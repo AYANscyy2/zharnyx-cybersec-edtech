@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, index, integer, json } from "drizzle-orm/pg-core";
 
 // ===============USERS=================
 
@@ -138,5 +138,198 @@ export const mentorApplicationRelations = relations(mentorApplication, ({ one })
 
 // ===============COURSES=================
 
+export const course = pgTable("course", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  image: text("image"),
+  status: text("status", { enum: ["published", "unpublished"] })
+    .default("unpublished")
+    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
+export const courseMonth = pgTable("course_month", {
+  id: text("id").primaryKey(),
+  courseId: text("course_id")
+    .notNull()
+    .references(() => course.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  type: text("type", { enum: ["common", "team"] })
+    .default("common")
+    .notNull(),
+  order: integer("order").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+}, (table) => [
+  index("course_month_courseId_idx").on(table.courseId)
+]);
+
+export const courseWeek = pgTable("course_week", {
+  id: text("id").primaryKey(),
+  monthId: text("month_id")
+    .notNull()
+    .references(() => courseMonth.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  order: integer("order").notNull(),
+  team: text("team", { enum: ["red", "blue"] }), // Nullable, only relevant if month type is 'team'
+  isProject: boolean("is_project").default(false).notNull(),
+  content: text("content"), // Description or learning content
+  resources: json("resources"), // Array of { title, link }
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+}, (table) => [
+  index("course_week_monthId_idx").on(table.monthId)
+]);
+
+export const weekMentor = pgTable("week_mentor", {
+  id: text("id").primaryKey(),
+  weekId: text("week_id")
+    .notNull()
+    .references(() => courseWeek.id, { onDelete: "cascade" }),
+  mentorId: text("mentor_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  assignedAt: timestamp("assigned_at").defaultNow().notNull(),
+}, (table) => [
+  index("week_mentor_weekId_idx").on(table.weekId),
+  index("week_mentor_mentorId_idx").on(table.mentorId)
+]);
+
+export const assessment = pgTable("assessment", {
+  id: text("id").primaryKey(),
+  weekId: text("week_id")
+    .notNull()
+    .references(() => courseWeek.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  timer: integer("timer"), // Duration in minutes
+  questions: json("questions").notNull(), // Array of questions
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+}, (table) => [
+  index("assessment_weekId_idx").on(table.weekId)
+]);
+
+export const projectSubmission = pgTable("project_submission", {
+  id: text("id").primaryKey(),
+  weekId: text("week_id")
+    .notNull()
+    .references(() => courseWeek.id, { onDelete: "cascade" }),
+  studentId: text("student_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  githubUrl: text("github_url"),
+  liveUrl: text("live_url"),
+  demoUrl: text("demo_url"),
+  description: text("description"),
+  score: integer("score"), // 1-10
+  review: text("review"),
+  status: text("status", { enum: ["pending", "graded"] })
+    .default("pending")
+    .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+}, (table) => [
+  index("project_submission_weekId_idx").on(table.weekId),
+  index("project_submission_studentId_idx").on(table.studentId)
+]);
+
+export const assessmentResponse = pgTable("assessment_response", {
+  id: text("id").primaryKey(),
+  assessmentId: text("assessment_id")
+    .notNull()
+    .references(() => assessment.id, { onDelete: "cascade" }),
+  studentId: text("student_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  answers: json("answers").notNull(), // Student answers
+  score: integer("score"),
+  status: text("status", { enum: ["pending", "completed"] })
+    .default("pending")
+    .notNull(),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+}, (table) => [
+  index("assessment_response_assessmentId_idx").on(table.assessmentId),
+  index("assessment_response_studentId_idx").on(table.studentId)
+]);
+
+export const courseRelations = relations(course, ({ many }) => ({
+  months: many(courseMonth),
+}));
+
+export const courseMonthRelations = relations(courseMonth, ({ one, many }) => ({
+  course: one(course, {
+    fields: [courseMonth.courseId],
+    references: [course.id],
+  }),
+  weeks: many(courseWeek),
+}));
+
+export const courseWeekRelations = relations(courseWeek, ({ one, many }) => ({
+  month: one(courseMonth, {
+    fields: [courseWeek.monthId],
+    references: [courseMonth.id],
+  }),
+  mentors: many(weekMentor),
+  assessments: many(assessment),
+  projectSubmissions: many(projectSubmission),
+}));
+
+export const weekMentorRelations = relations(weekMentor, ({ one }) => ({
+  week: one(courseWeek, {
+    fields: [weekMentor.weekId],
+    references: [courseWeek.id],
+  }),
+  mentor: one(user, {
+    fields: [weekMentor.mentorId],
+    references: [user.id],
+  }),
+}));
+
+export const assessmentRelations = relations(assessment, ({ one, many }) => ({
+  week: one(courseWeek, {
+    fields: [assessment.weekId],
+    references: [courseWeek.id],
+  }),
+  responses: many(assessmentResponse),
+}));
+
+export const assessmentResponseRelations = relations(assessmentResponse, ({ one }) => ({
+  assessment: one(assessment, {
+    fields: [assessmentResponse.assessmentId],
+    references: [assessment.id],
+  }),
+  student: one(user, {
+    fields: [assessmentResponse.studentId],
+    references: [user.id],
+  }),
+}));
+
+export const projectSubmissionRelations = relations(projectSubmission, ({ one }) => ({
+  week: one(courseWeek, {
+    fields: [projectSubmission.weekId],
+    references: [courseWeek.id],
+  }),
+  student: one(user, {
+    fields: [projectSubmission.studentId],
+    references: [user.id],
+  }),
+}));
 
 

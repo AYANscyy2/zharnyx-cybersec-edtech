@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { user } from "@/lib/db/schema";
+import { user, assessmentResponse, projectSubmission } from "@/lib/db/schema";
 import { requireAdmin } from "@/lib/auth/role-guard";
 import { eq, like, or, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -12,19 +12,32 @@ export async function getAllUsers({
     page = 1,
     limit = 10,
     query = "",
+    role = "all",
 }: {
     page?: number;
     limit?: number;
     query?: string;
+    role?: string;
 }) {
     try {
         await requireAdmin();
 
         const offset = (page - 1) * limit;
 
-        const whereClause = query
+        const searchCondition = query
             ? or(like(user.name, `%${query}%`), like(user.email, `%${query}%`))
             : undefined;
+
+        const roleCondition = role && role !== "all"
+            ? eq(user.role, role as "admin" | "mentor" | "student")
+            : undefined;
+
+        // Combine conditions using AND logic if both exist, or use whichever exists
+        // simplified logic: and(search, role)
+        // drizzle-orm 'and' handles undefineds gracefully usually, but let's be explicit
+        const whereClause = searchCondition && roleCondition
+            ? sql`${searchCondition} and ${roleCondition}`
+            : searchCondition || roleCondition;
 
         const [users, totalCountResult] = await Promise.all([
             db
@@ -59,11 +72,11 @@ export async function getAllUsers({
     }
 }
 
+
 // Update User Role
 export async function updateUserRole(userId: string, newRole: "admin" | "mentor" | "student") {
     try {
         await requireAdmin();
-
         await db
             .update(user)
             .set({ role: newRole })
@@ -74,5 +87,39 @@ export async function updateUserRole(userId: string, newRole: "admin" | "mentor"
     } catch (error) {
         console.error("Error updating user role:", error);
         return { success: false, error: error instanceof Error ? error.message : "Failed to update user role" };
+    }
+}
+
+// Get User Progress
+export async function getUserProgress(userId: string) {
+    try {
+        await requireAdmin();
+
+        const [assessments, projects] = await Promise.all([
+            db.query.assessmentResponse.findMany({
+                where: eq(assessmentResponse.studentId, userId),
+                with: {
+                    assessment: true,
+                }
+            }),
+            db.query.projectSubmission.findMany({
+                where: eq(projectSubmission.studentId, userId),
+                with: {
+                    week: true,
+                }
+            })
+        ]);
+
+        return {
+            success: true,
+            data: {
+                assessments,
+                projects,
+            }
+        };
+
+    } catch (error) {
+        console.error("Error fetching user progress:", error);
+        return { success: false, error: "Failed to fetch user progress" };
     }
 }

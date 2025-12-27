@@ -15,6 +15,13 @@
       "when": 1766356483571,
       "tag": "0001_friendly_rafael_vega",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1766824681986,
+      "tag": "0002_same_vertigo",
+      "breakpoints": true
     }
   ]
 }

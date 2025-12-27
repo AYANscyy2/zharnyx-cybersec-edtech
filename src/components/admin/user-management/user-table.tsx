@@ -4,6 +4,13 @@ import { useEffect, useState } from "react";
 import { User, columns } from "./columns";
 import { DataTable } from "./data-table";
 import { getAllUsers } from "@/actions/admin/user-management/action";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function UserTable() {
   const [data, setData] = useState<User[]>([]);
@@ -14,6 +21,11 @@ export function UserTable() {
   });
   const [pageCount, setPageCount] = useState(0);
 
+  // Search and Filter states
+  const [query, setQuery] = useState(""); // Internal state for input
+  const [searchQuery, setSearchQuery] = useState(""); // Actual query sent to API
+  const [roleFilter, setRoleFilter] = useState("all");
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -21,6 +33,8 @@ export function UserTable() {
       const result = await getAllUsers({
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
+        query: searchQuery,
+        role: roleFilter,
       });
 
       if (result.success && result.data) {
@@ -40,12 +54,55 @@ export function UserTable() {
     };
 
     fetchData();
-  }, [pagination]);
+  }, [pagination, searchQuery, roleFilter]);
+
+  const handleSearch = () => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 })); // Reset to first page
+    setSearchQuery(query);
+  };
 
   return (
     <div className="container mx-auto py-10">
+      <div className="flex items-center py-4 gap-4">
+        <div className="flex flex-1 items-center gap-2">
+          <input
+            placeholder="Search users..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            className="h-10 flex-1 rounded-md border border-white/10 bg-transparent px-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-slate-400 font-mono"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
+          />
+          <button
+            onClick={handleSearch}
+            className="h-10 px-4 rounded-md bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium font-mono"
+          >
+            Search
+          </button>
+        </div>
+        <Select
+          value={roleFilter}
+          onValueChange={(value) => {
+            setRoleFilter(value);
+            setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+          }}
+        >
+          <SelectTrigger className="w-[180px] h-10 border-white/10 bg-transparent text-white font-mono">
+            <SelectValue placeholder="All Roles" />
+          </SelectTrigger>
+          <SelectContent className="bg-black border-white/10 text-white font-mono">
+            <SelectItem value="all">All Roles</SelectItem>
+            <SelectItem value="student">Student</SelectItem>
+            <SelectItem value="mentor">Mentor</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       {loading ? (
-        <div>Loading...</div>
+        <div className="text-white font-mono">Loading...</div>
       ) : (
         <DataTable
           columns={columns}
