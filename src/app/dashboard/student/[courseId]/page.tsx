@@ -1,12 +1,6 @@
 import { requireStudent } from "@/lib/auth/role-guard";
 import { db } from "@/lib/db";
-import {
-  course,
-  enrollment,
-  studentProgress,
-  assessmentResponse,
-  projectSubmission,
-} from "@/lib/db/schema";
+import { course, enrollment } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
@@ -76,7 +70,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
       <AnimatedBackground />
       <div className="relative flex min-h-screen pointer-events-none">
         <main className="w-full max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 pointer-events-auto py-8">
-          <CourseViewShell course={courseData} userId={session.user.id} />
+          <CourseViewShell course={courseData} />
         </main>
       </div>
     </>

@@ -12,18 +12,18 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { MonthSection } from "./month-section";
+import type { Course, Week, Assessment } from "@/types/course-view";
 
 interface CourseViewShellProps {
-  course: any; // Replace with proper type
-  userId: string;
+  course: Course;
 }
 
-export function CourseViewShell({ course, userId }: CourseViewShellProps) {
+export function CourseViewShell({ course }: CourseViewShellProps) {
   // Extract all assessments and projects for valid tabs
-  const allAssessments = course.months.flatMap((m: any) =>
+  const allAssessments: Assessment[] = course.months.flatMap((m) =>
     m.weeks.flatMap(
-      (w: any) =>
-        w.assessments?.map((a: any) => ({
+      (w) =>
+        w.assessments?.map((a) => ({
           ...a,
           weekOrder: w.order,
           weekTitle: w.title,
@@ -32,10 +32,10 @@ export function CourseViewShell({ course, userId }: CourseViewShellProps) {
     )
   );
 
-  const allProjects = course.months.flatMap((m: any) =>
+  const allProjects: Week[] = course.months.flatMap((m) =>
     m.weeks
-      .filter((w: any) => w.isProject)
-      .map((w: any) => ({ ...w, isLocked: w.isLocked }))
+      .filter((w) => w.isProject)
+      .map((w) => ({ ...w, isLocked: w.isLocked }))
   );
 
   return (
@@ -89,7 +89,7 @@ export function CourseViewShell({ course, userId }: CourseViewShellProps) {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {course.months.map((month: any) => (
+              {course.months.map((month) => (
                 <MonthSection key={month.id} month={month} isLocked={false} />
               ))}
             </CardContent>
@@ -107,7 +107,7 @@ export function CourseViewShell({ course, userId }: CourseViewShellProps) {
               {allAssessments.length === 0 ? (
                 <p className="text-gray-400">No assessments available.</p>
               ) : (
-                allAssessments.map((assessment: any) => (
+                allAssessments.map((assessment) => (
                   <div
                     key={assessment.id}
                     className="p-4 border border-white/10 rounded bg-white/5 flex justify-between items-center"
@@ -145,7 +145,7 @@ export function CourseViewShell({ course, userId }: CourseViewShellProps) {
               {allProjects.length === 0 ? (
                 <p className="text-gray-400">No projects available.</p>
               ) : (
-                allProjects.map((project: any) => (
+                allProjects.map((project) => (
                   <div
                     key={project.id}
                     className="p-4 border border-white/10 rounded bg-white/5 flex justify-between items-center"

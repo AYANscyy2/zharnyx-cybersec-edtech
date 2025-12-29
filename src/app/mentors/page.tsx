@@ -5,6 +5,7 @@ import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { motion } from "motion/react";
 import { CometCard } from "@/components/ui/comet-card";
+import { Github, Linkedin, Twitter } from "lucide-react";
 
 // Reusable card component based on user provided demo
 function MentorCard({
@@ -19,29 +20,48 @@ function MentorCard({
   image: string;
 }) {
   return (
-    <CometCard>
+    <CometCard className="h-full">
       <div
-        className="flex w-full cursor-pointer flex-col items-stretch rounded-[16px] border border-white/10 bg-[#1F2121]/50 backdrop-blur-md p-2 saturate-0 md:p-4 hover:saturate-100 transition-all duration-500"
+        className="flex w-full h-full cursor-pointer flex-col items-stretch rounded-[16px] border border-white/5 bg-white/5 backdrop-blur-sm p-4 hover:bg-white/10 transition-all duration-500"
         style={{
           transformStyle: "preserve-3d",
         }}
       >
-        <div className="mx-2 flex-1">
-          <div className="relative mt-2 aspect-3/4 w-full overflow-hidden rounded-[16px]">
+        <div className="flex-1">
+          <div className="relative aspect-square w-full overflow-hidden rounded-[16px]">
             <img
               loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover contrast-75 hover:contrast-100 transition-all duration-500"
+              className="absolute inset-0 h-full w-full object-cover hover:scale-105 transition-transform duration-500"
               alt={`Mentor ${name}`}
               src={image}
             />
           </div>
         </div>
-        <div className="mt-4 flex flex-col p-4 font-mono text-white">
-          <div className="flex justify-between items-center mb-1">
-            <div className="text-lg font-bold">{name}</div>
-            <div className="text-xs text-gray-400 opacity-50">{tags}</div>
+        <div className="mt-6 flex flex-col font-mono text-white">
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <div className="text-xl font-bold">{name}</div>
+              <div className="text-sm text-indigo-400 mt-1">{role}</div>
+            </div>
           </div>
-          <div className="text-sm text-indigo-400">{role}</div>
+
+          <div className="flex items-center gap-4 mt-4 text-gray-400">
+            <a href="#" className="hover:text-white transition-colors">
+              <Linkedin className="w-5 h-5" />
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              <Twitter className="w-5 h-5" />
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              <Github className="w-5 h-5" />
+            </a>
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
+            <div className="text-xs text-gray-400 font-bold bg-white/5 px-2 py-1 rounded inline-block">
+              {tags}
+            </div>
+          </div>
         </div>
       </div>
     </CometCard>
@@ -85,12 +105,12 @@ export default function MentorsPage() {
       <AnimatedBackground />
       <Navbar />
 
-      <main className="relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 container mx-auto">
+      <main className="relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 container mx-auto max-w-[95%]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-6xl mx-auto space-y-12"
+          className="space-y-12"
         >
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold font-mono text-white">
@@ -101,14 +121,14 @@ export default function MentorsPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 justify-items-center">
             {mentors.map((mentor, index) => (
               <motion.div
                 key={mentor.name}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
-                className="w-full max-w-sm"
+                className="w-full"
               >
                 <MentorCard {...mentor} />
               </motion.div>

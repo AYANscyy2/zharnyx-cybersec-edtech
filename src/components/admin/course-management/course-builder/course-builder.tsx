@@ -2,7 +2,11 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CourseFormSchema, CourseFormValues } from "@/lib/validators/course";
+import {
+  CourseFormSchema,
+  CourseFormDraftSchema,
+  CourseFormValues,
+} from "@/lib/validators/course";
 import { Button } from "@/components/ui/button";
 import {
   createFullCourse,
@@ -45,8 +49,9 @@ export function CourseBuilder({
   }, []);
 
   const form = useForm<CourseFormValues>({
+    // Use draft schema for default validation (relaxed)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(CourseFormSchema) as any,
+    resolver: zodResolver(CourseFormDraftSchema) as any,
     defaultValues: initialData || {
       title: "",
       description: "",
@@ -91,10 +96,92 @@ export function CourseBuilder({
     }
   };
 
+  // Handler for saving draft (no validation)
+  const handleSaveDraft = async () => {
+    setIsSubmitting(true);
+    try {
+      const data = form.getValues();
+      data.status = "unpublished";
+
+      let result;
+      if (courseId) {
+        result = await updateFullCourse(courseId, data);
+      } else {
+        result = await createFullCourse(data);
+      }
+
+      if (result.success) {
+        toast.success("Draft saved successfully!");
+        onComplete();
+      } else {
+        toast.error(result.error || "Failed to save draft");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Handler for publishing (with strict validation)
+  const handlePublish = async () => {
+    const data = form.getValues();
+    data.status = "published";
+
+    // Validate against strict schema before publishing
+    const validation = CourseFormSchema.safeParse(data);
+
+    if (!validation.success) {
+      // Show validation errors
+      const firstError = validation.error.errors[0];
+      toast.error(
+        `Cannot publish: ${firstError.message} at ${firstError.path.join(
+          " > "
+        )}`
+      );
+
+      // Scroll to the first error field if possible
+      const errorPath = firstError.path[0] as string;
+      const element = document.querySelector(`[name="${errorPath}"]`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      return;
+    }
+
+    // If validation passes, submit
+    setIsSubmitting(true);
+    try {
+      let result;
+      if (courseId) {
+        result = await updateFullCourse(courseId, data);
+      } else {
+        result = await createFullCourse(data);
+      }
+
+      if (result.success) {
+        toast.success(
+          courseId
+            ? "Course updated and published!"
+            : "Course published successfully!"
+        );
+        onComplete();
+      } else {
+        toast.error(result.error || "Failed to publish course");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <form
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onSubmit={handleSubmit(onSubmit as any)}
+      onSubmit={(e) => e.preventDefault()}
       className="space-y-8 w-full max-w-screen mx-auto"
     >
       <div className="flex items-center justify-between mb-6">
@@ -114,10 +201,7 @@ export function CourseBuilder({
             type="button"
             variant="outline"
             disabled={isSubmitting}
-            onClick={() => {
-              setValue("status", "unpublished");
-              handleSubmit(onSubmit)();
-            }}
+            onClick={handleSaveDraft}
             className="font-mono border-white/20 text-white bg-transparent hover:bg-white/10"
           >
             {isSubmitting ? (
@@ -128,10 +212,7 @@ export function CourseBuilder({
           <Button
             type="button"
             disabled={isSubmitting}
-            onClick={() => {
-              setValue("status", "published");
-              handleSubmit(onSubmit)();
-            }}
+            onClick={handlePublish}
             className="font-mono bg-white text-black hover:bg-gray-200"
           >
             {isSubmitting ? (
