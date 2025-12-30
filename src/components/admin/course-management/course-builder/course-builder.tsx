@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CourseFormSchema,
@@ -63,45 +63,17 @@ export function CourseBuilder({
 
   const {
     formState: { errors },
-    handleSubmit,
     register,
     control,
     watch,
     setValue,
   } = form;
 
-  const onSubmit: SubmitHandler<CourseFormValues> = async (data) => {
-    setIsSubmitting(true);
-    try {
-      let result;
-      if (courseId) {
-        result = await updateFullCourse(courseId, data);
-      } else {
-        result = await createFullCourse(data);
-      }
-
-      if (result.success) {
-        toast.success(
-          courseId ? "Course updated!" : "Course created successfully!"
-        );
-        onComplete();
-      } else {
-        toast.error(result.error || "Failed to save course");
-      }
-    } catch (error) {
-      toast.error("An unexpected error occurred");
-      console.error(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   // Handler for saving draft (no validation)
   const handleSaveDraft = async () => {
     setIsSubmitting(true);
     try {
-      const data = form.getValues();
-      data.status = "unpublished";
+      const data = { ...form.getValues(), status: "unpublished" as const };
 
       let result;
       if (courseId) {
@@ -126,15 +98,14 @@ export function CourseBuilder({
 
   // Handler for publishing (with strict validation)
   const handlePublish = async () => {
-    const data = form.getValues();
-    data.status = "published";
+    const data = { ...form.getValues(), status: "published" as const };
 
     // Validate against strict schema before publishing
     const validation = CourseFormSchema.safeParse(data);
 
     if (!validation.success) {
       // Show validation errors
-      const firstError = validation.error.errors[0];
+      const firstError = validation.error.issues[0];
       toast.error(
         `Cannot publish: ${firstError.message} at ${firstError.path.join(
           " > "
