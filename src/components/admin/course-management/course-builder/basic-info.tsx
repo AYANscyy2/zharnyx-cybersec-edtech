@@ -48,6 +48,23 @@ export function BasicInfo({ register, errors }: BasicInfoProps) {
         </FieldContent>
         <FieldError errors={[errors.description]} />
       </Field>
+      <Field>
+        <FieldLabel htmlFor="price" className="text-white font-mono">
+          Price (INR)
+        </FieldLabel>
+        <FieldContent>
+          <Input
+            id="price"
+            type="number"
+            min={0}
+            step={0.01}
+            placeholder="0.00"
+            {...register("price")}
+            className="bg-black/50 border-white/10 text-white font-mono focus:ring-slate-400"
+          />
+        </FieldContent>
+        <FieldError errors={[errors.price]} />
+      </Field>
       {/* Image field removed as per requirements */}
       {/* 
         Status is handled via "Save Draft" vs "Publish" buttons conceptually, 

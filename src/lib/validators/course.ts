@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const WeekResourceSchema = z.object({
   title: z.string().min(1, "Resource title is required"),
-  link: z.string().url("Invalid URL"),
+  link: z.url("Invalid URL"),
 });
 
 export const WeekResourceDraftSchema = z.object({
@@ -14,16 +14,16 @@ export const AssessmentSchema = z.object({
   title: z.string().min(1, "Assessment title is required"),
   topic: z.string().min(1, "Assessment topic is required"),
   problem: z.string().min(1, "Problem statement is required"),
-  submissionFormat: z.string().default("pdf"),
-  timer: z.number().min(0, "Timer must be positive").default(60), // In minutes
+  submissionFormat: z.enum(["pdf", "url"]).default("pdf"),
+  deadline: z.coerce.date().optional(), // Date only
 });
 
 export const AssessmentDraftSchema = z.object({
   title: z.string().optional(),
   topic: z.string().optional(),
   problem: z.string().optional(),
-  submissionFormat: z.string().optional().default("pdf"),
-  timer: z.number().optional(),
+  submissionFormat: z.enum(["pdf", "url"]).optional().default("pdf"),
+  deadline: z.coerce.date().optional(),
 });
 
 export const CourseWeekSchema = z.object({
@@ -74,6 +74,7 @@ export const CourseMonthDraftSchema = z.object({
 export const CourseFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
+  price: z.coerce.number().min(0, "Price must be positive"),
   // image: z.string().url("Invalid Image URL").optional().or(z.literal("")), // Removed as per request
   image: z.string().optional().nullable(), // Keeping as optional/nullable for DB compatibility if needed, but not validated/used in UI
   status: z.enum(["published", "unpublished"]).default("unpublished"),
@@ -84,6 +85,7 @@ export const CourseFormSchema = z.object({
 export const CourseFormDraftSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
+  price: z.coerce.number().optional().default(0),
   image: z.string().optional().nullable(),
   status: z.enum(["published", "unpublished"]).default("unpublished"),
   months: z.array(CourseMonthDraftSchema).optional().default([]),

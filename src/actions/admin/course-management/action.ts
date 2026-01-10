@@ -69,7 +69,7 @@ export async function createFullCourse(data: CourseFormValues) {
                                     topic: weekData.assessment.topic!,
                                     problem: weekData.assessment.problem!,
                                     submissionFormat: weekData.assessment.submissionFormat,
-                                    timer: weekData.assessment.timer,
+                                    deadline: weekData.assessment.deadline,
                                 });
                             }
 
@@ -307,7 +307,7 @@ export async function updateFullCourse(courseId: string, data: CourseFormValues)
                                     topic: weekData.assessment.topic!,
                                     problem: weekData.assessment.problem!,
                                     submissionFormat: weekData.assessment.submissionFormat,
-                                    timer: weekData.assessment.timer,
+                                    deadline: weekData.assessment.deadline,
                                 }).where(eq(assessment.id, existingAssessment.id));
                             } else {
                                 // Create
@@ -318,7 +318,7 @@ export async function updateFullCourse(courseId: string, data: CourseFormValues)
                                     topic: weekData.assessment.topic!,
                                     problem: weekData.assessment.problem!,
                                     submissionFormat: weekData.assessment.submissionFormat,
-                                    timer: weekData.assessment.timer,
+                                    deadline: weekData.assessment.deadline,
                                 });
                             }
                         } else {

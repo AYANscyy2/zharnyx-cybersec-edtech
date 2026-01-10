@@ -194,6 +194,7 @@ export const course = pgTable("course", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   image: text("image"),
+  price: integer("price").default(0),
   status: text("status", { enum: ["published", "unpublished"] })
     .default("unpublished")
     .notNull(),
@@ -268,7 +269,7 @@ export const assessment = pgTable("assessment", {
   topic: text("topic").notNull(),
   problem: text("problem").notNull(),
   submissionFormat: text("submission_format").default("pdf").notNull(),
-  timer: integer("timer"), // Duration in minutes
+  deadline: timestamp("deadline"), // Assessment deadline
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -337,7 +338,7 @@ export const enrollment = pgTable("enrollment", {
     .default("pending")
     .notNull(),
   amount: integer("amount"), // Amount in cents
-  currency: text("currency").default("USD"),
+  currency: text("currency").default("INR"),
 }, (table) => [
   index("enrollment_studentId_idx").on(table.studentId),
   index("enrollment_courseId_idx").on(table.courseId)

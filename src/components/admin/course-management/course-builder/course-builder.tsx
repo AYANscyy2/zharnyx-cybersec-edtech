@@ -57,6 +57,7 @@ export function CourseBuilder({
     defaultValues: initialData || {
       title: "",
       description: "",
+      price: 0,
       image: "",
       status: "unpublished",
       months: [], // Start with empty curriculum
@@ -86,6 +87,7 @@ export function CourseBuilder({
         const formValues: CourseFormValues = {
             title: dbCourse.title,
             description: dbCourse.description || "",
+            price: dbCourse.price || 0,
             image: dbCourse.image || "",
             status: dbCourse.status as "published" | "unpublished",
             months: dbCourse.months.map(month => ({
@@ -107,8 +109,8 @@ export function CourseBuilder({
                         title: week.assessments[0].title,
                         topic: week.assessments[0].topic || "",
                         problem: week.assessments[0].problem || "",
-                        submissionFormat: week.assessments[0].submissionFormat || "pdf",
-                        timer: week.assessments[0].timer || 60
+                        submissionFormat: (week.assessments[0].submissionFormat as "pdf" | "url") || "pdf",
+                        deadline: week.assessments[0].deadline ? new Date(week.assessments[0].deadline) : undefined
                     } : null,
                     mentorIds: week.mentors.map(wm => wm.mentorId)
                 }))

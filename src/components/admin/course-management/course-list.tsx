@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { DataTable } from "./data-table";
 import { getColumns, Course } from "./columns";
-import { getAllCourses, deleteCourse } from "@/actions/admin/course-management/action";
+import { getAllCourses, deleteCourse, updateCourseStatus } from "@/actions/admin/course-management/action";
 import { toast } from "sonner";
 import {
   Select,
@@ -12,6 +12,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface CourseListProps {
   onEdit: (courseId: string) => void;
@@ -99,19 +109,41 @@ export function CourseList({ onEdit }: CourseListProps) {
     });
   };
 
-  const handleDelete = async (courseId: string) => {
-    if (confirm("Are you sure you want to delete this course?")) {
-      const result = await deleteCourse(courseId);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  const confirmDelete = async () => {
+    if (deleteId) {
+      const result = await deleteCourse(deleteId);
       if (result.success) {
         toast.success(result.message);
         fetchCourses();
       } else {
         toast.error(result.error);
       }
+      setDeleteId(null);
     }
   };
 
-  const columns = getColumns({ onEdit, onDelete: handleDelete });
+  const [unpublishId, setUnpublishId] = useState<string | null>(null);
+
+  const confirmUnpublish = async () => {
+      if (unpublishId) {
+          const result = await updateCourseStatus(unpublishId, "unpublished");
+          if (result.success) {
+              toast.success(result.message);
+              fetchCourses();
+          } else {
+              toast.error(result.error);
+          }
+          setUnpublishId(null);
+      }
+  }
+
+  const columns = getColumns({ 
+    onEdit, 
+    onDelete: (id) => setDeleteId(id), 
+    onUnpublish: (id) => setUnpublishId(id) 
+  });
 
   return (
     <div className="space-y-4">
@@ -168,6 +200,36 @@ export function CourseList({ onEdit }: CourseListProps) {
           onPaginationChange={handlePaginationChange}
         />
       )}
+
+      <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
+        <AlertDialogContent className="bg-black border-white/10 text-white font-mono">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              This action cannot be undone. This will permanently delete the course and all associated data including tests and progress.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-white/10 border-white/10 text-white hover:bg-white/20">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-500 hover:bg-red-600 text-white border-0">Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!unpublishId} onOpenChange={(open) => !open && setUnpublishId(null)}>
+        <AlertDialogContent className="bg-black border-white/10 text-white font-mono">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Unpublish this course?</AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              This will remove the course from the public catalog. Students will no longer see it, but enrolled students may still have access.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-white/10 border-white/10 text-white hover:bg-white/20">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmUnpublish} className="bg-orange-500 hover:bg-orange-600 text-white border-0">Unpublish</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

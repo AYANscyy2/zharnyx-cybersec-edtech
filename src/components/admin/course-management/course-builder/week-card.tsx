@@ -8,6 +8,7 @@ import {
   UseFormWatch,
   UseFormSetValue,
   useFieldArray,
+  useWatch,
 } from "react-hook-form";
 import { CourseFormValues } from "@/lib/validators/course";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -22,7 +23,16 @@ import {
   Search,
   UserPlus,
   X,
+  CalendarIcon,
 } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -82,12 +92,18 @@ export function WeekCard({
     isFourthWeek ||
     !!watch(`months.${monthIndex}.weeks.${weekIndex}.isProject`);
 
-  const hasAssessment = !!watch(
-    `months.${monthIndex}.weeks.${weekIndex}.assessment`
-  );
+  // Use useWatch for better reactivity on deep nested objects
+  const assessmentValue = useWatch({
+    control,
+    name: `months.${monthIndex}.weeks.${weekIndex}.assessment`,
+  });
+  const hasAssessment = !!assessmentValue;
+
   const monthType = watch(`months.${monthIndex}.type`);
-  const assignedMentors =
-    watch(`months.${monthIndex}.weeks.${weekIndex}.mentorIds`) || [];
+  const assignedMentors = useWatch({
+    control,
+    name: `months.${monthIndex}.weeks.${weekIndex}.mentorIds`,
+  }) || [];
 
   const [mentorSearch, setMentorSearch] = useState("");
   const [isMentorDialogOpen, setIsMentorDialogOpen] = useState(false);
@@ -131,12 +147,14 @@ export function WeekCard({
     e.stopPropagation();
 
     if (hasAssessment) {
-      // Use undefined to remove the field
-      setValue(`months.${monthIndex}.weeks.${weekIndex}.assessment`, undefined, {
+      console.log("Removing assessment");
+      // Use null to remove the field complying with nullable() schema
+      setValue(`months.${monthIndex}.weeks.${weekIndex}.assessment`, null, {
         shouldValidate: true,
         shouldDirty: true,
       });
     } else {
+      console.log("Adding assessment");
       // Set default values
       setValue(
         `months.${monthIndex}.weeks.${weekIndex}.assessment`,
@@ -145,7 +163,7 @@ export function WeekCard({
           topic: "General Topic",
           problem: "",
           submissionFormat: "pdf",
-          timer: 60,
+          // deadline: undefined, // Optional
         },
         {
           shouldValidate: true,
@@ -435,7 +453,11 @@ export function WeekCard({
                       {m.name}
                       <X
                         className="h-3 w-3 cursor-pointer hover:text-red-400"
-                        onClick={() => handleMentorToggle(mId, false)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleMentorToggle(mId, false);
+                        }}
                       />
                     </Badge>
                   );
@@ -492,7 +514,7 @@ export function WeekCard({
                     <div className="flex-1">
                       <Label className="text-xs text-gray-400 font-mono mb-1 block">Submission Format</Label>
                       <Select
-                         onValueChange={(val) => setValue(`months.${monthIndex}.weeks.${weekIndex}.assessment.submissionFormat`, val)}
+                         onValueChange={(val) => setValue(`months.${monthIndex}.weeks.${weekIndex}.assessment.submissionFormat`, val as "url" | "pdf")}
                          defaultValue={watch(`months.${monthIndex}.weeks.${weekIndex}.assessment.submissionFormat`) || "pdf"}
                       >
                          <SelectTrigger className="bg-black/40 border-white/10 text-white font-mono h-9 text-sm">
@@ -500,16 +522,17 @@ export function WeekCard({
                          </SelectTrigger>
                          <SelectContent className="bg-black border-white/10 text-white font-mono">
                             <SelectItem value="pdf">PDF Upload</SelectItem>
-                            <SelectItem value="text">Text Input</SelectItem>
+                            <SelectItem value="url">URL Link</SelectItem>
                          </SelectContent>
                       </Select>
                     </div>
-                     <div className="w-24">
-                        <Label className="text-xs text-gray-400 font-mono mb-1 block">Timer (mins)</Label>
-                        <Input
-                          type="number"
-                          {...register(`months.${monthIndex}.weeks.${weekIndex}.assessment.timer`, { valueAsNumber: true })}
-                          className="bg-black/40 border-white/10 text-white font-mono h-9 text-sm"
+                      <div className="flex-1">
+                        <Label className="text-xs text-gray-400 font-mono mb-1 block">Deadline</Label>
+                        <DeadlinePicker 
+                          control={control}
+                          setValue={setValue}
+                          monthIndex={monthIndex}
+                          weekIndex={weekIndex}
                         />
                      </div>
                   </div>
@@ -520,5 +543,52 @@ export function WeekCard({
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+function DeadlinePicker({ 
+  control, 
+  setValue, 
+  monthIndex, 
+  weekIndex 
+}: { 
+  control: Control<CourseFormValues>;
+  setValue: UseFormSetValue<CourseFormValues>;
+  monthIndex: number; 
+  weekIndex: number;
+}) {
+  const deadline = useWatch({
+    control,
+    name: `months.${monthIndex}.weeks.${weekIndex}.assessment.deadline`,
+  });
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-full justify-start text-left font-normal bg-black/40 border-white/10 text-white font-mono h-9 text-sm",
+            !deadline && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {deadline ? (
+            format(deadline, "PPP")
+          ) : (
+            <span>Pick a date</span>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0 bg-black border-white/10 text-white" align="start">
+        <Calendar
+          mode="single"
+          selected={deadline || undefined}
+          onSelect={(date) => setValue(`months.${monthIndex}.weeks.${weekIndex}.assessment.deadline`, date, { shouldValidate: true })}
+          initialFocus
+          className="bg-black text-white border-white/10"
+        />
+      </PopoverContent>
+    </Popover>
   );
 }

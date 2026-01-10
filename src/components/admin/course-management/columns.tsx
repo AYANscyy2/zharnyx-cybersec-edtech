@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2, Globe, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,9 +23,10 @@ export type Course = {
 interface ColumnsProps {
   onEdit: (courseId: string) => void;
   onDelete: (courseId: string) => void;
+  onUnpublish: (courseId: string) => void;
 }
 
-export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Course>[] => [
+export const getColumns = ({ onEdit, onDelete, onUnpublish }: ColumnsProps): ColumnDef<Course>[] => [
   {
     accessorKey: "title",
     header: "TITLE",
@@ -81,6 +82,18 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Course
             className="bg-black border-white/10 text-white font-mono"
           >
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            {course.status === "published" && (
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                  onUnpublish(course.id);
+                }}
+                className="cursor-pointer hover:bg-white/10"
+              >
+                <EyeOff className="mr-2 h-4 w-4" />
+                Unpublish Course
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               onClick={() => onEdit(course.id)}
               className="cursor-pointer hover:bg-white/10"
@@ -89,7 +102,10 @@ export const getColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Course
               Edit Course
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => onDelete(course.id)}
+              onSelect={(e) => {
+                 e.preventDefault(); // Prevent closing for confirm dialog
+                 onDelete(course.id);
+              }}
               className="cursor-pointer hover:bg-red-500/10 text-red-500 focus:bg-red-500/10 focus:text-red-500"
             >
               <Trash2 className="mr-2 h-4 w-4" />
