@@ -31,14 +31,16 @@ export function ManagedCourses() {
   ];
 
   return (
-    <Card className="bg-black/40 border-white/10 backdrop-blur-sm h-full">
-      <CardHeader className="flex flex-row items-center justify-between">
+    <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none shadow-[4px_4px_0px_0px_white/10] h-full">
+      <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4 flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-white font-mono flex items-center gap-2">
-            <BookOpen className="h-5 w-5 text-indigo-400" />
-            Managed Courses
-          </CardTitle>
-          <CardDescription className="text-gray-400 font-mono">
+          <div className="flex items-center gap-2 mb-1">
+            <BookOpen className="h-4 w-4 text-purple-500" />
+            <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
+              Managed Courses
+            </CardTitle>
+          </div>
+          <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
             Courses you are teaching
           </CardDescription>
         </div>
@@ -46,33 +48,33 @@ export function ManagedCourses() {
           asChild
           variant="outline"
           size="sm"
-          className="border-white/10 text-white hover:bg-white/10"
+          className="rounded-none border-2 border-white text-white bg-transparent hover:bg-white hover:text-black font-mono uppercase text-xs font-bold tracking-wide h-8"
         >
           <TransitionLink href="/dashboard/admin/courses/new">
-            Create New
+            Create
           </TransitionLink>
         </Button>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="p-0">
         {courses.map((course) => (
           <div
             key={course.id}
-            className="p-4 rounded-lg border border-white/5 bg-white/5 flex flex-col gap-2"
+            className="p-4 border-b border-white/10 hover:bg-white/5 transition-colors group"
           >
             <div className="flex justify-between items-start">
-              <div>
-                <h4 className="font-semibold text-white font-mono">
+              <div className="space-y-2">
+                <h4 className="font-bold text-white font-mono text-sm leading-tight group-hover:text-purple-400 transition-colors">
                   {course.title}
                 </h4>
-                <div className="flex items-center gap-4 mt-1 text-xs text-gray-400 font-mono">
+                <div className="flex items-center gap-4 text-[10px] text-gray-400 font-mono uppercase tracking-wider">
                   <span className="flex items-center gap-1">
                     <Users className="h-3 w-3" /> {course.students} Students
                   </span>
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] ${
+                    className={`px-1.5 py-0.5 border ${
                       course.status === "Active"
-                        ? "bg-green-500/20 text-green-400"
-                        : "bg-gray-500/20 text-gray-400"
+                        ? "border-green-500 text-green-400"
+                        : "border-gray-500 text-gray-400"
                     }`}
                   >
                     {course.status}
@@ -83,7 +85,7 @@ export function ManagedCourses() {
                 asChild
                 size="sm"
                 variant="ghost"
-                className="text-gray-400 hover:text-white hover:bg-white/10"
+                className="text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-none h-8 font-mono text-xs uppercase"
               >
                 <TransitionLink href={`/dashboard/admin/courses/${course.id}`}>
                   Manage

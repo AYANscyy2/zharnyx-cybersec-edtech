@@ -4,8 +4,16 @@ import { requireMentor } from "@/lib/auth/role-guard";
 import { MentorDashboardShell } from "@/components/dashboard/mentor/mentor-dashboard-shell";
 import { AnimatedBackground } from "@/components/shared/animated-background";
 
-export default async function MentorPage() {
+// Define props interface for Page in Next.js 13+
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function MentorPage(props: PageProps) {
   await requireMentor();
+  const searchParams = await props.searchParams;
+  const section =
+    typeof searchParams.section === "string" ? searchParams.section : undefined;
 
   return (
     <>
@@ -31,7 +39,7 @@ export default async function MentorPage() {
             </div>
           </div>
 
-          <MentorDashboardShell />
+          <MentorDashboardShell section={section} />
         </main>
       </div>
     </>

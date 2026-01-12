@@ -76,10 +76,10 @@ export function UserTable() {
       <div className="flex items-center py-4 gap-4">
         <div className="flex flex-1 items-center gap-2">
           <input
-            placeholder="Search users..."
+            placeholder="SEARCH USERS..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            className="h-10 flex-1 rounded-md border border-white/10 bg-transparent px-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-slate-400 font-mono"
+            className="h-10 flex-1 rounded-none border-2 border-white/20 bg-black px-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500 font-mono uppercase tracking-wide transition-colors"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleSearch();
@@ -88,7 +88,7 @@ export function UserTable() {
           />
           <button
             onClick={handleSearch}
-            className="h-10 px-4 rounded-md bg-white/10 text-white hover:bg-white/20 transition-colors text-sm font-medium font-mono"
+            className="h-10 px-6 rounded-none bg-white text-black hover:bg-gray-200 transition-colors text-xs font-black uppercase tracking-widest border-2 border-white"
           >
             Search
           </button>
@@ -100,15 +100,15 @@ export function UserTable() {
             setPagination((prev) => ({ ...prev, pageIndex: 0 }));
           }}
         >
-          <SelectTrigger className="w-[180px] h-10 border-white/10 bg-transparent text-white font-mono">
+          <SelectTrigger className="w-[180px] h-10 border-2 border-white/20 bg-black text-white font-mono rounded-none uppercase text-xs font-bold tracking-wide focus:border-red-500">
             <SelectValue placeholder="All Roles" />
           </SelectTrigger>
-          <SelectContent className="bg-black border-white/10 text-white font-mono">
-            <SelectItem value="all">All Roles</SelectItem>
-            <SelectItem value="student">Student</SelectItem>
-            <SelectItem value="mentor">Mentor</SelectItem>
-            <SelectItem value="recruiter">Recruiter</SelectItem>
-            <SelectItem value="admin">Admin</SelectItem>
+          <SelectContent className="bg-black border-2 border-white/20 text-white font-mono rounded-none">
+            <SelectItem value="all">ALL ROLES</SelectItem>
+            <SelectItem value="student">STUDENT</SelectItem>
+            <SelectItem value="mentor">MENTOR</SelectItem>
+            <SelectItem value="recruiter">RECRUITER</SelectItem>
+            <SelectItem value="admin">ADMIN</SelectItem>
           </SelectContent>
         </Select>
       </div>

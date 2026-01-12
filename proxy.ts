@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Public routes - no authentication required
-  const publicRoutes = ["/", "/sign-in", "/sign-up", "/about", "/courses"];
+  const publicRoutes = ["/", "/auth", "/about", "/courses"];
   const isPublicRoute = publicRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
@@ -22,7 +22,7 @@ export async function proxy(request: NextRequest) {
   });
 
   if (!session) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    return NextResponse.redirect(new URL("/auth", request.url));
   }
 
   // Role-based route protection

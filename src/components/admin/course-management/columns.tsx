@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 
@@ -26,7 +27,11 @@ interface ColumnsProps {
   onUnpublish: (courseId: string) => void;
 }
 
-export const getColumns = ({ onEdit, onDelete, onUnpublish }: ColumnsProps): ColumnDef<Course>[] => [
+export const getColumns = ({
+  onEdit,
+  onDelete,
+  onUnpublish,
+}: ColumnsProps): ColumnDef<Course>[] => [
   {
     accessorKey: "title",
     header: "TITLE",
@@ -72,45 +77,58 @@ export const getColumns = ({ onEdit, onDelete, onUnpublish }: ColumnsProps): Col
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 hover:bg-white/10 rounded-none data-[state=open]:bg-white/10"
+            >
               <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
+              <MoreHorizontal className="h-4 w-4 text-white" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="bg-black border-white/10 text-white font-mono"
+            className="font-mono bg-black border-2 border-white/20 rounded-none w-56 shadow-[4px_4px_0px_0px_white/20] p-0"
           >
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {course.status === "published" && (
+            <div className="bg-white/5 p-2 border-b-2 border-white/20">
+              <DropdownMenuLabel className="p-0 text-white font-black uppercase text-xs tracking-widest">
+                Course Actions
+              </DropdownMenuLabel>
+            </div>
+
+            <div className="p-1">
+              {course.status === "published" && (
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    onUnpublish(course.id);
+                  }}
+                  className="text-orange-400 hover:text-black hover:bg-orange-500 focus:text-black focus:bg-orange-500 rounded-none cursor-pointer uppercase text-xs font-bold tracking-wide py-2"
+                >
+                  <EyeOff className="mr-2 h-4 w-4" />
+                  Unpublish
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem
+                onClick={() => onEdit(course.id)}
+                className="text-gray-300 hover:text-black hover:bg-white focus:text-black focus:bg-white rounded-none cursor-pointer uppercase text-xs font-bold tracking-wide py-2"
+              >
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit Details
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator className="bg-white/10 my-1" />
+
               <DropdownMenuItem
                 onSelect={(e) => {
-                  e.preventDefault();
-                  onUnpublish(course.id);
+                  e.preventDefault(); // Prevent closing for confirm dialog
+                  onDelete(course.id);
                 }}
-                className="cursor-pointer hover:bg-white/10"
+                className="text-red-500 hover:text-black hover:bg-red-600 focus:text-black focus:bg-red-600 rounded-none cursor-pointer uppercase text-xs font-bold tracking-wide py-2"
               >
-                <EyeOff className="mr-2 h-4 w-4" />
-                Unpublish Course
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Course
               </DropdownMenuItem>
-            )}
-            <DropdownMenuItem
-              onClick={() => onEdit(course.id)}
-              className="cursor-pointer hover:bg-white/10"
-            >
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit Course
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onSelect={(e) => {
-                 e.preventDefault(); // Prevent closing for confirm dialog
-                 onDelete(course.id);
-              }}
-              className="cursor-pointer hover:bg-red-500/10 text-red-500 focus:bg-red-500/10 focus:text-red-500"
-            >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete Course
-            </DropdownMenuItem>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
       );

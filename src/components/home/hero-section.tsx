@@ -2,123 +2,158 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { ArrowRight, Flame, Shield, Briefcase, Terminal, Crosshair } from "lucide-react";
+import {
+  ArrowRight,
+  Flame,
+  Shield,
+  Briefcase,
+  Terminal,
+  Crosshair,
+} from "lucide-react";
 
 export function HeroSection() {
+  const fadeInUp = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.5 },
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-20 pb-10">
-      
       {/* Background Grid Accent - subtle static noise or pattern could go here */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
 
       <main className="relative z-10 w-full max-w-7xl px-4 sm:px-6 flex flex-col items-center gap-8">
-        
         {/* Top Badge - Neo Brutalist */}
-        <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center gap-3 px-4 py-1.5 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white]"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex items-center gap-3 px-4 py-1.5 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white]"
         >
-            <Terminal size={14} strokeWidth={3} />
-            <span>Zharnyx 2.0 // Cyber-Agency</span>
+          <Terminal size={14} strokeWidth={3} />
+          <span>Zharnyx 2.0 // Cyber-Agency</span>
         </motion.div>
 
         {/* Hero Content */}
         <div className="flex flex-col items-center text-center max-w-5xl space-y-6">
-            
-            {/* Headline with Staggered Reveal */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white leading-[1.1] uppercase">
-                <OverflowText text="From Student to" delay={0.1} />
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-red-500 animate-gradient-x">
-                   <OverflowText text="Security Consultant" delay={0.2} />
-                </span>
-            </h1>
+          {/* Headline */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white leading-[1.1] uppercase flex flex-col items-center">
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              From Student to
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-red-500 animate-gradient-x"
+            >
+              Security Consultant
+            </motion.span>
+          </h1>
 
-            <motion.p 
-                initial={{ opacity: 0, scale: 0.95 }} 
-                animate={{ opacity: 1, scale: 1 }} 
-                transition={{ delay: 0.4 }}
-                className="text-base md:text-xl text-gray-300 max-w-2xl font-medium border-l-4 border-red-600 pl-4 text-left md:text-center md:border-l-0 md:border-b-4 md:pb-2"
-            >
-                A 6-month career residency producing <span className="bg-white text-black px-1">Day-1-ready engineers</span> via live war games & SOC operations.
-            </motion.p>
-            
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                 className="flex flex-wrap justify-center gap-4 text-xs font-bold uppercase tracking-widest text-red-500"
-            >
-                <span className="flex items-center gap-1"><Crosshair size={12}/> Live Operations</span>
-                <span className="text-gray-600">/</span>
-                <span className="flex items-center gap-1"><Shield size={12}/> Client Deployments</span>
-            </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="text-base md:text-xl text-gray-300 max-w-2xl font-medium border-l-4 border-red-600 pl-4 text-left md:text-center md:border-l-0 md:border-b-4 md:pb-2"
+          >
+            A 6-month career residency producing{" "}
+            <span className="bg-white text-black px-1">
+              Day-1-ready engineers
+            </span>{" "}
+            via live war games & SOC operations.
+          </motion.p>
 
-            {/* Neo-Brutalist CTA Buttons */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-6 mt-6 w-full justify-center"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="flex flex-wrap justify-center gap-4 text-xs font-bold uppercase tracking-widest text-red-500"
+          >
+            <span className="flex items-center gap-1">
+              <Crosshair size={12} /> Live Operations
+            </span>
+            <span className="text-gray-600">/</span>
+            <span className="flex items-center gap-1">
+              <Shield size={12} /> Client Deployments
+            </span>
+          </motion.div>
+
+          {/* Neo-Brutalist CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-6 mt-6 w-full justify-center"
+          >
+            <Link
+              href="/blueprint"
+              className="group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:translate-x-1 hover:translate-y-1 transition-transform"
             >
-                <Link
-                    href="/blueprint"
-                    className="group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:translate-x-1 hover:translate-y-1 transition-transform"
-                >
-                    <span className="absolute inset-0 bg-white translate-x-1.5 translate-y-1.5 -z-10 border-2 border-white group-hover:translate-x-0 group-hover:translate-y-0 transition-transform"></span>
-                    <span className="flex items-center gap-2">
-                        View Blueprint <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                    </span>
-                </Link>
-                <Link
-                    href="/apply"
-                    className="group px-8 py-4 bg-transparent text-white font-bold text-lg uppercase tracking-wider border-2 border-white hover:bg-white hover:text-black transition-colors"
-                >
-                    Apply Now
-                </Link>
-            </motion.div>
+              <span className="absolute inset-0 bg-white translate-x-1.5 translate-y-1.5 -z-10 border-2 border-white group-hover:translate-x-0 group-hover:translate-y-0 transition-transform"></span>
+              <span className="flex items-center gap-2">
+                View Blueprint{" "}
+                <ArrowRight
+                  size={20}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </span>
+            </Link>
+            <Link
+              href="/apply"
+              className="group px-8 py-4 bg-transparent text-white font-bold text-lg uppercase tracking-wider border-2 border-white hover:bg-white hover:text-black transition-colors"
+            >
+              Apply Now
+            </Link>
+          </motion.div>
         </div>
 
         {/* Stats Grid - Neo Brutalist Box */}
         <motion.div
-             initial={{ opacity: 0, y: 30 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ duration: 0.8, delay: 0.8 }}
-             className="grid grid-cols-2 md:grid-cols-4 w-full border-2 border-white/20 mt-12 bg-black/50 backdrop-blur-sm divide-x-2 divide-y-2 md:divide-y-0 divide-white/20"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="grid grid-cols-2 md:grid-cols-4 w-full border-2 border-white/20 mt-12 bg-black/50 backdrop-blur-sm divide-x-2 divide-y-2 md:divide-y-0 divide-white/20"
         >
-            <StatItem value="6 MONTHS" label="Duration" />
-            <StatItem value="3 LVL" label="Deployment" />
-            <StatItem value="100%" label="Exposure" />
-            <StatItem value="₹4.5K" label="Investment" />
+          <StatItem value="6 MONTHS" label="Duration" />
+          <StatItem value="3 LVL" label="Deployment" />
+          <StatItem value="100%" label="Exposure" />
+          <StatItem value="₹4.5K" label="Investment" />
         </motion.div>
-       
       </main>
     </div>
   );
 }
 
-function OverflowText({ text, delay }: { text: string, delay: number }) {
-    return (
-        <span className="inline-block overflow-hidden align-bottom">
-            <motion.span
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.5, delay, ease: [0.33, 1, 0.68, 1] }}
-                className="inline-block"
-            >
-                {text}
-            </motion.span>
-        </span>
-    )
+function OverflowText({ text, delay }: { text: string; delay: number }) {
+  return (
+    <span className="inline-block overflow-hidden align-bottom">
+      <motion.span
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5, delay, ease: [0.33, 1, 0.68, 1] }}
+        className="inline-block"
+      >
+        {text}
+      </motion.span>
+    </span>
+  );
 }
 
-function StatItem({ value, label }: { value: string, label: string }) {
-    return (
-        <div className="flex flex-col items-center justify-center p-6 hover:bg-white/5 transition-colors group">
-            <span className="text-3xl font-bold text-white group-hover:text-red-500 transition-colors">{value}</span>
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1 group-hover:text-white transition-colors">{label}</span>
-        </div>
-    )
+function StatItem({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center p-6 hover:bg-white/5 transition-colors group">
+      <span className="text-3xl font-bold text-white group-hover:text-red-500 transition-colors">
+        {value}
+      </span>
+      <span className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1 group-hover:text-white transition-colors">
+        {label}
+      </span>
+    </div>
+  );
 }

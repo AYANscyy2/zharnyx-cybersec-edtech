@@ -16,7 +16,7 @@
 
 3. **Create your first user:**
 
-   - Go to `/sign-up`
+   - Go to `/auth`
    - Create an account (defaults to student role)
 
 4. **Promote user to admin (in PostgreSQL):**
@@ -32,8 +32,7 @@
 
 ## Routes
 
-- `/sign-in` - Sign in (public)
-- `/sign-up` - Sign up (public)
+- `/auth` - Authentication (public)
 - `/dashboard` - Main dashboard (authenticated)
 - `/dashboard/admin` - Admin panel (admin only)
 - `/dashboard/mentor` - Mentor portal (mentor + admin)

@@ -18,8 +18,6 @@ import {
 import {
   BookOpen,
   Briefcase,
-  Trophy,
-  DollarSign,
   Settings,
   LogOut,
   Home,
@@ -29,6 +27,10 @@ import {
   Shield,
   PanelLeft,
   ChevronLeft,
+  Terminal,
+  FileText,
+  FolderKanban,
+  HelpCircle,
 } from "lucide-react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth/auth-client";
@@ -82,6 +84,29 @@ const ADMIN_ITEMS = [
   },
 ];
 
+const MENTOR_ITEMS = [
+  {
+    title: "Student Progress",
+    id: "student-progress",
+    icon: GraduationCap,
+  },
+  {
+    title: "Score Assignments",
+    id: "score-assignments",
+    icon: FileText,
+  },
+  {
+    title: "Score Projects",
+    id: "score-projects",
+    icon: FolderKanban,
+  },
+  {
+    title: "Doubt Sessions",
+    id: "doubt-sessions",
+    icon: HelpCircle,
+  },
+];
+
 interface DashboardSidebarProps {
   userRole?: string;
 }
@@ -94,7 +119,14 @@ export function DashboardSidebar({
   const searchParams = useSearchParams();
   const { toggleSidebar, state } = useSidebar();
 
-  const currentSection = searchParams.get("section") || "user-management";
+  const effectiveRole =
+    userRole === "admin" && pathname?.startsWith("/dashboard/mentor")
+      ? "mentor"
+      : userRole;
+
+  const currentSection =
+    searchParams.get("section") ||
+    (effectiveRole === "mentor" ? "student-progress" : "user-management");
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -106,156 +138,264 @@ export function DashboardSidebar({
     router.push(`/dashboard/admin?section=${id}`);
   };
 
-  const items = userRole === "admin" ? [] : STUDENT_ITEMS;
+  const handleMentorClick = (id: string) => {
+    router.push(`/dashboard/mentor?section=${id}`);
+  };
+
+  const items =
+    effectiveRole === "admin"
+      ? []
+      : effectiveRole === "mentor"
+      ? []
+      : STUDENT_ITEMS;
 
   return (
     <Sidebar
-      className="border-r border-blue-500/30 bg-black text-white transition-all duration-300 overflow-visible"
+      className="border-r-2 border-white/20 bg-black text-white transition-none"
       collapsible="icon"
     >
-      <SidebarHeader className="border-b-2 border-red-600 p-4 h-[70px] flex items-center bg-black">
+      <SidebarHeader className="border-b-2 border-white/20 p-4 h-[80px] flex items-center justify-center bg-black group-data-[collapsible=icon]:p-2">
         {/* Logo / Title Area */}
-        <div className="flex items-center gap-3 overflow-hidden transition-all duration-300 w-full">
-          {/* Shield Icon - Red */}
-          <div className="flex items-center justify-center shrink-0">
-            <Shield
+        <div className="flex items-center gap-3 overflow-hidden w-full group">
+          {/* Icon - Color depends on Role */}
+          <div
+            className={cn(
+              "flex items-center justify-center shrink-0 w-10 h-10 border-2 border-white/20 shadow-[2px_2px_0px_0px_white] group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 transition-all",
+              effectiveRole === "mentor" ? "bg-purple-600" : "bg-red-600"
+            )}
+          >
+            <div
               className={cn(
-                "text-red-600 fill-red-600/10 transition-all duration-300 stroke-[2.5px]",
-                state === "expanded" ? "h-8 w-8" : "h-5 w-5"
+                "text-black h-6 w-6 group-data-[collapsible=icon]:h-4 group-data-[collapsible=icon]:w-4 flex items-center justify-center"
               )}
-            />
+            >
+              {effectiveRole === "mentor" ? (
+                <GraduationCap strokeWidth={2.5} />
+              ) : (
+                <Terminal strokeWidth={2.5} />
+              )}
+            </div>
           </div>
 
-          {/* Text - Red */}
-          {state === "expanded" && (
-            <span className="font-mono font-black text-xl text-red-600 tracking-tighter truncate animate-in fade-in slide-in-from-left-4 duration-300 uppercase shadow-[2px_2px_0px_0px_#3b82f6]">
+          {/* Text - White - Hide via CSS when collapsed if state isn't enough */}
+          <div
+            className={cn(
+              "flex flex-col transition-opacity duration-200",
+              state === "collapsed" ? "opacity-0 w-0 hidden" : "opacity-100"
+            )}
+          >
+            <span className="font-black text-xl text-white tracking-tighter uppercase leading-none">
               ZHARNYX
             </span>
-          )}
+            <span
+              className={cn(
+                "text-[10px] font-mono uppercase tracking-widest leading-none mt-1",
+                effectiveRole === "mentor" ? "text-purple-500" : "text-red-500"
+              )}
+            >
+              {effectiveRole === "mentor" ? "Mentor Zone" : "Admin Console"}
+            </span>
+          </div>
         </div>
-
-        <Button
-          onClick={toggleSidebar}
-          variant="ghost"
-          size="icon"
-          className={cn(
-            "absolute -right-3 top-6 z-50 h-6 w-6 rounded-none border-2 border-red-600 bg-black text-red-600 hover:bg-red-600 hover:text-black transition-all duration-200 shadow-[4px_4px_0px_0px_#3b82f6]",
-            state === "collapsed" && "right-[-12px]"
-          )}
-        >
-          <ChevronLeft
-            className={cn(
-              "h-4 w-4 font-bold transition-transform duration-300",
-              state === "collapsed" && "rotate-180"
-            )}
-          />
-        </Button>
       </SidebarHeader>
 
-      <SidebarContent className="bg-black">
+      <SidebarContent className="bg-black py-6">
         {/* Admin Menu */}
-        {userRole === "admin" && (
+        {effectiveRole === "admin" && (
           <SidebarGroup>
-            <SidebarGroupLabel className="text-red-500/70 font-mono font-bold uppercase tracking-wider text-xs mb-2">
-              Admin Console
+            <SidebarGroupLabel className="text-gray-500 font-mono font-bold uppercase tracking-widest text-xs mb-4 pl-4 group-data-[collapsible=icon]:hidden">
+              Management modules
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu className="gap-2">
-                {ADMIN_ITEMS.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={
-                        pathname === "/dashboard/admin" &&
-                        currentSection === item.id
-                      }
-                      onClick={() => handleAdminClick(item.id)}
-                      className={cn(
-                        "font-mono font-bold text-sm border-2 border-transparent transition-all duration-200 p-3 h-auto",
-                        // Default: Blue text
-                        "text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 hover:border-blue-500 hover:shadow-[4px_4px_0px_0px_#3b82f6]",
-                        // Active: Purple styling
-                        "data-[active=true]:bg-purple-900/20 data-[active=true]:text-purple-400",
-                        "data-[active=true]:border-purple-500 data-[active=true]:shadow-[4px_4px_0px_0px_#a855f7]",
-                        "data-[active=true]:translate-x-[2px] data-[active=true]:translate-y-[2px]"
-                      )}
-                    >
-                      <button className="flex items-center gap-3">
-                        <item.icon
-                          className={cn(
-                            "h-5 w-5 stroke-[2.5px]",
-                            // Icon color follows active state (Purple) or default (Blue)
-                            pathname === "/dashboard/admin" &&
-                              currentSection === item.id
-                              ? "text-purple-400"
-                              : "text-blue-500"
-                          )}
-                        />
-                        <span className="leading-none">{item.title}</span>
-                      </button>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+              <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
+                {ADMIN_ITEMS.map((item) => {
+                  const isActive =
+                    pathname === "/dashboard/admin" &&
+                    currentSection === item.id;
+
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive}
+                        onClick={() => handleAdminClick(item.id)}
+                        className={cn(
+                          "font-mono font-bold text-sm border-2 transition-all duration-200 p-3 h-auto rounded-none mb-1",
+                          // Default
+                          "bg-transparent border-transparent text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/20",
+                          // Active
+                          isActive &&
+                            "bg-red-600/10 border-red-600 text-red-500 hover:bg-red-600/20 hover:text-red-400 hover:border-red-500 shadow-[2px_2px_0px_0px_#dc2626]",
+                          // Collapsed adjustments
+                          "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2"
+                        )}
+                      >
+                        <button className="flex items-center gap-3 w-full group-data-[collapsible=icon]:justify-center">
+                          <item.icon
+                            className={cn(
+                              "h-5 w-5 stroke-[1.5px] shrink-0",
+                              isActive
+                                ? "text-red-500"
+                                : "text-gray-400 group-hover:text-white"
+                            )}
+                          />
+                          <span className="uppercase tracking-wide text-xs group-data-[collapsible=icon]:hidden">
+                            {item.title}
+                          </span>
+                        </button>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         )}
 
-        {/* Student/Mentor Menu */}
-        {userRole !== "admin" && (
+        {/* Mentor Menu */}
+        {effectiveRole === "mentor" && (
           <SidebarGroup>
-            <SidebarGroupLabel className="text-red-500/70 font-mono font-bold uppercase tracking-wider text-xs mb-2">
-              Dashboard
+            <SidebarGroupLabel className="text-gray-500 font-mono font-bold uppercase tracking-widest text-xs mb-4 pl-4 group-data-[collapsible=icon]:hidden">
+              Overview & Grading
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu className="gap-2">
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={
-                        pathname === item.url ||
-                        pathname?.startsWith(item.url + "/")
-                      }
-                      onClick={() => router.push(item.url)}
-                      className={cn(
-                        "font-mono font-bold text-sm border-2 border-transparent transition-all duration-200 p-3 h-auto",
-                        "text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 hover:border-blue-500 hover:shadow-[4px_4px_0px_0px_#3b82f6]",
-                        "data-[active=true]:bg-purple-900/20 data-[active=true]:text-purple-400",
-                        "data-[active=true]:border-purple-500 data-[active=true]:shadow-[4px_4px_0px_0px_#a855f7]"
-                      )}
-                    >
-                      <button className="flex items-center gap-3">
-                        <item.icon className="h-5 w-5 stroke-[2.5px]" />
-                        <span className="leading-none">{item.title}</span>
-                      </button>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+              <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
+                {MENTOR_ITEMS.map((item) => {
+                  const isActive =
+                    pathname === "/dashboard/mentor" &&
+                    currentSection === item.id;
+
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive}
+                        onClick={() => handleMentorClick(item.id)}
+                        className={cn(
+                          "font-mono font-bold text-sm border-2 transition-all duration-200 p-3 h-auto rounded-none mb-1",
+                          // Default
+                          "bg-transparent border-transparent text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/20",
+                          // Active - Purple
+                          isActive &&
+                            "bg-purple-600/10 border-purple-600 text-purple-500 hover:bg-purple-600/20 hover:text-purple-400 hover:border-purple-500 shadow-[2px_2px_0px_0px_#9333ea]",
+                          // Collapsed adjustments
+                          "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2"
+                        )}
+                      >
+                        <button className="flex items-center gap-3 w-full group-data-[collapsible=icon]:justify-center">
+                          <item.icon
+                            className={cn(
+                              "h-5 w-5 stroke-[1.5px] shrink-0",
+                              isActive
+                                ? "text-purple-500"
+                                : "text-gray-400 group-hover:text-white"
+                            )}
+                          />
+                          <span className="uppercase tracking-wide text-xs group-data-[collapsible=icon]:hidden">
+                            {item.title}
+                          </span>
+                        </button>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {/* Student Menu */}
+        {effectiveRole !== "admin" && effectiveRole !== "mentor" && (
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-gray-500 font-mono font-bold uppercase tracking-widest text-xs mb-4 pl-4">
+              Learning Space
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
+                {items.map((item) => {
+                  const isActive =
+                    pathname === item.url ||
+                    pathname?.startsWith(item.url + "/");
+
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive}
+                        onClick={() => router.push(item.url)}
+                        className={cn(
+                          "font-mono font-bold text-sm border-2 transition-all duration-200 p-3 h-auto rounded-none mb-1",
+                          // Default
+                          "bg-transparent border-transparent text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/20",
+                          // Active
+                          isActive &&
+                            "bg-blue-600/10 border-blue-600 text-blue-500 hover:bg-blue-600/20 hover:text-blue-400 hover:border-blue-500 shadow-[2px_2px_0px_0px_#2563eb]",
+                          // Collapsed
+                          "group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2"
+                        )}
+                      >
+                        <button className="flex items-center gap-3 w-full group-data-[collapsible=icon]:justify-center">
+                          <item.icon
+                            className={cn(
+                              "h-5 w-5 stroke-[1.5px] shrink-0",
+                              isActive
+                                ? "text-blue-500"
+                                : "text-gray-400 group-hover:text-white"
+                            )}
+                          />
+                          <span className="uppercase tracking-wide text-xs group-data-[collapsible=icon]:hidden">
+                            {item.title}
+                          </span>
+                        </button>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         )}
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-white/10 p-4 bg-black">
-        <SidebarMenu>
+      <SidebarFooter className="border-t-2 border-white/20 p-4 bg-black group-data-[collapsible=icon]:p-2">
+        <SidebarMenu className="gap-2 group-data-[collapsible=icon]:gap-1">
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={toggleSidebar}
+              className="hover:bg-white/10 font-mono text-gray-400 hover:text-white border-2 border-transparent hover:border-white/20 h-auto p-3 rounded-none  group-data-[collapsible=icon]:justify-center"
+            >
+              <PanelLeft
+                className={cn(
+                  "h-4 w-4 transition-transform",
+                  state === "collapsed" && "rotate-180"
+                )}
+              />
+              <span className="uppercase tracking-wider text-xs group-data-[collapsible=icon]:hidden">
+                {state === "expanded" ? "Collapse" : ""}
+              </span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={() => router.push("/")}
-              className="hover:bg-white/10 font-mono text-gray-400 hover:text-white"
+              className="hover:bg-white/10 font-mono text-gray-400 hover:text-white border-2 border-transparent hover:border-white/20 h-auto p-3 rounded-none group-data-[collapsible=icon]:justify-center"
             >
               <Home className="h-4 w-4" />
-              <span>Back to Home</span>
+              <span className="uppercase tracking-wider text-xs group-data-[collapsible=icon]:hidden">
+                Home
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleLogout}
-              className="hover:bg-red-500/10 text-red-500/80 hover:text-red-500 font-mono group"
+              className="hover:bg-red-900/30 text-red-500/70 hover:text-red-500 font-mono border-2 border-transparent hover:border-red-900/50 h-auto p-3 rounded-none group group-data-[collapsible=icon]:justify-center"
             >
-              <LogOut className="h-4 w-4 group-hover:scale-110 transition-transform" />
-              <span>Sign Out</span>
+              <LogOut className="h-4 w-4 " />
+              <span className="uppercase tracking-wider text-xs group-data-[collapsible=icon]:hidden">
+                Sign Out
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
