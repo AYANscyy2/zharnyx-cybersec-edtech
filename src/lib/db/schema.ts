@@ -195,6 +195,7 @@ export const course = pgTable("course", {
   description: text("description").notNull(),
   image: text("image"),
   price: integer("price").default(0),
+  sellingPoints: json("selling_points"),
   status: text("status", { enum: ["published", "unpublished"] })
     .default("unpublished")
     .notNull(),
@@ -445,5 +446,3 @@ export const studentProgressRelations = relations(studentProgress, ({ one }) => 
     references: [courseWeek.id],
   }),
 }));
-
-

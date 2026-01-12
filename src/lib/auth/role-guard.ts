@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { auth, type Role } from "./auth";
+import { redirect, RedirectType } from "next/navigation";
 
 export async function requireAuth() {
   const session = await auth.api.getSession({
@@ -9,7 +10,7 @@ export async function requireAuth() {
   });
 
   if (!session) {
-    throw new Error("Unauthorized: Please sign in to continue");
+    redirect("/auth", RedirectType.replace);
   }
 
   return session;

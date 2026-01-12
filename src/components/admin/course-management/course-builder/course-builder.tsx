@@ -59,6 +59,7 @@ export function CourseBuilder({
       description: "",
       price: 0,
       image: "",
+      sellingPoints: [],
       status: "unpublished",
       months: [], // Start with empty curriculum
     },
@@ -82,41 +83,50 @@ export function CourseBuilder({
       const res = await getCourseDetails(courseId);
       if (res.success && res.data) {
         const dbCourse = res.data;
-        
+
         // Map DB structure to Form Values
         const formValues: CourseFormValues = {
-            title: dbCourse.title,
-            description: dbCourse.description || "",
-            price: dbCourse.price || 0,
-            image: dbCourse.image || "",
-            status: dbCourse.status as "published" | "unpublished",
-            months: dbCourse.months.map(month => ({
-                id: month.id,
-                title: month.title,
-                type: month.type as "common" | "team",
-                order: month.order,
-                weeks: month.weeks.map(week => ({
-                    id: week.id,
-                    title: week.title,
-                    order: week.order,
-                    team: week.team as "red" | "blue" | null,
-                    isProject: week.isProject,
-                    projectTitle: week.projectTitle || "",
-                    projectDescription: week.projectDescription || "",
-                    content: week.content || "",
-                    resources: week.resources ? (week.resources as any) : [],
-                    assessment: week.assessments && week.assessments.length > 0 ? {
-                        title: week.assessments[0].title,
-                        topic: week.assessments[0].topic || "",
-                        problem: week.assessments[0].problem || "",
-                        submissionFormat: (week.assessments[0].submissionFormat as "pdf" | "url") || "pdf",
-                        deadline: week.assessments[0].deadline ? new Date(week.assessments[0].deadline) : undefined
-                    } : null,
-                    mentorIds: week.mentors.map(wm => wm.mentorId)
-                }))
-            }))
+          title: dbCourse.title,
+          description: dbCourse.description || "",
+          price: dbCourse.price || 0,
+          image: dbCourse.image || "",
+          sellingPoints: (dbCourse.sellingPoints as string[]) || [],
+          status: dbCourse.status as "published" | "unpublished",
+          months: dbCourse.months.map((month) => ({
+            id: month.id,
+            title: month.title,
+            type: month.type as "common" | "team",
+            order: month.order,
+            weeks: month.weeks.map((week) => ({
+              id: week.id,
+              title: week.title,
+              order: week.order,
+              team: week.team as "red" | "blue" | null,
+              isProject: week.isProject,
+              projectTitle: week.projectTitle || "",
+              projectDescription: week.projectDescription || "",
+              content: week.content || "",
+              resources: week.resources ? (week.resources as any) : [],
+              assessment:
+                week.assessments && week.assessments.length > 0
+                  ? {
+                      title: week.assessments[0].title,
+                      topic: week.assessments[0].topic || "",
+                      problem: week.assessments[0].problem || "",
+                      submissionFormat:
+                        (week.assessments[0].submissionFormat as
+                          | "pdf"
+                          | "url") || "pdf",
+                      deadline: week.assessments[0].deadline
+                        ? new Date(week.assessments[0].deadline)
+                        : undefined,
+                    }
+                  : null,
+              mentorIds: week.mentors.map((wm) => wm.mentorId),
+            })),
+          })),
         };
-        
+
         reset(formValues);
       } else {
         toast.error("Failed to load course details");
@@ -126,10 +136,9 @@ export function CourseBuilder({
     }
 
     if (courseId) {
-        loadCourse();
+      loadCourse();
     }
   }, [courseId, reset, onComplete]);
-
 
   // Handler for saving draft (no validation)
   const handleSaveDraft = async () => {
@@ -211,13 +220,13 @@ export function CourseBuilder({
       setIsSubmitting(false);
     }
   };
-  
+
   if (isLoading) {
-      return (
-          <div className="flex justify-center items-center h-64">
-              <Loader2 className="h-8 w-8 animate-spin text-white" />
-          </div>
-      );
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-white" />
+      </div>
+    );
   }
 
   return (
@@ -276,7 +285,7 @@ export function CourseBuilder({
           <h4 className="text-xl font-mono text-white mb-4 border-b border-white/10 pb-2">
             Basic Information
           </h4>
-          <BasicInfo register={register} errors={errors} />
+          <BasicInfo register={register} errors={errors} control={control} />
         </section>
 
         {/* Step 2: Curriculum (Deep Nested) */}

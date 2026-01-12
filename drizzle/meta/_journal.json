@@ -43,6 +43,13 @@
       "when": 1767938222460,
       "tag": "0005_lyrical_hex",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1768248424944,
+      "tag": "0006_lowly_big_bertha",
+      "breakpoints": true
     }
   ]
 }

@@ -19,6 +19,8 @@ import { createId } from "@paralleldrive/cuid2";
 export async function createFullCourse(data: CourseFormValues) {
     try {
         await requireAdmin();
+        console.log("createFullCourse received data:", JSON.stringify(data, null, 2));
+
 
         await db.transaction(async (tx) => {
             // 1. Create Course
@@ -28,6 +30,8 @@ export async function createFullCourse(data: CourseFormValues) {
                 title: data.title,
                 description: data.description,
                 image: data.image || null,
+                sellingPoints: data.sellingPoints || [],
+                price: data.price ? Math.round(Number(data.price)) : 0,
                 status: data.status,
             }).returning();
 
@@ -109,7 +113,6 @@ export async function getAllCourses({
     query?: string;
     status?: string;
 }) {
-    // ... existing read logic ...
     try {
         await requireAdmin();
         const offset = (page - 1) * limit;
@@ -154,7 +157,6 @@ export async function getAllCourses({
 }
 
 export async function getCourseDetails(courseId: string) {
-    // ... existing get logic ...
     try {
         await requireAdmin();
         const courseData = await db.query.course.findFirst({
@@ -197,6 +199,8 @@ export async function getCourseDetails(courseId: string) {
 export async function updateFullCourse(courseId: string, data: CourseFormValues) {
     try {
         await requireAdmin();
+        console.log("updateFullCourse received data:", JSON.stringify(data, null, 2));
+
 
         await db.transaction(async (tx) => {
             // 1. Update Course Details
@@ -205,6 +209,8 @@ export async function updateFullCourse(courseId: string, data: CourseFormValues)
                     title: data.title,
                     description: data.description,
                     image: data.image || null,
+                    sellingPoints: data.sellingPoints || [],
+                    price: data.price ? Math.round(Number(data.price)) : 0,
                     status: data.status,
                 })
                 .where(eq(course.id, courseId));
@@ -379,5 +385,3 @@ export async function deleteCourse(courseId: string) {
         return { success: false, error: "Failed to delete course" };
     }
 }
-
-

@@ -9,26 +9,6 @@ import {
   Globe,
   Lock,
   Terminal,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-
-const features = [
-  { icon: Zap, label: "6 Months Intensive Training" },
-  { icon: ShieldCheck, label: "Red + Blue Combined Foundation" },
-  { icon: Terminal, label: "Specialized Track (Red or Blue)" },
-  { icon: Crosshair, label: "Live War Games (Month 5)" },
-  { icon: Lock, label: "vSOC Residency Experience" },
-  { icon: Database, label: "3+ Real Projects" },
-  { icon: Globe, label: "GitHub Portfolio" },
-  { icon: Award, label: "Z-CPJE Certification" },
-  { icon: FileText, label: "Experience Letter" },
-  { icon: Briefcase, label: "Placement Support" },
-  { icon: Clock, label: "2 Floating Weeks (Exam Buffer)" },
-  { icon: Users, label: "Lifetime Community Access" },
-];
-
-import {
   Crosshair,
   Award,
   FileText,
@@ -36,8 +16,52 @@ import {
   Clock,
   Users,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
-export function PricingCard() {
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  price: number | null;
+  sellingPoints: unknown;
+  months: unknown[];
+}
+
+interface PricingCardProps {
+  course: Course;
+}
+
+const ICONS = [
+  Zap,
+  ShieldCheck,
+  Terminal,
+  Crosshair,
+  Lock,
+  Database,
+  Globe,
+  Award,
+  FileText,
+  Briefcase,
+  Clock,
+  Users,
+];
+
+export function PricingCard({ course }: PricingCardProps) {
+  const sellingPoints = Array.isArray(course.sellingPoints)
+    ? (course.sellingPoints as string[])
+    : [];
+
+  const durationInMonths = course.months?.length || 0;
+  // Avoid division by zero if no months are defined, default to 1 or existing 6 logic?
+  // Let's assume if 0 months, we show full price ~ or handle gracefully.
+  // If user wants "per month", likely there is a duration.
+  // If duration is 0, let's just use 1 to avoid Infinity, or maybe fallback to 6 if they want default.
+  // But user said "fetch the no of the moths to show th eprive per month correctly".
+  // So if months = 0, maybe "Custom Duration" or just show total?
+  // Let's safe guard:
+  const monthlyDivisor = durationInMonths > 0 ? durationInMonths : 1;
+
   return (
     <section className="py-20 px-4 md:px-8 bg-black">
       <div className="max-w-7xl mx-auto border-2 border-white/20 bg-zinc-950/50 backdrop-blur-md">
@@ -54,33 +78,30 @@ export function PricingCard() {
             </Badge>
 
             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight">
-              The Purple Team <br /> Pathway
+              {course.title}
             </h2>
 
             <div className="space-y-1">
               <div className="flex items-baseline gap-2">
                 <span className="text-6xl md:text-7xl font-black text-white">
-                  ₹4,500
+                  ₹{course.price?.toLocaleString() ?? "0"}
                 </span>
                 <span className="text-xl text-zinc-500 font-mono">/ total</span>
               </div>
               <p className="text-sm text-purple-400 font-bold font-mono uppercase tracking-wide">
-                ~₹750 per month • 6 months duration
+                ~₹
+                {course.price
+                  ? Math.round(course.price / monthlyDivisor).toLocaleString()
+                  : 0}{" "}
+                per month • {durationInMonths} months duration
               </p>
             </div>
           </div>
 
           {/* Right Box: CTA */}
           <div className="w-full lg:w-[400px] bg-zinc-900/50 flex flex-col justify-center p-8 md:p-12 space-y-6 relative overflow-hidden">
-            {/* <div className="absolute top-0 right-0 p-4 border-l-2 border-b-2 border-white/10 bg-black/50">
-              <span className="text-xs font-mono text-zinc-500">
-                SEATS_AVAILABLE: 30
-              </span>
-            </div> */}
-
             <p className="text-zinc-400 text-sm leading-relaxed">
-              This is not just a course. It is a simulated work environment
-              designed to take you from novice to deployed engineer.
+              {course.description}
             </p>
 
             <Button className="w-full bg-red-600 hover:bg-red-700 text-black hover:text-white font-black uppercase tracking-wider h-16 text-lg border-2 border-red-600 hover:border-red-500 transition-all group">
@@ -96,36 +117,34 @@ export function PricingCard() {
         </div>
 
         {/* Grid of Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-y-2 md:divide-y-0 md:divide-x-2 md:[&>*:nth-child(2)]:border-r-2 lg:[&>*:nth-child(3)]:border-r-0 lg:[&>*:nth-child(3n)]:border-r-0 border-white/20">
-          {/* Note: Tailwind divide utilities are tricky with grids. Using borders directly on elements or a container query approach is safer. 
-                 For simplicity and robustness in this specific grid, I'll use individual borders.
-             */}
-        </div>
-
-        {/* Re-doing grid with explicit borders for Neo-Brutalist look */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className={`
-                        p-6 border-b-2 border-white/20 flex flex-col gap-4 group hover:bg-white/5 transition-colors
-                        ${
-                          index % 4 !== 3 ? "lg:border-r-2" : ""
-                        } /* Right border for all except last in row on LG */
-                        ${
-                          index % 2 !== 1 ? "md:max-lg:border-r-2" : ""
-                        } /* Right border for odd items on MD */
-                    `}
-            >
-              <feature.icon
-                className="w-8 h-8 text-zinc-600 group-hover:text-red-500 transition-colors"
-                strokeWidth={1.5}
-              />
-              <span className="text-sm font-bold text-zinc-300 uppercase tracking-wide leading-tight group-hover:text-white">
-                {feature.label}
-              </span>
+          {sellingPoints.length > 0 ? (
+            sellingPoints.map((point, index) => {
+              const Icon = ICONS[index % ICONS.length];
+              return (
+                <div
+                  key={index}
+                  className={`
+                                p-6 border-b-2 border-white/20 flex flex-col gap-4 group hover:bg-white/5 transition-colors
+                                ${index % 4 !== 3 ? "lg:border-r-2" : ""} 
+                                ${index % 2 !== 1 ? "md:max-lg:border-r-2" : ""}
+                            `}
+                >
+                  <Icon
+                    className="w-8 h-8 text-zinc-600 group-hover:text-red-500 transition-colors"
+                    strokeWidth={1.5}
+                  />
+                  <span className="text-sm font-bold text-zinc-300 uppercase tracking-wide leading-tight group-hover:text-white">
+                    {point}
+                  </span>
+                </div>
+              );
+            })
+          ) : (
+            <div className="col-span-full p-8 text-center text-zinc-600 italic">
+              No features listed.
             </div>
-          ))}
+          )}
         </div>
 
         {/* Footer Bar */}

@@ -78,6 +78,7 @@ export const CourseFormSchema = z.object({
   // image: z.string().url("Invalid Image URL").optional().or(z.literal("")), // Removed as per request
   image: z.string().optional().nullable(), // Keeping as optional/nullable for DB compatibility if needed, but not validated/used in UI
   status: z.enum(["published", "unpublished"]).default("unpublished"),
+  sellingPoints: z.array(z.string()).optional(),
   months: z.array(CourseMonthSchema),
 });
 
@@ -88,6 +89,7 @@ export const CourseFormDraftSchema = z.object({
   price: z.coerce.number().optional().default(0),
   image: z.string().optional().nullable(),
   status: z.enum(["published", "unpublished"]).default("unpublished"),
+  sellingPoints: z.array(z.string()).optional(),
   months: z.array(CourseMonthDraftSchema).optional().default([]),
 });
 

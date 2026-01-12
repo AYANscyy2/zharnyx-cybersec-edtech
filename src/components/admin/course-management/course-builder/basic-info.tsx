@@ -1,9 +1,17 @@
 "use client";
 
-import { UseFormRegister, FieldErrors } from "react-hook-form";
+import {
+  UseFormRegister,
+  FieldErrors,
+  Control,
+  useFieldArray,
+  Controller,
+} from "react-hook-form";
 import { CourseFormValues } from "@/lib/validators/course";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Plus, Trash2 } from "lucide-react";
 import {
   Field,
   FieldLabel,
@@ -14,9 +22,15 @@ import {
 interface BasicInfoProps {
   register: UseFormRegister<CourseFormValues>;
   errors: FieldErrors<CourseFormValues>;
+  control: Control<CourseFormValues>;
 }
 
-export function BasicInfo({ register, errors }: BasicInfoProps) {
+export function BasicInfo({ register, errors, control }: BasicInfoProps) {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "sellingPoints" as never, // casting to avoid deep path type issues with simple array of strings if strict mode complains
+  });
+
   return (
     <div className="space-y-6">
       <Field>
@@ -53,18 +67,79 @@ export function BasicInfo({ register, errors }: BasicInfoProps) {
           Price (INR)
         </FieldLabel>
         <FieldContent>
-          <Input
-            id="price"
-            type="number"
-            min={0}
-            step={0.01}
-            placeholder="0.00"
-            {...register("price")}
-            className="bg-black/50 border-white/10 text-white font-mono focus:ring-slate-400"
+          <Controller
+            control={control}
+            name="price"
+            render={({ field: { onChange, value, ...field } }) => (
+              <Input
+                {...field}
+                id="price"
+                type="number"
+                min={0}
+                step={1}
+                placeholder="0"
+                value={value ?? ""}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  onChange(val === "" ? 0 : Number(val));
+                }}
+                className="bg-black/50 border-white/10 text-white font-mono focus:ring-slate-400"
+              />
+            )}
           />
         </FieldContent>
         <FieldError errors={[errors.price]} />
       </Field>
+      <div className="border-t border-white/10 pt-4">
+        <div className="flex items-center justify-between mb-2">
+          <FieldLabel className="text-white font-mono">
+            Selling Points
+          </FieldLabel>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => append("")}
+            className="text-xs font-mono text-neon-blue hover:text-white hover:bg-white/10"
+          >
+            <Plus className="mr-1 h-3 w-3" />
+            Add Point
+          </Button>
+        </div>
+
+        <div className="space-y-3">
+          {fields.map((field, index) => (
+            <div key={field.id} className="flex gap-2 items-start">
+              <div className="flex-1">
+                <Input
+                  placeholder={`Selling point ${index + 1}`}
+                  {...register(`sellingPoints.${index}` as const)}
+                  className="bg-black/50 border-white/10 text-white font-mono focus:ring-slate-400 text-sm"
+                />
+                {errors.sellingPoints && errors.sellingPoints[index] && (
+                  <p className="text-red-500 text-xs mt-1 font-mono">
+                    {errors.sellingPoints[index]?.message}
+                  </p>
+                )}
+              </div>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => remove(index)}
+                className="text-gray-400 hover:text-red-500 hover:bg-white/10 h-10 w-10 shrink-0"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+          {fields.length === 0 && (
+            <p className="text-gray-500 text-sm font-mono italic">
+              No selling points added yet.
+            </p>
+          )}
+        </div>
+      </div>
       {/* Image field removed as per requirements */}
       {/* 
         Status is handled via "Save Draft" vs "Publish" buttons conceptually, 

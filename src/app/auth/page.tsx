@@ -4,17 +4,16 @@ import { useState, Suspense } from "react";
 import { signIn, signUp } from "@/lib/auth/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "@/components/shared/toast";
-import { AnimatedBackground } from "@/components/shared/animated-background";
-import { Navbar } from "@/components/shared/navbar";
-import { Button } from "@/components/ui/button";
+import { motion } from "motion/react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Terminal,
+  User,
+  Mail,
+  Lock,
+  AlertCircle,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -98,99 +97,134 @@ function AuthContent() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center pointer-events-none px-4 py-20">
-      <Card className="w-full max-w-md pointer-events-auto bg-slate-900/90 backdrop-blur-md border-white/20 text-white font-mono">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">
-            {mode === "signin" ? "Login to your account" : "Create account"}
-          </CardTitle>
-          <CardDescription className="text-neutral-300">
-            {mode === "signin"
-              ? "Enter your credentials to access your account"
-              : "Fill in your details to create a new account"}
-          </CardDescription>
-          <div className="pt-2">
-            <Button
-              variant="link"
-              className="text-white hover:text-white/80 p-0 h-auto font-mono"
-              onClick={() => {
-                setMode(mode === "signin" ? "signup" : "signin");
-                setError("");
-              }}
-            >
-              {mode === "signin"
-                ? "Don't have an account? Sign Up"
-                : "Already have an account? Sign In"}
-            </Button>
+    <div className="relative min-h-screen flex items-center justify-center p-4">
+      {/* Background Grid Accent */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md relative z-10"
+      >
+        {/* Top Badge - Neo Brutalist */}
+        <div className="flex justify-center mb-8">
+          <div className="flex items-center gap-3 px-4 py-1.5 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white]">
+            <Terminal size={14} strokeWidth={3} />
+            <span>Zharnyx 2.0 // Cyber-Agency</span>
           </div>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-4">
-              {mode === "signup" && (
-                <div className="grid gap-2">
-                  <Label htmlFor="name" className="text-white">
-                    Full Name
-                  </Label>
+        </div>
+
+        <div className="bg-black border-2 border-white/20 p-8 shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] backdrop-blur-sm">
+          <div className="flex flex-col items-center text-center space-y-2 mb-8">
+            <h1 className="text-3xl font-black text-white uppercase tracking-tighter">
+              {mode === "signin" ? "Operator Login" : "New Recruit"}
+            </h1>
+            <p className="text-gray-400 font-mono text-xs uppercase tracking-widest">
+              {mode === "signin"
+                ? "Identify yourself to access the mainframe."
+                : "Begin your initialization sequence."}
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {mode === "signup" && (
+              <div className="space-y-1">
+                <Label
+                  htmlFor="name"
+                  className="text-white text-xs font-bold uppercase tracking-wider"
+                >
+                  Codename
+                </Label>
+                <div className="relative group">
+                  <User
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors"
+                    size={16}
+                  />
                   <Input
                     id="name"
                     type="text"
-                    placeholder="John Doe"
+                    placeholder="ENTER CODENAME"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="bg-slate-800/50 border-white/20 text-white placeholder:text-neutral-500 focus:border-white/40"
-                    style={{ borderRadius: "0px" }}
+                    className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors"
                   />
                 </div>
-              )}
-              <div className="grid gap-2">
-                <Label htmlFor="email" className="text-white">
-                  Email
-                </Label>
+              </div>
+            )}
+
+            <div className="space-y-1">
+              <Label
+                htmlFor="email"
+                className="text-white text-xs font-bold uppercase tracking-wider"
+              >
+                Email Address
+              </Label>
+              <div className="relative group">
+                <Mail
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors"
+                  size={16}
+                />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="OPERATOR@ZHARNYX.COM"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-slate-800/50 border-white/20 text-white placeholder:text-neutral-500 focus:border-white/40"
-                  style={{ borderRadius: "0px" }}
+                  className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors"
                 />
               </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password" className="text-white">
-                    Password
-                  </Label>
-                  {mode === "signin" && (
-                    <a
-                      href="#"
-                      className="ml-auto inline-block text-xs underline-offset-4 hover:underline text-neutral-300"
-                    >
-                      Forgot password?
-                    </a>
-                  )}
-                </div>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <Label
+                  htmlFor="password"
+                  className="text-white text-xs font-bold uppercase tracking-wider"
+                >
+                  Password
+                </Label>
+                {mode === "signin" && (
+                  <a
+                    href="#"
+                    className="text-[10px] text-gray-500 hover:text-red-500 uppercase tracking-widest transition-colors font-bold"
+                  >
+                    Difficulties?
+                  </a>
+                )}
+              </div>
+              <div className="relative group">
+                <Lock
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors"
+                  size={16}
+                />
                 <Input
                   id="password"
                   type="password"
                   required
-                  placeholder={
-                    mode === "signup" ? "Min. 8 characters" : "••••••••"
-                  }
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-slate-800/50 border-white/20 text-white placeholder:text-neutral-500 focus:border-white/40"
-                  style={{ borderRadius: "0px" }}
+                  className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors"
                 />
               </div>
-              {mode === "signup" && (
-                <div className="grid gap-2">
-                  <Label htmlFor="confirm-password" className="text-white">
-                    Confirm Password
-                  </Label>
+            </div>
+
+            {mode === "signup" && (
+              <div className="space-y-1">
+                <Label
+                  htmlFor="confirm-password"
+                  className="text-white text-xs font-bold uppercase tracking-wider"
+                >
+                  Confirm Password
+                </Label>
+                <div className="relative group">
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors"
+                    size={16}
+                  />
                   <Input
                     id="confirm-password"
                     type="password"
@@ -198,43 +232,59 @@ function AuthContent() {
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="bg-slate-800/50 border-white/20 text-white placeholder:text-neutral-500 focus:border-white/40"
-                    style={{ borderRadius: "0px" }}
+                    className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors"
                   />
                 </div>
-              )}
-              {error && (
-                <div className="rounded-md bg-red-900/50 border border-red-500/50 p-3">
-                  <div className="text-sm text-red-200">{error}</div>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-950/30 border border-red-500/50 p-3 flex items-start gap-3">
+                <AlertCircle
+                  className="text-red-500 shrink-0 mt-0.5"
+                  size={16}
+                />
+                <div className="text-sm text-red-200 font-mono">{error}</div>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:translate-x-1 hover:translate-y-1 transition-transform disabled:opacity-50 disabled:pointer-events-none mt-4"
+            >
+              <span className="absolute inset-0 bg-white translate-x-1.5 translate-y-1.5 -z-10 border-2 border-white group-hover:translate-x-0 group-hover:translate-y-0 transition-transform"></span>
+              <span className="flex items-center justify-center gap-2">
+                {isLoading ? (
+                  <Loader2 className="animate-spin" size={20} />
+                ) : (
+                  <>
+                    {mode === "signin" ? "Establish Link" : "Initialize"}{" "}
+                    <ArrowRight
+                      size={20}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
+                  </>
+                )}
+              </span>
+            </button>
           </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-3">
-          <Button
-            type="submit"
-            onClick={handleSubmit}
-            disabled={isLoading}
-            className="w-full bg-white text-black hover:bg-neutral-200 font-mono font-semibold"
-            style={{ borderRadius: "0px" }}
-          >
-            {isLoading
-              ? mode === "signin"
-                ? "Signing in..."
-                : "Creating account..."
-              : mode === "signin"
-              ? "Sign In"
-              : "Sign Up"}
-          </Button>
-          {mode === "signup" && (
-            <div className="text-xs text-neutral-400 text-center">
-              By signing up, you agree to our Terms of Service and Privacy
-              Policy.
-            </div>
-          )}
-        </CardFooter>
-      </Card>
+
+          <div className="mt-8 text-center">
+            <button
+              className="text-gray-500 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors"
+              onClick={() => {
+                setMode(mode === "signin" ? "signup" : "signin");
+                setError("");
+              }}
+            >
+              {mode === "signin"
+                ? "No credentials? Request Access"
+                : "Already active? Operator Login"}
+            </button>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
@@ -242,12 +292,10 @@ function AuthContent() {
 export default function AuthPage() {
   return (
     <>
-      <AnimatedBackground />
-      <Navbar />
       <Suspense
         fallback={
-          <div className="min-h-screen flex items-center justify-center text-white font-mono">
-            Loading...
+          <div className="min-h-screen flex items-center justify-center bg-black text-white font-mono">
+            <Loader2 className="animate-spin text-red-600" size={32} />
           </div>
         }
       >
