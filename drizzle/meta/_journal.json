@@ -50,6 +50,27 @@
       "when": 1768248424944,
       "tag": "0006_lowly_big_bertha",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768329054631,
+      "tag": "0007_brief_goblin_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1768369827356,
+      "tag": "0008_parched_xavin",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1768371433523,
+      "tag": "0009_wealthy_wild_child",
+      "breakpoints": true
     }
   ]
 }

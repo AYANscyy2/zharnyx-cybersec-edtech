@@ -1,6 +1,12 @@
+"use client";
+
 import { ManagedCourses } from "./managed-courses";
 import { StudentApplications } from "./student-applications";
 import { EngagementStats } from "./engagement-stats";
+import { AssignedWeeksSection } from "./assigned-weeks-section";
+import { AssignmentScoringSection } from "./assignment-scoring-section";
+import { ProjectScoringSection } from "./project-scoring-section";
+import { DoubtClearingSection } from "./doubt-clearing-section";
 import {
   Card,
   CardHeader,
@@ -9,7 +15,6 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import {
-  Terminal,
   GraduationCap,
   FileText,
   FolderKanban,
@@ -18,9 +23,13 @@ import {
 
 interface MentorDashboardShellProps {
   section?: string;
+  mentorId: string;
 }
 
-export function MentorDashboardShell({ section }: MentorDashboardShellProps) {
+export function MentorDashboardShell({
+  section,
+  mentorId,
+}: MentorDashboardShellProps) {
   const currentSection = section || "student-progress";
 
   const renderContent = () => {
@@ -28,23 +37,20 @@ export function MentorDashboardShell({ section }: MentorDashboardShellProps) {
       case "student-progress":
         return (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <EngagementStats />
-            </div>
             <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none shadow-[4px_4px_0px_0px_white/10]">
               <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
                 <div className="flex items-center gap-2 mb-1">
                   <GraduationCap className="w-4 h-4 text-purple-500" />
                   <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
-                    Student Progress
+                    Assigned Sessions
                   </CardTitle>
                 </div>
                 <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                  Track performance across your assigned courses.
+                  View your assigned course weeks and sessions.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-0">
-                <StudentApplications />
+              <CardContent className="p-6">
+                <AssignedWeeksSection mentorId={mentorId} />
               </CardContent>
             </Card>
           </div>
@@ -63,8 +69,8 @@ export function MentorDashboardShell({ section }: MentorDashboardShellProps) {
                 Review and grade pending student assignments.
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-6 font-mono text-gray-400 text-sm text-center uppercase tracking-widest border-t border-white/10">
-              No pending assignments to score.
+            <CardContent className="p-6">
+              <AssignmentScoringSection mentorId={mentorId} />
             </CardContent>
           </Card>
         );
@@ -82,8 +88,8 @@ export function MentorDashboardShell({ section }: MentorDashboardShellProps) {
                 Evaluate capstone and module projects.
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-6 font-mono text-gray-400 text-sm text-center uppercase tracking-widest border-t border-white/10">
-              No pending projects to review.
+            <CardContent className="p-6">
+              <ProjectScoringSection mentorId={mentorId} />
             </CardContent>
           </Card>
         );
@@ -98,19 +104,34 @@ export function MentorDashboardShell({ section }: MentorDashboardShellProps) {
                 </CardTitle>
               </div>
               <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                Upcoming scheduled 1:1 and group sessions.
+                Manage student doubt clearing requests.
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-6 font-mono text-gray-400 text-sm text-center uppercase tracking-widest border-t border-white/10">
-              No active doubt sessions found.
+            <CardContent className="p-6">
+              <DoubtClearingSection mentorId={mentorId} />
             </CardContent>
           </Card>
         );
       default:
+        // Default to student progress or empty state
         return (
           <div className="space-y-6">
-            <EngagementStats />
-            <ManagedCourses />
+            <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none shadow-[4px_4px_0px_0px_white/10]">
+              <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <GraduationCap className="w-4 h-4 text-purple-500" />
+                  <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
+                    Assigned Sessions
+                  </CardTitle>
+                </div>
+                <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
+                  View your assigned course weeks and sessions.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-6">
+                <AssignedWeeksSection mentorId={mentorId} />
+              </CardContent>
+            </Card>
           </div>
         );
     }
@@ -118,7 +139,6 @@ export function MentorDashboardShell({ section }: MentorDashboardShellProps) {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      {/* Header handled by Layout or Sidebar context usually, but good to have a title here if generic header missing */}
       {renderContent()}
     </div>
   );

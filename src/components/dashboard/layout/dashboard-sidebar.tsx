@@ -40,18 +40,18 @@ import { Button } from "@/components/ui/button";
 // Menu items configuration
 const STUDENT_ITEMS = [
   {
-    title: "Overview",
-    url: "/dashboard/student",
-    icon: LayoutDashboard,
-  },
-  {
     title: "My Learning",
-    url: "/dashboard/student/learning",
+    id: "learning",
     icon: GraduationCap,
   },
   {
+    title: "Submissions",
+    id: "submissions",
+    icon: FileText,
+  },
+  {
     title: "Profile",
-    url: "/dashboard/profile",
+    id: "profile",
     icon: Settings,
   },
 ];
@@ -120,13 +120,21 @@ export function DashboardSidebar({
   const { toggleSidebar, state } = useSidebar();
 
   const effectiveRole =
-    userRole === "admin" && pathname?.startsWith("/dashboard/mentor")
-      ? "mentor"
+    userRole === "admin"
+      ? pathname?.startsWith("/dashboard/mentor")
+        ? "mentor"
+        : pathname?.startsWith("/dashboard/student")
+        ? "student"
+        : "admin"
       : userRole;
 
   const currentSection =
     searchParams.get("section") ||
-    (effectiveRole === "mentor" ? "student-progress" : "user-management");
+    (effectiveRole === "mentor"
+      ? "student-progress"
+      : effectiveRole === "student"
+      ? "learning"
+      : "user-management");
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -142,6 +150,10 @@ export function DashboardSidebar({
     router.push(`/dashboard/mentor?section=${id}`);
   };
 
+  const handleStudentClick = (id: string) => {
+    router.push(`/dashboard/student?section=${id}`);
+  };
+
   const items =
     effectiveRole === "admin"
       ? []
@@ -151,7 +163,7 @@ export function DashboardSidebar({
 
   return (
     <Sidebar
-      className="border-r-2 border-white/20 bg-black text-white transition-none"
+      className="border-r-2 border-white/20 bg-black text-white"
       collapsible="icon"
     >
       <SidebarHeader className="border-b-2 border-white/20 p-4 h-[80px] flex items-center justify-center bg-black group-data-[collapsible=icon]:p-2">
@@ -161,7 +173,11 @@ export function DashboardSidebar({
           <div
             className={cn(
               "flex items-center justify-center shrink-0 w-10 h-10 border-2 border-white/20 shadow-[2px_2px_0px_0px_white] group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 transition-all",
-              effectiveRole === "mentor" ? "bg-purple-600" : "bg-red-600"
+              effectiveRole === "mentor"
+                ? "bg-purple-600"
+                : effectiveRole === "student"
+                ? "bg-blue-600"
+                : "bg-red-600"
             )}
           >
             <div
@@ -171,6 +187,8 @@ export function DashboardSidebar({
             >
               {effectiveRole === "mentor" ? (
                 <GraduationCap strokeWidth={2.5} />
+              ) : effectiveRole === "student" ? (
+                <BookOpen strokeWidth={2.5} />
               ) : (
                 <Terminal strokeWidth={2.5} />
               )}
@@ -190,10 +208,18 @@ export function DashboardSidebar({
             <span
               className={cn(
                 "text-[10px] font-mono uppercase tracking-widest leading-none mt-1",
-                effectiveRole === "mentor" ? "text-purple-500" : "text-red-500"
+                effectiveRole === "mentor"
+                  ? "text-purple-500"
+                  : effectiveRole === "student"
+                  ? "text-blue-500"
+                  : "text-red-500"
               )}
             >
-              {effectiveRole === "mentor" ? "Mentor Zone" : "Admin Console"}
+              {effectiveRole === "mentor"
+                ? "Mentor Zone"
+                : effectiveRole === "student"
+                ? "Student Portal"
+                : "Admin Console"}
             </span>
           </div>
         </div>
@@ -307,22 +333,22 @@ export function DashboardSidebar({
         {/* Student Menu */}
         {effectiveRole !== "admin" && effectiveRole !== "mentor" && (
           <SidebarGroup>
-            <SidebarGroupLabel className="text-gray-500 font-mono font-bold uppercase tracking-widest text-xs mb-4 pl-4">
+            <SidebarGroupLabel className="text-gray-500 font-mono font-bold uppercase tracking-widest text-xs mb-4 pl-4 group-data-[collapsible=icon]:hidden">
               Learning Space
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
                 {items.map((item) => {
                   const isActive =
-                    pathname === item.url ||
-                    pathname?.startsWith(item.url + "/");
+                    pathname === "/dashboard/student" &&
+                    currentSection === item.id;
 
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
                         isActive={isActive}
-                        onClick={() => router.push(item.url)}
+                        onClick={() => handleStudentClick(item.id)}
                         className={cn(
                           "font-mono font-bold text-sm border-2 transition-all duration-200 p-3 h-auto rounded-none mb-1",
                           // Default

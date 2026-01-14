@@ -19,6 +19,10 @@ export const user = pgTable("user", {
   githubUrl: text("github_url"),
   linkedinUrl: text("linkedin_url"),
   websiteUrl: text("website_url"),
+  twitterUrl: text("twitter_url"),
+  contactEmail: text("contact_email"),
+  resumeUrl: text("resume_url"), // Link to resume (PDF/Drive)
+  topProjects: json("top_projects"), // Array of project submission IDs
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -96,6 +100,8 @@ export const userRelations = relations(user, ({ many }) => ({
   projectSubmissions: many(projectSubmission),
   mentorApplications: many(mentorApplication),
   recruiterApplications: many(recruiterApplication),
+  studentDoubts: many(doubtSession, { relationName: "studentDoubts" }),
+  mentorDoubts: many(doubtSession, { relationName: "mentorDoubts" }),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -444,5 +450,42 @@ export const studentProgressRelations = relations(studentProgress, ({ one }) => 
   week: one(courseWeek, {
     fields: [studentProgress.weekId],
     references: [courseWeek.id],
+  }),
+}));
+
+export const doubtSession = pgTable("doubt_session", {
+  id: text("id").primaryKey(),
+  studentId: text("student_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  mentorId: text("mentor_id")
+    .references(() => user.id, { onDelete: "set null" }), // Optional initially, or assigned later
+  topic: text("topic").notNull(),
+  description: text("description").notNull(),
+  status: text("status", { enum: ["pending", "scheduled", "completed", "rejected"] })
+    .default("pending")
+    .notNull(),
+  scheduledAt: timestamp("scheduled_at"),
+  meetLink: text("meet_link"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+}, (table) => [
+  index("doubt_session_studentId_idx").on(table.studentId),
+  index("doubt_session_mentorId_idx").on(table.mentorId),
+]);
+
+export const doubtSessionRelations = relations(doubtSession, ({ one }) => ({
+  student: one(user, {
+    fields: [doubtSession.studentId],
+    references: [user.id],
+    relationName: "studentDoubts"
+  }),
+  mentor: one(user, {
+    fields: [doubtSession.mentorId],
+    references: [user.id],
+    relationName: "mentorDoubts"
   }),
 }));

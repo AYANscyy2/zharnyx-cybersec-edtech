@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "resume_url" text;

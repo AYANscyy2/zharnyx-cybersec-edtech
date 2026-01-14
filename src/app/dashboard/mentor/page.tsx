@@ -10,7 +10,9 @@ interface PageProps {
 }
 
 export default async function MentorPage(props: PageProps) {
-  await requireMentor();
+  const session = await requireMentor();
+  const mentorId = session.user.id;
+
   const searchParams = await props.searchParams;
   const section =
     typeof searchParams.section === "string" ? searchParams.section : undefined;
@@ -39,7 +41,7 @@ export default async function MentorPage(props: PageProps) {
             </div>
           </div>
 
-          <MentorDashboardShell section={section} />
+          <MentorDashboardShell section={section} mentorId={mentorId} />
         </main>
       </div>
     </>
