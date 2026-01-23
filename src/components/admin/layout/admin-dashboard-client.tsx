@@ -40,7 +40,7 @@ export default function AdminPage() {
                 Admin Zone
               </span>
               <span className="text-gray-500 font-mono text-xs uppercase tracking-widest">
-                // System Status: Active
+                {"// System Status: Active"}
               </span>
             </div>
           </div>

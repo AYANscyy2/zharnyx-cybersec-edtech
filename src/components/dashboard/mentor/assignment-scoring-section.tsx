@@ -177,7 +177,7 @@ export function AssignmentScoringSection({
                 <div className="p-3 bg-white/5 rounded border border-white/10 flex items-center justify-between">
                   <div className="flex items-center gap-2 overflow-hidden mr-2">
                     <FileText className="h-4 w-4 shrink-0 text-blue-400" />
-                    <span className="text-sm truncate opacity-80 decoration-slice">
+                    <span className="text-sm truncate opacity-80 box-decoration-slice">
                       {selectedSubmission.submissionUrl}
                     </span>
                   </div>

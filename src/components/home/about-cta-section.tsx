@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { Shield, Target, Building2, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 import Link from "next/link";
 
 export function AboutCTASection() {
@@ -17,7 +17,7 @@ export function AboutCTASection() {
             viewport={{ once: true }}
             className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4 font-bold"
           >
-            // Who We Are
+            {"// Who We Are"}
           </motion.div>
 
           <motion.h2
@@ -27,7 +27,7 @@ export function AboutCTASection() {
             className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-20"
           >
             About{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-purple-500">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-purple-500">
               Zharnyx
             </span>
           </motion.h2>
@@ -62,15 +62,16 @@ export function AboutCTASection() {
             className="bg-white/5 border-2 border-white/10 p-8 md:p-12 relative max-w-4xl mx-auto"
           >
             <p className="text-gray-300 text-lg md:text-xl font-medium leading-relaxed mb-8">
-              We don't believe in mass-produced graduates. We believe in
+              We don&apos;t believe in mass-produced graduates. We believe in
               engineers who can walk into a SOC, a red team engagement, or a
               security architecture discussion — and deliver from day one.
             </p>
             <div className="h-px w-20 bg-red-500 mx-auto mb-8" />
             <h3 className="text-2xl md:text-3xl font-black uppercase text-white">
-              "Zharnyx is not education.
+              &quot;Zharnyx is not education.
               <br />
-              <span className="text-red-500">Zharnyx is preparation.</span>"
+              <span className="text-red-500">Zharnyx is preparation.</span>
+              &quot;
             </h3>
           </motion.div>
         </div>
@@ -83,7 +84,7 @@ export function AboutCTASection() {
             viewport={{ once: true }}
             className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-tight mb-4"
           >
-            If You're Serious About <br />
+            If You&apos;re Serious About <br />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-purple-500 to-blue-500">
               Cybersecurity, Apply.
             </span>

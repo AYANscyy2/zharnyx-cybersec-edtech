@@ -25,12 +25,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { ExternalLink, Github, Briefcase, Terminal } from "lucide-react";
-import { getRecruiterCandidates } from "@/actions/recruiter/dashboard";
+import {
+  getRecruiterCandidates,
+  Candidate,
+} from "@/actions/recruiter/dashboard";
 import { toast } from "sonner";
 
 export default function RecruiterDashboardClient() {
   const [activeSection, setActiveSection] = useState("candidates");
-  const [candidates, setCandidates] = useState<any[]>([]);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -72,7 +75,7 @@ export default function RecruiterDashboardClient() {
                   Recruiter Zone
                 </span>
                 <span className="text-gray-500 font-mono text-xs uppercase tracking-widest">
-                  // Talent Acquisition
+                  {"// Talent Acquisition"}
                 </span>
               </div>
             </div>
@@ -144,7 +147,7 @@ export default function RecruiterDashboardClient() {
                                 </TableCell>
                                 <TableCell>
                                   <div className="flex flex-wrap gap-2">
-                                    {candidate.projects.map((p: any) => (
+                                    {candidate.projects.map((p) => (
                                       <div
                                         key={p.id}
                                         className="flex flex-col text-[10px] bg-white/5 p-2 border border-white/10 w-32"
@@ -176,7 +179,7 @@ export default function RecruiterDashboardClient() {
                                     ))}
                                     {candidate.projects.length === 0 && (
                                       <span className="text-gray-600 text-xs italic">
-                                        // No projects
+                                        {"// No projects"}
                                       </span>
                                     )}
                                   </div>
@@ -202,7 +205,7 @@ export default function RecruiterDashboardClient() {
                                 colSpan={5}
                                 className="h-24 text-center font-mono text-gray-500 border-white/10"
                               >
-                                // No candidates found.
+                                {/* No candidates found. */}
                               </TableCell>
                             </TableRow>
                           )}

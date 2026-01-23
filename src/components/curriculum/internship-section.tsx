@@ -33,9 +33,9 @@ export function InternshipSection() {
           The Three-Tier Internship
         </h2>
         <p className="text-gray-400 max-w-4xl mx-auto font-mono text-sm md:text-base font-medium leading-relaxed mb-4">
-          To solve the "Experience Guarantee," Zharnyx utilizes a Three-Tier
-          Hybrid Internship model. This ensures every student, regardless of
-          performance, receives a verifiable path to experience.
+          To solve the &quot;Experience Guarantee,&quot; Zharnyx utilizes a
+          Three-Tier Hybrid Internship model. This ensures every student,
+          regardless of performance, receives a verifiable path to experience.
         </p>
       </motion.div>
 
@@ -109,7 +109,7 @@ export function InternshipSection() {
         </div>
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-10 mb-12">
-          <div className="w-24 h-24 bg-gradient-to-br from-red-600 to-purple-600 flex items-center justify-center border-2 border-white shadow-[8px_8px_0px_0px_white]">
+          <div className="w-24 h-24 bg-linear-to-br from-red-600 to-purple-600 flex items-center justify-center border-2 border-white shadow-[8px_8px_0px_0px_white]">
             <Trophy className="w-10 h-10 text-white" />
           </div>
           <div>
@@ -256,7 +256,7 @@ function TierCard({
         </span>
       </div>
 
-      <p className="text-base text-gray-400 font-mono mb-10 flex-grow leading-relaxed">
+      <p className="text-base text-gray-400 font-mono mb-10 grow leading-relaxed">
         {description}
       </p>
 

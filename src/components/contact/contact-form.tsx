@@ -18,7 +18,7 @@ export function ContactForm() {
   return (
     <section className="min-h-screen py-20 px-4 md:px-8 bg-black relative flex items-center justify-center">
       {/* Decorative Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] z-0 pointer-events-none opacity-50" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] z-0 pointer-events-none opacity-50" />
 
       <div className="max-w-6xl w-full mx-auto border-2 border-white bg-black relative z-10 grid grid-cols-1 lg:grid-cols-3 shadow-[8px_8px_0px_0px_#ef4444]">
         {/* Left Panel: Contact Details */}
@@ -30,7 +30,7 @@ export function ContactForm() {
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none mb-4">
               Get In <br />{" "}
-              <span className="text-stroke-1 text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-white">
+              <span className="text-stroke-1 text-transparent bg-clip-text bg-linear-to-r from-red-500 to-white">
                 Touch
               </span>
             </h2>
@@ -152,7 +152,7 @@ function SocialIcon({
   href,
   color,
 }: {
-  icon: any;
+  icon: React.ElementType;
   href: string;
   color: string;
 }) {

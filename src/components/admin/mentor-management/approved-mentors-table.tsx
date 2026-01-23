@@ -19,8 +19,15 @@ import {
 } from "@/components/ui/card";
 import { getApprovedMentors } from "@/actions/admin/mentor-management/action";
 
+interface Mentor {
+  id: string;
+  name: string | null;
+  email: string;
+  createdAt?: Date | null;
+}
+
 export function ApprovedMentorsTable() {
-  const [mentors, setMentors] = useState<any[]>([]);
+  const [mentors, setMentors] = useState<Mentor[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

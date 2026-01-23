@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { submitMentorApplication } from "@/actions/mentor/apply";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner"; // Assuming sonner is installed, or valid toast
+// import { toast } from "sonner"; // Assuming sonner is installed, or valid toast
 
 export function MentorApplicationForm() {
   const [step, setStep] = useState(1);
@@ -115,7 +115,7 @@ export function MentorApplicationForm() {
         onSubmit={handleSubmit}
         className="border-2 border-white/20 bg-black p-8 md:p-12 relative overflow-hidden shadow-[8px_8px_0px_0px_#9333ea]"
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-purple-500 opacity-50"></div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-purple-500 via-blue-500 to-purple-500 opacity-50"></div>
 
         <AnimatePresence mode="wait">
           {step === 1 && (

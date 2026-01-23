@@ -8,7 +8,7 @@ export default function ApplyPage() {
   return (
     <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4">
       {/* Decorative Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] z-0 pointer-events-none opacity-50" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] z-0 pointer-events-none opacity-50" />
 
       <div className="relative z-10 max-w-7xl w-full text-center space-y-12">
         <div>
@@ -17,7 +17,7 @@ export default function ApplyPage() {
           </div>
           <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
             Select{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-purple-500 to-blue-500">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-purple-500 to-blue-500">
               Application
             </span>
           </h1>

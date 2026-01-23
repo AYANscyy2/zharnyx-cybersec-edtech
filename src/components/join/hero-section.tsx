@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ArrowDown } from "lucide-react";
+// import { ArrowDown } from "lucide-react";
 
 export function JoinHero() {
   return (
@@ -28,7 +28,7 @@ export function JoinHero() {
         className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 max-w-7xl mx-auto uppercase text-white leading-[0.9]"
       >
         Choose Your <br className="hidden md:block" />
-        <span className="text-transparent bg-clip-text bg-gradient-to-br from-green-400 via-white to-green-600 decoration-green-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
+        <span className="text-transparent bg-clip-text bg-linear-to-br from-green-400 via-white to-green-600 decoration-green-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
           Designation
         </span>
       </motion.h1>
@@ -43,7 +43,7 @@ export function JoinHero() {
       </motion.p>
 
       {/* Decorative Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none opacity-50" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none opacity-50" />
     </motion.section>
   );
 }

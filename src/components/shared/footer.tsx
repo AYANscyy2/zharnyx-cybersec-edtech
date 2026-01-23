@@ -141,7 +141,7 @@ export function Footer() {
           <div>
             <h4 className="text-white font-bold text-lg mb-8">Next Cohort</h4>
             <div className="p-6 bg-white/5 border border-white/10 rounded-xl relative group hover:border-white/30 transition-colors">
-              <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-purple-600 mb-2">
+              <div className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-red-500 to-purple-600 mb-2">
                 January 2026
               </div>
               <div className="text-xs font-mono text-blue-400 mb-6 uppercase tracking-wider">
@@ -180,7 +180,7 @@ export function Footer() {
             <div>© {currentYear} ZHARNYX. All rights reserved.</div>
 
             <div className="text-center md:text-right text-gray-400">
-              "This is not a course. It's a career residency."
+              &quot;This is not a course. It&apos;s a career residency.&quot;
             </div>
 
             <div className="flex items-center gap-2 text-green-500">

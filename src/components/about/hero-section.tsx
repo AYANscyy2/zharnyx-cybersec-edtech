@@ -28,7 +28,7 @@ export function HeroSection() {
         className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 max-w-7xl mx-auto uppercase text-white leading-[0.9]"
       >
         Building the <br className="hidden md:block" /> Next Generation of{" "}
-        <span className="text-transparent bg-clip-text bg-gradient-to-b from-red-500 to-purple-800 decoration-red-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
+        <span className="text-transparent bg-clip-text bg-linear-to-b from-red-500 to-purple-800 decoration-red-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
           Security Engineers
         </span>
       </motion.h1>

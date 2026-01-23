@@ -43,8 +43,8 @@ export default async function ProfilePage({
         <div className="w-full max-w-6xl mx-auto px-4 py-8 pointer-events-auto">
           {/* Header / Profile Info */}
           <div className="flex flex-col md:flex-row gap-8 mb-12">
-            <div className="flex-shrink-0">
-              <div className="h-40 w-40 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold text-white border-4 border-black/50 overflow-hidden shadow-[4px_4px_0px_0px_white/20]">
+            <div className="shrink-0">
+              <div className="h-40 w-40 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold text-white border-4 border-black/50 overflow-hidden shadow-[4px_4px_0px_0px_white/20]">
                 {user.image ? (
                   <img
                     src={user.image}

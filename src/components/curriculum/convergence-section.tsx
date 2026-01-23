@@ -91,8 +91,8 @@ export function ConvergenceSection() {
             </div>
 
             <p className="text-gray-400 font-mono text-base border-t-2 border-white/10 pt-4 mt-2 font-medium">
-              Red Team attacks the Blue Team's infrastructure in real-time. Blue
-              Team must detect and block them within 15 minutes.
+              Red Team attacks the Blue Team&apos;s infrastructure in real-time.
+              Blue Team must detect and block them within 15 minutes.
             </p>
           </div>
         </motion.div>
@@ -115,9 +115,9 @@ export function ConvergenceSection() {
               The Joint Report
             </h4>
             <div className="p-6 bg-white/5 border border-dashed border-white/30 text-gray-300 font-mono text-sm md:text-base italic mb-6">
-              "Here is how I got in." — Red <br />
-              "Here is how I saw him." — Blue <br />
-              "Here is how to fix it." — Both
+              &quot;Here is how I got in.&quot; <br />
+              &quot;Here is how I saw him.&quot; <br />
+              &quot;Here is how to fix it.&quot;
             </div>
             <p className="text-purple-400 font-black text-sm uppercase tracking-widest border-l-4 border-purple-500 pl-4">
               Deliverable: Purple Team Assessment

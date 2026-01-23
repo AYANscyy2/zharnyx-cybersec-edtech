@@ -2,21 +2,14 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Flame,
-  Shield,
-  Briefcase,
-  Terminal,
-  Crosshair,
-} from "lucide-react";
+import { ArrowRight, Shield, Terminal, Crosshair } from "lucide-react";
 
 export function HeroSection() {
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 },
-  };
+  // const fadeInUp = {
+  //   initial: { opacity: 0, y: 20 },
+  //   animate: { opacity: 1, y: 0 },
+  //   transition: { duration: 0.5 },
+  // };
 
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-20 pb-10">
@@ -50,7 +43,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-white to-red-500 animate-gradient-x"
+              className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-white to-red-500 animate-gradient-x"
             >
               Security Consultant
             </motion.span>
@@ -130,20 +123,20 @@ export function HeroSection() {
   );
 }
 
-function OverflowText({ text, delay }: { text: string; delay: number }) {
-  return (
-    <span className="inline-block overflow-hidden align-bottom">
-      <motion.span
-        initial={{ y: "100%" }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5, delay, ease: [0.33, 1, 0.68, 1] }}
-        className="inline-block"
-      >
-        {text}
-      </motion.span>
-    </span>
-  );
-}
+// function OverflowText({ text, delay }: { text: string; delay: number }) {
+//   return (
+//     <span className="inline-block overflow-hidden align-bottom">
+//       <motion.span
+//         initial={{ y: "100%" }}
+//         animate={{ y: 0 }}
+//         transition={{ duration: 0.5, delay, ease: [0.33, 1, 0.68, 1] }}
+//         className="inline-block"
+//       >
+//         {text}
+//       </motion.span>
+//     </span>
+//   );
+// }
 
 function StatItem({ value, label }: { value: string; label: string }) {
   return (

@@ -46,7 +46,8 @@ export default async function DashboardPage() {
                 {userRole} Mode
               </span>
               <span className="text-gray-500 font-mono text-xs uppercase tracking-widest">
-                // Welcome, {userName}
+                {"// Welcome, "}
+                {userName}
               </span>
             </div>
           </div>
@@ -188,13 +189,11 @@ export default async function DashboardPage() {
                   <label className="text-[10px] text-gray-500 font-mono uppercase tracking-widest block">
                     Full Name
                   </label>
-                  <div className="font-mono text-sm break-words">
-                    {userName}
-                  </div>
+                  <div className="font-mono text-sm break-all">{userName}</div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase tracking-widest block flex items-center gap-1">
+                  <label className="text-[10px] text-gray-500 font-mono uppercase tracking-widest flex items-center gap-1">
                     <Mail className="w-3 h-3" /> Email Address
                   </label>
                   <div className="font-mono text-sm break-all text-gray-300">
@@ -203,7 +202,7 @@ export default async function DashboardPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase tracking-widest block flex items-center gap-1">
+                  <label className="text-[10px] text-gray-500 font-mono uppercase tracking-widest flex items-center gap-1">
                     <Fingerprint className="w-3 h-3" /> User ID
                   </label>
                   <div className="font-mono text-xs break-all py-2 px-3 bg-white/5 border border-white/10 rounded-sm text-gray-400">

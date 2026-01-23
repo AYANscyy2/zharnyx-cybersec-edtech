@@ -28,7 +28,7 @@ export function PricingHero() {
         className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 max-w-7xl mx-auto uppercase text-white leading-[0.9]"
       >
         Invest in Your <br className="hidden md:block" />
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 decoration-purple-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
+        <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-purple-500 to-blue-500 decoration-purple-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
           Security Career
         </span>
       </motion.h1>
@@ -39,7 +39,7 @@ export function PricingHero() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="text-base md:text-lg text-gray-300 font-mono max-w-5xl mx-auto border-y-2 border-white/10 py-6 px-10 bg-white/5 backdrop-blur-md mb-8"
       >
-        Don't buy a course. Buy a{" "}
+        Don&apos;t buy a course. Buy a{" "}
         <span className="text-white bg-red-600 px-1">career simulator</span>.
         Colleges teach theory; Zharnyx builds soldiers.
       </motion.p>
@@ -58,7 +58,7 @@ export function PricingHero() {
       </motion.div>
 
       {/* Decorative Grid - ensuring visibility */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none opacity-50" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none opacity-50" />
     </motion.section>
   );
 }

@@ -70,7 +70,7 @@ function PortfolioCard({
       transition={{ duration: 0.8, delay }}
       className="bg-black border-2 border-white/20 p-8 flex flex-col items-center text-center hover:border-purple-500 transition-all duration-300 hover:shadow-[12px_12px_0px_0px_#a855f7] hover:-translate-y-2 group"
     >
-      <span className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-800 mb-6 group-hover:text-purple-500 group-hover:bg-none transition-colors">
+      <span className="text-7xl font-black text-transparent bg-clip-text bg-linear-to-b from-white to-gray-800 mb-6 group-hover:text-purple-500 group-hover:bg-none transition-colors">
         {number}
       </span>
       <h3 className="font-black text-white uppercase text-xl mb-3 leading-tight tracking-tight">

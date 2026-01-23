@@ -28,7 +28,7 @@ export function HeroSection() {
         className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 max-w-7xl mx-auto uppercase text-white leading-[0.9]"
       >
         The{" "}
-        <span className="text-transparent bg-clip-text bg-gradient-to-b from-purple-400 to-purple-800 decoration-purple-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
+        <span className="text-transparent bg-clip-text bg-linear-to-b from-purple-400 to-purple-800 decoration-purple-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
           Purple Team
         </span>{" "}
         <br className="hidden md:block" /> Pathway
@@ -44,7 +44,7 @@ export function HeroSection() {
           24 Weeks Intensive
         </span>
         <span className="hidden md:inline text-purple-500 text-2xl font-black">
-          //
+          {/* // */}
         </span>
         <span className="px-5 py-2 border-2 border-white/20 bg-black hover:border-white transition-colors">
           5+1 Operational Model

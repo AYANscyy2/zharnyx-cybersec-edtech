@@ -4,11 +4,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+// import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   Building2,
-  Send,
   Loader2,
   ArrowLeft,
   ArrowRight,
@@ -117,7 +116,7 @@ export function RecruiterApplicationForm() {
         onSubmit={handleSubmit}
         className="border-2 border-white/20 bg-black p-8 md:p-12 relative overflow-hidden shadow-[8px_8px_0px_0px_#2563eb]"
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 opacity-50"></div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-purple-500 to-blue-500 opacity-50"></div>
 
         <AnimatePresence mode="wait">
           {step === 1 && (
