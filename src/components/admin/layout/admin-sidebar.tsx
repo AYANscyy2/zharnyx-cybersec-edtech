@@ -59,7 +59,14 @@ const items = [
     id: "revenue",
     icon: DollarSign,
   },
+  {
+    title: "Coupon Management",
+    id: "coupon-management",
+    icon: Ticket,
+  },
 ];
+
+import { Ticket } from "lucide-react";
 
 // Need to import correct icon for UserWithCases or just use Users
 import { UserCheck as UserWithCases } from "lucide-react";

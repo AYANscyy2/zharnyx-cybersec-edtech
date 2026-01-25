@@ -4,6 +4,7 @@ import { OverviewSection } from "./overview-section";
 import { LearningMaterialSection } from "./learning-material-section";
 import { SubmissionsHistorySection } from "./submissions-history-section";
 import { ProfileSection } from "./profile-section";
+import { DoubtSessionsView } from "./doubt/doubt-sessions-view";
 import {
   Card,
   CardHeader,
@@ -97,6 +98,8 @@ export function StudentDashboardShell({
             </CardContent>
           </Card>
         );
+      case "doubts":
+        return <DoubtSessionsView studentId={studentId} />;
       default:
         return (
           <div className="space-y-6">

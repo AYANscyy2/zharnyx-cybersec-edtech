@@ -34,7 +34,7 @@ export function MissionSection() {
 
         <p className="text-gray-300 text-lg md:text-2xl leading-relaxed font-mono font-medium">
           <span className="text-white font-bold">
-            Zharnyx isn't a course; it's a workforce engine.
+            Zharnyx isn&apos;t a course; it's a workforce engine.
           </span>{" "}
           We don't just graduate students; we graduate veterans of a{" "}
           <span className="text-red-500">4-week cyber war</span> (Month 5) and

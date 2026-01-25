@@ -7,6 +7,7 @@ import { RecruiterApplicationTable } from "@/components/admin/recruiter-manageme
 import { ApprovedMentorsTable } from "@/components/admin/mentor-management/approved-mentors-table";
 import { ApprovedRecruitersTable } from "@/components/admin/recruiter-management/approved-recruiters-table";
 import { RankingTable } from "@/components/admin/ranking/ranking-table";
+import { CouponManager } from "@/components/admin/coupon-management/coupon-manager";
 import {
   Card,
   CardContent,
@@ -158,6 +159,8 @@ export default function AdminPage() {
               </CardContent>
             </Card>
           )}
+
+          {activeSection === "coupon-management" && <CouponManager />}
         </div>
       </div>
     </div>
