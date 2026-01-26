@@ -3,11 +3,13 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { UserActions } from "./user-actions";
 
+import { Role } from "@/lib/auth/auth";
+
 export type User = {
   id: string;
   name: string;
   email: string;
-  role: "admin" | "mentor" | "student" | "recruiter";
+  role: Role;
   createdAt: Date;
   // Add other fields as necessary from specific DB schema return type
 };

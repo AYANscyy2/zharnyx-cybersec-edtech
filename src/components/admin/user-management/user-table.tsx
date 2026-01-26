@@ -108,6 +108,7 @@ export function UserTable() {
             <SelectItem value="student">STUDENT</SelectItem>
             <SelectItem value="mentor">MENTOR</SelectItem>
             <SelectItem value="recruiter">RECRUITER</SelectItem>
+            <SelectItem value="partner_agency">PARTNER AGENCY</SelectItem>
             <SelectItem value="admin">ADMIN</SelectItem>
           </SelectContent>
         </Select>
