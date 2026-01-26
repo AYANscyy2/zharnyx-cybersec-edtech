@@ -117,30 +117,30 @@ export default async function DashboardPage() {
             {(userRole === "admin" ||
               userRole === "mentor" ||
               userRole === "student") && (
-              <Link href="/dashboard/student" className="block group">
-                <Card className="h-full bg-zinc-950 border-2 border-white/20 text-white rounded-none transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[4px_4px_0px_0px_#3b82f6]">
-                  <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <GraduationCap className="w-5 h-5 text-blue-500" />
-                      <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
-                        Student Portal
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                      Learning & submissions.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <p className="text-sm text-gray-400 font-mono">
-                      Access course materials, submit work, and view progress.
-                    </p>
-                    <div className="mt-4 flex items-center text-blue-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            )}
+                <Link href="/dashboard/student" className="block group">
+                  <Card className="h-full bg-zinc-950 border-2 border-white/20 text-white rounded-none transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[4px_4px_0px_0px_#3b82f6]">
+                    <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <GraduationCap className="w-5 h-5 text-blue-500" />
+                        <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
+                          Student Portal
+                        </CardTitle>
+                      </div>
+                      <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
+                        Learning & submissions.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <p className="text-sm text-gray-400 font-mono">
+                        Access course materials, submit work, and view progress.
+                      </p>
+                      <div className="mt-4 flex items-center text-blue-500 font-bold text-xs uppercase tracking-widest">
+                        <Terminal className="w-3 h-3 mr-2" /> Access Granted
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )}
 
             {/* Recruiter Link - For Admin and Recruiter */}
             {(userRole === "admin" || userRole === "recruiter") && (
@@ -162,6 +162,33 @@ export default async function DashboardPage() {
                       Search for candidates and manage job postings.
                     </p>
                     <div className="mt-4 flex items-center text-yellow-500 font-bold text-xs uppercase tracking-widest">
+                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            )}
+
+            {/* Partner Agency Link - For Admin and Partner Agency */}
+            {(userRole === "admin" || userRole === "partner_agency") && (
+              <Link href="/dashboard/partner" className="block group">
+                <Card className="h-full bg-zinc-950 border-2 border-white/20 text-white rounded-none transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[4px_4px_0px_0px_#22c55e]">
+                  <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Briefcase className="w-5 h-5 text-green-500" />
+                      <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
+                        Partner Portal
+                      </CardTitle>
+                    </div>
+                    <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
+                      Agency Stats & Revenue.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <p className="text-sm text-gray-400 font-mono">
+                      Track coupon usage and revenue share.
+                    </p>
+                    <div className="mt-4 flex items-center text-green-500 font-bold text-xs uppercase tracking-widest">
                       <Terminal className="w-3 h-3 mr-2" /> Access Granted
                     </div>
                   </CardContent>

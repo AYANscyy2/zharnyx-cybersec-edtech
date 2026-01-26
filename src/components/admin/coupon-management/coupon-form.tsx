@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 // import { Checkbox } from "@/components/ui/checkbox"; // Removing unused if we use Switch or just keeping it
 import { Switch } from "@/components/ui/switch"; // Let's use Switch for better UI
 import { createCoupon, updateCoupon } from "@/actions/admin/coupons/action";
+import { getPartners } from "@/actions/admin/partner/options";
 import { toast } from "sonner";
 import {
   Loader2,
@@ -15,6 +16,7 @@ import {
   Hash,
   Calendar,
   DollarSign,
+  Users,
 } from "lucide-react";
 
 interface CouponFormProps {
@@ -26,6 +28,8 @@ interface CouponFormProps {
     maxUses: number | null;
     isActive: boolean;
     expiresAt: Date | null;
+    partnerId?: string | null;
+    partnerRevenue?: number | null;
   };
   onSuccess?: () => void;
 }
@@ -33,6 +37,18 @@ interface CouponFormProps {
 export function CouponForm({ coupon, onSuccess }: CouponFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isActive, setIsActive] = useState(coupon ? coupon.isActive : true);
+  const [partners, setPartners] = useState<{ id: string; name: string }[]>([]);
+  const [showRevenueInput, setShowRevenueInput] = useState(!!coupon?.partnerId);
+
+  useEffect(() => {
+    async function fetchPartners() {
+      const { data } = await getPartners();
+      if (data) {
+        setPartners(data.map(p => ({ id: p.id, name: p.name })));
+      }
+    }
+    fetchPartners();
+  }, []);
 
   const handleSubmit = async (formData: FormData) => {
     setIsLoading(true);
@@ -178,13 +194,72 @@ export function CouponForm({ coupon, onSuccess }: CouponFormProps) {
                   ? new Date(coupon.expiresAt).toISOString().split("T")[0]
                   : ""
               }
-              className="pl-9" // Native date input might overlap with icon, but let's try
+              className="pl-9"
             />
           </div>
           <p className="text-[10px] text-muted-foreground mt-1">
             Optional expiry date.
           </p>
         </div>
+      </div>
+
+      {/* Partner Agency Section */}
+      <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-4 mt-4">
+        <div className="space-y-2">
+          <Label
+            htmlFor="partnerId"
+            className="text-xs font-mono uppercase tracking-widest text-gray-500"
+          >
+            Partner Agency
+          </Label>
+          <div className="relative">
+            <Users className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <select
+              id="partnerId"
+              name="partnerId"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-9 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              defaultValue={coupon?.partnerId || ""}
+              onChange={(e) => setShowRevenueInput(!!e.target.value)}
+            >
+              <option value="">None</option>
+              {partners.map((partner) => (
+                <option key={partner.id} value={partner.id}>
+                  {partner.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <p className="text-[10px] text-muted-foreground mt-1">
+            Assign to a partner agency.
+          </p>
+        </div>
+
+        {/* Partner Revenue */}
+        {showRevenueInput && (
+          <div className="space-y-2">
+            <Label
+              htmlFor="partnerRevenue"
+              className="text-xs font-mono uppercase tracking-widest text-gray-500"
+            >
+              Partner Revenue (₹)
+            </Label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="partnerRevenue"
+                name="partnerRevenue"
+                type="number"
+                min="0"
+                placeholder="200"
+                defaultValue={coupon?.partnerRevenue || ""}
+                className="pl-9"
+              />
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-1">
+              Amount partner gets per use.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between rounded-lg border p-3 border-white/10 bg-white/5">
@@ -202,11 +277,6 @@ export function CouponForm({ coupon, onSuccess }: CouponFormProps) {
           checked={isActive}
           onCheckedChange={setIsActive}
         />
-        {/* Hidden input to submit the value because Switch isn't a native form input in the same way checkbox is unless we use Controlled form. 
-            But here we are using formData. Checkbox uses value="on" if checked. 
-            Native checkbox is easier for FormData. Let's use a hidden checkbox synced with switch or just use the switch if it renders a button.
-            Radix switch renders a button. We need a hidden input.
-        */}
         <input type="hidden" name="isActive" value={isActive ? "on" : "off"} />
       </div>
 

@@ -19,7 +19,9 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
-  role: text("role", { enum: ["admin", "mentor", "student", "recruiter"] })
+  role: text("role", {
+    enum: ["admin", "mentor", "student", "recruiter", "partner_agency"],
+  })
     .default("student")
     .notNull(),
   isRecruiterVisible: boolean("is_recruiter_visible").default(false).notNull(),
@@ -196,11 +198,48 @@ export const recruiterApplication = pgTable(
   (table) => [index("recruiter_application_userId_idx").on(table.userId)]
 );
 
+
 export const recruiterApplicationRelations = relations(
   recruiterApplication,
   ({ one }) => ({
     user: one(user, {
       fields: [recruiterApplication.userId],
+      references: [user.id],
+    }),
+  })
+);
+
+// ===============PARTNER AGENCY APPLICATION=================
+
+export const partnerApplication = pgTable(
+  "partner_application",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    agencyName: text("agency_name").notNull(),
+    email: text("email").notNull(),
+    contactNo: text("contact_no").notNull(),
+    websiteUrl: text("website_url"),
+    description: text("description"), // Brief about agency
+    status: text("status", { enum: ["pending", "approved", "rejected"] })
+      .default("pending")
+      .notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [index("partner_application_userId_idx").on(table.userId)]
+);
+
+export const partnerApplicationRelations = relations(
+  partnerApplication,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [partnerApplication.userId],
       references: [user.id],
     }),
   })
@@ -413,6 +452,7 @@ export const studentProgress = pgTable(
 export const courseRelations = relations(course, ({ many }) => ({
   months: many(courseMonth),
   enrollments: many(enrollment),
+  coupons: many(coupon),
 }));
 
 export const courseMonthRelations = relations(courseMonth, ({ one, many }) => ({
@@ -568,11 +608,26 @@ export const coupon = pgTable(
     usedCount: integer("used_count").default(0).notNull(),
     isActive: boolean("is_active").default(true).notNull(),
     expiresAt: timestamp("expires_at"),
+    partnerId: text("partner_id").references(() => user.id, {
+      onDelete: "set null",
+    }),
+    partnerRevenue: integer("partner_revenue"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index("coupon_code_idx").on(table.code)]
+  (table) => [
+    index("coupon_code_idx").on(table.code),
+    index("coupon_partnerId_idx").on(table.partnerId),
+  ]
 );
+
+export const couponRelations = relations(coupon, ({ one }) => ({
+  partner: one(user, {
+    fields: [coupon.partnerId],
+    references: [user.id],
+  }),
+}));
+

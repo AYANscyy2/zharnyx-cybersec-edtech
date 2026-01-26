@@ -8,6 +8,8 @@ import { ApprovedMentorsTable } from "@/components/admin/mentor-management/appro
 import { ApprovedRecruitersTable } from "@/components/admin/recruiter-management/approved-recruiters-table";
 import { RankingTable } from "@/components/admin/ranking/ranking-table";
 import { CouponManager } from "@/components/admin/coupon-management/coupon-manager";
+import { PartnerApplicationTable } from "@/components/admin/partner-management/partner-application-table";
+import { PartnerTable } from "@/components/admin/partner-management/partner-table";
 import {
   Card,
   CardContent,
@@ -127,6 +129,28 @@ export default function AdminPage() {
                     <RecruiterApplicationTable />
                   </CardContent>
                 </Card>
+
+                {/* Partner Applications */}
+                <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none shadow-[4px_4px_0px_0px_white/10] pt-0 col-span-1 xl:col-span-2">
+                  <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <Terminal className="w-4 h-4 text-green-500" />
+                          <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
+                            Partner Agency Requests
+                          </CardTitle>
+                        </div>
+                        <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
+                          Review pending partner agency applications.
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <PartnerApplicationTable />
+                  </CardContent>
+                </Card>
               </div>
             </div>
           )}
@@ -161,6 +185,12 @@ export default function AdminPage() {
           )}
 
           {activeSection === "coupon-management" && <CouponManager />}
+
+          {activeSection === "partner-management" && (
+            <div className="space-y-8">
+              <PartnerTable />
+            </div>
+          )}
         </div>
       </div>
     </div>

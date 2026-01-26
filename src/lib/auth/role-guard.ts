@@ -22,11 +22,7 @@ export async function requireRole(allowedRoles: Role[]) {
   const userRole = session.user.role as Role;
 
   if (!allowedRoles.includes(userRole)) {
-    throw new Error(
-      `Forbidden: This action requires one of the following roles: ${allowedRoles.join(
-        ", "
-      )}`
-    );
+    redirect("/dashboard", RedirectType.replace);
   }
 
   return session;
