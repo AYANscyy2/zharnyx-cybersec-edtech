@@ -17,6 +17,8 @@ const couponSchema = z.object({
     .optional()
     .transform((val) => (val ? new Date(val) : undefined)),
   isActive: z.boolean().default(true),
+  partnerId: z.string().optional(),
+  partnerRevenue: z.coerce.number().optional(),
 });
 
 export async function createCoupon(formData: FormData) {
@@ -28,6 +30,8 @@ export async function createCoupon(formData: FormData) {
       maxUses: formData.get("maxUses") || undefined,
       expiresAt: formData.get("expiresAt") || undefined,
       isActive: formData.get("isActive") === "on",
+      partnerId: formData.get("partnerId") || undefined,
+      partnerRevenue: formData.get("partnerRevenue") || undefined,
     };
 
     const validatedData = couponSchema.parse(rawData);
@@ -35,14 +39,17 @@ export async function createCoupon(formData: FormData) {
     await db.insert(coupon).values({
       id: createId(),
       code: validatedData.code,
-      discountPercent: validatedData.discountPercent,
+      discountPercent: validatedData.discountPercent, // already number via coerce
       maxDiscountAmount: validatedData.maxDiscountAmount,
       maxUses: validatedData.maxUses,
       isActive: validatedData.isActive,
       expiresAt: validatedData.expiresAt,
+      partnerId: validatedData.partnerId || null,
+      partnerRevenue: validatedData.partnerRevenue || null,
     });
 
     revalidatePath("/dashboard/admin/coupons");
+    revalidatePath("/dashboard/admin");
     return { success: true, message: "Coupon created successfully" };
   } catch (error) {
     console.error("Error creating coupon:", error);
@@ -59,6 +66,8 @@ export async function updateCoupon(id: string, formData: FormData) {
       maxUses: formData.get("maxUses") || undefined,
       expiresAt: formData.get("expiresAt") || undefined,
       isActive: formData.get("isActive") === "on", // Handle checkbox/switch
+      partnerId: formData.get("partnerId") || undefined,
+      partnerRevenue: formData.get("partnerRevenue") || undefined,
     };
 
     const validatedData = couponSchema.parse(rawData);
@@ -72,10 +81,13 @@ export async function updateCoupon(id: string, formData: FormData) {
         maxUses: validatedData.maxUses,
         isActive: validatedData.isActive,
         expiresAt: validatedData.expiresAt,
+        partnerId: validatedData.partnerId || null,
+        partnerRevenue: validatedData.partnerRevenue || null,
       })
       .where(eq(coupon.id, id));
 
     revalidatePath("/dashboard/admin/coupons");
+    revalidatePath("/dashboard/admin");
     return { success: true, message: "Coupon updated successfully" };
   } catch (error) {
     console.error("Error updating coupon:", error);

@@ -27,7 +27,7 @@ export default function ApplyPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-4 gap-6">
           {/* Student Card */}
           <Link href="/pricing" className="group block text-left">
             <div className="h-full border-2 bg-zinc-950 p-8 border-red-500 shadow-[8px_8px_0px_0px_#ef4444] transition-all duration-300 relative overflow-hidden hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#ef4444]">
@@ -109,6 +109,34 @@ export default function ApplyPage() {
                 className="p-0 text-white uppercase font-bold tracking-widest bg-transparent hover:bg-transparent hover:text-blue-400"
               >
                 Initialize Request{" "}
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
+          </Link>
+
+          {/* Partner Agency Card */}
+          <Link href="/apply/partner-agency" className="group block text-left">
+            <div className="h-full border-2 bg-zinc-950 p-8 border-green-500 shadow-[8px_8px_0px_0px_#22c55e] transition-all duration-300 relative overflow-hidden hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#22c55e]">
+              <div className="absolute top-0 right-0 p-4 opacity-50">
+                <Building2 className="w-12 h-12 text-green-500/20 transition-colors" />
+              </div>
+
+              <div className="mb-6 inline-flex p-3 border-2 border-green-600 bg-green-600 text-white transition-colors">
+                <Building2 className="w-6 h-6" />
+              </div>
+
+              <h3 className="text-2xl font-black uppercase tracking-wide mb-2 text-green-400 transition-colors">
+                Partner Agency
+              </h3>
+              <p className="text-zinc-400 text-sm font-mono mb-8">
+                Drive growth and revenue by partnering with us.
+              </p>
+
+              <Button
+                variant="ghost"
+                className="p-0 text-white uppercase font-bold tracking-widest bg-transparent hover:bg-transparent hover:text-green-400"
+              >
+                Join Network{" "}
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
