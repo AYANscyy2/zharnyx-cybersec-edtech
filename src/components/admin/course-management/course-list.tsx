@@ -26,6 +26,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { TableSkeleton } from "@/components/shared/table-skeleton";
+
+import { useDebounce } from "@/hooks/use-debounce";
+import { useUrlSync } from "@/hooks/use-url-sync";
 
 interface CourseListProps {
   onEdit: (courseId: string) => void;
@@ -40,9 +44,9 @@ export function CourseList({ onEdit }: CourseListProps) {
   });
   const [pageCount, setPageCount] = useState(0);
 
-  const [query, setQuery] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [query, setQuery] = useUrlSync("search", "", 500);
+  const debouncedQuery = useDebounce(query, 500);
+  const [statusFilter, setStatusFilter] = useUrlSync("status", "all");
 
   const fetchCourses = async (overrides?: {
     pageIndex?: number;
@@ -64,7 +68,7 @@ export function CourseList({ onEdit }: CourseListProps) {
     const currentSearchQuery =
       overrides?.searchQuery !== undefined
         ? overrides.searchQuery
-        : searchQuery;
+        : debouncedQuery;
     const currentStatusFilter =
       overrides?.statusFilter !== undefined
         ? overrides.statusFilter
@@ -92,26 +96,23 @@ export function CourseList({ onEdit }: CourseListProps) {
   };
 
   useEffect(() => {
+    // Reset pagination when search or filter changes
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, [debouncedQuery, statusFilter]);
+
+  useEffect(() => {
     fetchCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleSearch = () => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-    setSearchQuery(query);
-    fetchCourses({ pageIndex: 0, searchQuery: query });
-  };
+  }, [pagination, debouncedQuery, statusFilter]);
 
   const handlePaginationChange = (nextPagination: {
     pageIndex: number;
     pageSize: number;
   }) => {
     setPagination(nextPagination);
-    fetchCourses({
-      pageIndex: nextPagination.pageIndex,
-      pageSize: nextPagination.pageSize,
-    });
   };
+  /* Wait, `fetchCourses` uses state values unless overridden. 
+     If we want live search, we should just depend on `debouncedQuery` in an effect. */
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
@@ -158,26 +159,18 @@ export function CourseList({ onEdit }: CourseListProps) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             className="h-10 flex-1 rounded-none border-2 border-white/20 bg-black px-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500 font-mono uppercase tracking-wide transition-colors"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
           />
           <button
-            onClick={handleSearch}
-            className="h-10 px-6 rounded-none bg-white text-black hover:bg-gray-200 transition-colors text-xs font-black uppercase tracking-widest border-2 border-white"
             disabled={loading}
+            className="h-10 px-6 rounded-none bg-white text-black hover:bg-gray-200 transition-colors text-xs font-black uppercase tracking-widest border-2 border-white disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Search
+            {loading ? "SEARCHING..." : "SEARCH"}
           </button>
         </div>
         <Select
           value={statusFilter}
           onValueChange={(value) => {
             setStatusFilter(value);
-            setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-            fetchCourses({ statusFilter: value, pageIndex: 0 });
           }}
         >
           <SelectTrigger className="w-[180px] h-10 border-2 border-white/20 bg-black text-white font-mono rounded-none uppercase text-xs font-bold tracking-wide focus:border-red-500">
@@ -192,9 +185,7 @@ export function CourseList({ onEdit }: CourseListProps) {
       </div>
 
       {loading ? (
-        <div className="text-white font-mono text-center py-10">
-          Loading courses...
-        </div>
+        <TableSkeleton columnCount={4} rowCount={5} />
       ) : (
         <DataTable
           columns={columns}
