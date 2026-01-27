@@ -11,6 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { TableSkeleton } from "@/components/shared/table-skeleton";
+
+import { useDebounce } from "@/hooks/use-debounce";
+import { useUrlSync } from "@/hooks/use-url-sync";
 
 export function UserTable() {
   const [data, setData] = useState<User[]>([]);
@@ -22,9 +26,22 @@ export function UserTable() {
   const [pageCount, setPageCount] = useState(0);
 
   // Search and Filter states
-  const [query, setQuery] = useState(""); // Internal state for input
-  const [searchQuery, setSearchQuery] = useState(""); // Actual query sent to API
-  const [roleFilter, setRoleFilter] = useState("all");
+  const [query, setQuery] = useUrlSync("search", "", 500);
+  // We use the same value for query and debouncedQuery because the hook handles URL debounce internally if needed,
+  // BUT the table uses debouncedQuery to fetch data.
+  // Actually, my hook debounces the URL update, but we also want the data fetch to be debounced.
+  // The 'query' returned by useUrlSync is the immediate value (for input).
+  // The URL update happens later.
+  // We still need a debounced value for the API call unless we want to read from URL?
+  // Let's keep it simple: useUrlSync returns [value, setValue]. The URL update is a side effect.
+  // We still need a debounced value for the API call to avoid spamming while typing.
+  // OR we can trust the hook's URL update delay, but that might delay the UI?
+  // UseDebounce is better for the API call. The URL sync is just for permalinks.
+
+  const debouncedQuery = useDebounce(query, 500);
+  // Note: The hook also debounces URL updates, so they happen together effectively.
+
+  const [roleFilter, setRoleFilter] = useUrlSync("role", "all");
 
   const [mounted, setMounted] = useState(false);
 
@@ -39,7 +56,7 @@ export function UserTable() {
       const result = await getAllUsers({
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
-        query: searchQuery,
+        query: debouncedQuery,
         role: roleFilter,
       });
 
@@ -60,12 +77,13 @@ export function UserTable() {
     };
 
     fetchData();
-  }, [pagination, searchQuery, roleFilter]);
+  }, [pagination, debouncedQuery, roleFilter]);
 
-  const handleSearch = () => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 })); // Reset to first page
-    setSearchQuery(query);
-  };
+  // Reset pagination when search changes
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, [debouncedQuery, roleFilter]);
+
 
   if (!mounted) {
     return null;
@@ -80,17 +98,12 @@ export function UserTable() {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             className="h-10 flex-1 rounded-none border-2 border-white/20 bg-black px-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500 font-mono uppercase tracking-wide transition-colors"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
           />
           <button
-            onClick={handleSearch}
-            className="h-10 px-6 rounded-none bg-white text-black hover:bg-gray-200 transition-colors text-xs font-black uppercase tracking-widest border-2 border-white"
+            disabled={loading}
+            className="h-10 px-6 rounded-none bg-white text-black hover:bg-gray-200 transition-colors text-xs font-black uppercase tracking-widest border-2 border-white disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Search
+            {loading ? "SEARCHING..." : "SEARCH"}
           </button>
         </div>
         <Select
@@ -114,7 +127,7 @@ export function UserTable() {
         </Select>
       </div>
       {loading ? (
-        <div className="text-white font-mono mx-auto container">Loading...</div>
+        <TableSkeleton columnCount={5} rowCount={10} />
       ) : (
         <DataTable
           columns={columns}
