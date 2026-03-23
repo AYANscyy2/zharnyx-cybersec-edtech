@@ -34,6 +34,13 @@ export const user = pgTable("user", {
   contactEmail: text("contact_email"),
   resumeUrl: text("resume_url"), // Link to resume (PDF/Drive)
   topProjects: json("top_projects").$type<string[]>(), // Array of project submission IDs
+  phone: text("phone"),
+  city: text("city"),
+  studentStatus: text("student_status", { enum: ["College Student", "Working Professional"] }),
+  preferredTrack: text("preferred_track"),
+  collegeName: text("college_name"),
+  message: text("message"),
+  idProofUrl: text("id_proof_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()

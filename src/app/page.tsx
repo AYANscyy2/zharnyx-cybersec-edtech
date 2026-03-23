@@ -1,45 +1,55 @@
 import { HeroSection } from "@/components/home/hero-section";
-import { PortfolioSection } from "@/components/curriculum/portfolio-section";
-import { ArchitectureSection } from "@/components/home/architecture-section";
-import { MasterPlanSection } from "@/components/home/master-plan-section";
-import { MethodologySection } from "@/components/home/methodology-section";
-import { WarRoomSection } from "@/components/home/war-room-section";
-import { AgencyOperationsSection } from "@/components/home/agency-operations-section";
-import { GatekeepingSection } from "@/components/home/gatekeeping-section";
-import { DeploymentTiersSection } from "@/components/home/deployment-tiers-section";
+import { ProblemStatementSection } from "@/components/home/problem-statement-section";
+import { TrackSpecialisationsSection } from "@/components/home/track-specialisations-section";
 import { WhyZharnyxSection } from "@/components/home/why-zharnyx-section";
+import { MasterPlanSection } from "@/components/home/master-plan-section";
+import { WhoIsThisForSection } from "@/components/home/who-is-this-for-section";
+import { FoundersSection } from "@/components/home/founders-section";
+import { FaqSection } from "@/components/home/faq-section";
 import { AboutCTASection } from "@/components/home/about-cta-section";
-import { db } from "@/lib/db";
-import { course } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  // Fetch the first published course, or a specific one "main"
-  // For now, let's take the first published one as the "featured" course
-  const courses = await db.query.course.findMany({
-    where: eq(course.status, "published"),
-    with: {
-      months: true,
+  const featuredCourse = {
+    months: [],
+    level: "",
+    price: 0,
+    portfolioStats: {
+      scripts: 0,
+      audits: 0,
+      caseStudies: 0,
+      certificates: 0,
     },
-    limit: 1,
-  });
-
-  const featuredCourse = courses[0];
+  };
 
   return (
     <>
+      {/* 1. Hero */}
       <HeroSection course={featuredCourse} />
-      <ArchitectureSection />
+
+      {/* 2. Problem Statement */}
+      <ProblemStatementSection />
+
+      {/* 3. Track Specialisations */}
+      <TrackSpecialisationsSection />
+
+      {/* 4. Why Zharnyx */}
       <WhyZharnyxSection />
+
+      {/* 5. 7-Month Plan */}
       <MasterPlanSection />
-      <MethodologySection />
-      <WarRoomSection />
-      <AgencyOperationsSection />
-      <GatekeepingSection />
-      <DeploymentTiersSection />
-      <PortfolioSection stats={featuredCourse?.portfolioStats} />
+
+      {/* 6. Who Is This For */}
+      <WhoIsThisForSection />
+
+      {/* 7. Founders */}
+      <FoundersSection />
+
+      {/* 8. FAQ */}
+      <FaqSection />
+
+      {/* 9. Final CTA */}
       <AboutCTASection />
     </>
   );

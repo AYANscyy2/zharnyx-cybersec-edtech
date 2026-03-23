@@ -24,6 +24,13 @@ export const auth = betterAuth({
         defaultValue: "student",
         input: false, // Don't allow setting role during signup
       },
+      phone: { type: "string", required: false },
+      city: { type: "string", required: false },
+      studentStatus: { type: "string", required: false },
+      preferredTrack: { type: "string", required: false },
+      collegeName: { type: "string", required: false },
+      message: { type: "string", required: false },
+      idProofUrl: { type: "string", required: false },
     },
   },
 });

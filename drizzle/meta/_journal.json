@@ -99,6 +99,20 @@
       "when": 1769491281397,
       "tag": "0013_secret_fallen_one",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1774252456579,
+      "tag": "0014_serious_lady_bullseye",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1774258426169,
+      "tag": "0015_quiet_rage",
+      "breakpoints": true
     }
   ]
 }

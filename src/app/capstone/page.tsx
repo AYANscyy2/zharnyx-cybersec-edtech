@@ -1,0 +1,147 @@
+import { Shield, Crosshair, Cloud, Search, ArrowRight, Zap, Target, BookOpen, AlertOctagon } from "lucide-react";
+import Link from "next/link";
+
+export const metadata = {
+  title: "Capstone Simulation | Zharnyx Academy",
+  description: "The ultimate 72-Hour live-fire exercise where all four tracks come together in a real-time, cross-team cybersecurity simulation.",
+};
+
+export default function CapstonePage() {
+  return (
+    <div className="relative min-h-screen pt-32 pb-20 overflow-hidden font-mono bg-black text-white">
+      {/* Background Accent */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
+
+      <main className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col items-center gap-24">
+        
+        {/* Header Section */}
+        <section className="flex flex-col items-center text-center max-w-4xl space-y-6">
+          <div className="flex items-center gap-2 px-4 py-1 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white]">
+            <Zap size={14} strokeWidth={3} />
+            <span>WEEK 25 · CAPSTONE SIMULATION</span>
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight">
+            72-Hour <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">Live-Fire</span> Exercise
+          </h1>
+          
+          <p className="text-lg md:text-xl text-gray-400 font-medium border-l-4 border-red-600 pl-4 text-left max-w-3xl">
+            The ultimate test. All four tracks come together in a real-time, cross-team cybersecurity simulation. SOC defends. VAPT attacks. Cloud secures. DFIR investigates.
+          </p>
+        </section>
+
+        {/* The Simulation Grid */}
+        <section className="w-full flex justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+            
+            {/* SOC */}
+            <div className="bg-[#050505] border-2 border-white/20 p-8 flex flex-col gap-6 hover:border-blue-500 transition-colors group relative overflow-hidden">
+              <div className="absolute -top-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Shield size={200} className="text-blue-500" />
+              </div>
+              <div className="flex items-center justify-between z-10">
+                <div className="p-3 border-2 border-blue-500 bg-blue-500/10 text-blue-500">
+                  <Shield size={24} />
+                </div>
+                <span className="text-blue-500 font-bold uppercase tracking-widest text-sm">Defenders</span>
+              </div>
+              <h3 className="text-3xl font-black uppercase text-white z-10">SOC Students</h3>
+              <p className="text-gray-400 leading-relaxed z-10">
+                Defend a live corporate network. Monitor SIEM alerts, triage threats, coordinate incident response in real-time.
+              </p>
+            </div>
+
+            {/* VAPT */}
+            <div className="bg-[#050505] border-2 border-white/20 p-8 flex flex-col gap-6 hover:border-red-500 transition-colors group relative overflow-hidden">
+              <div className="absolute -top-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Crosshair size={200} className="text-red-500" />
+              </div>
+              <div className="flex items-center justify-between z-10">
+                <div className="p-3 border-2 border-red-500 bg-red-500/10 text-red-500">
+                  <Crosshair size={24} />
+                </div>
+                <span className="text-red-500 font-bold uppercase tracking-widest text-sm">Attackers</span>
+              </div>
+              <h3 className="text-3xl font-black uppercase text-white z-10">VAPT Students</h3>
+              <p className="text-gray-400 leading-relaxed z-10">
+                Attack the SOC-defended network. Find vulnerabilities, exploit them, and document findings in a professional report.
+              </p>
+            </div>
+
+            {/* Cloud */}
+            <div className="bg-[#050505] border-2 border-white/20 p-8 flex flex-col gap-6 hover:border-sky-400 transition-colors group relative overflow-hidden">
+              <div className="absolute -top-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Cloud size={200} className="text-sky-400" />
+              </div>
+              <div className="flex items-center justify-between z-10">
+                <div className="p-3 border-2 border-sky-400 bg-sky-400/10 text-sky-400">
+                  <Cloud size={24} />
+                </div>
+                <span className="text-sky-400 font-bold uppercase tracking-widest text-sm">Architects</span>
+              </div>
+              <h3 className="text-3xl font-black uppercase text-white z-10">Cloud Students</h3>
+              <p className="text-gray-400 leading-relaxed z-10">
+                Secure the Azure/AWS infrastructure. Configure firewalls, manage IAM roles, and detect misconfigurations during the assault.
+              </p>
+            </div>
+
+            {/* DFIR */}
+            <div className="bg-[#050505] border-2 border-white/20 p-8 flex flex-col gap-6 hover:border-purple-500 transition-colors group relative overflow-hidden">
+              <div className="absolute -top-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Search size={200} className="text-purple-500" />
+              </div>
+              <div className="flex items-center justify-between z-10">
+                <div className="p-3 border-2 border-purple-500 bg-purple-500/10 text-purple-500">
+                  <Search size={24} />
+                </div>
+                <span className="text-purple-500 font-bold uppercase tracking-widest text-sm">Investigators</span>
+              </div>
+              <h3 className="text-3xl font-black uppercase text-white z-10">DFIR Students</h3>
+              <p className="text-gray-400 leading-relaxed z-10">
+                Analyze the aftermath. Perform memory forensics, trace attacker movement, and build a comprehensive timeline of the breach.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        {/* Portfolio Outputs */}
+        <section className="w-full space-y-8">
+          <div className="flex items-center gap-4 border-b-2 border-white/20 pb-4">
+            <BookOpen className="text-red-500" size={32} />
+            <h2 className="text-3xl font-black uppercase tracking-tight text-white">Portfolio Outputs</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {["Full Executive Pentest Report", "Incident Timeline & Indicators", "SIEM Architecture Diagram", "Cloud Compliance Review"].map((doc, i) => (
+              <div key={i} className="py-6 px-4 border-2 border-white/10 flex flex-col items-center justify-center text-center bg-white/5 hover:bg-white/10 hover:border-red-500 transition-colors group gap-3">
+                <Target size={24} className="text-gray-500 group-hover:text-red-500 transition-colors" />
+                <span className="font-bold uppercase tracking-widest text-sm text-gray-300 group-hover:text-white transition-colors">
+                  {doc}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="w-full bg-red-600/10 border-2 border-red-600 p-8 md:p-12 text-center shadow-[8px_8px_0px_0px_rgba(220,38,38,1)] flex flex-col items-center gap-8">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white mb-2">Ready for the Challenge?</h2>
+            <p className="text-red-400 font-bold uppercase tracking-widest text-sm">Prove your skills in a simulated enterprise environment and graduate with real-world experience.</p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-6 w-full justify-center">
+            <Link
+              href="/auth?mode=signup"
+              className="group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:-translate-y-1 transition-transform shadow-[4px_4px_0px_0px_white] hover:shadow-[2px_2px_0px_0px_white] flex items-center justify-center gap-3"
+            >
+              Enroll Now <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  );
+}

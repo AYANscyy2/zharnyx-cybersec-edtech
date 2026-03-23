@@ -31,7 +31,7 @@ export function Navbar({ className }: NavbarProps) {
   return (
     <div
       className={cn(
-        "fixed top-0 inset-x-0 w-full z-[100] font-mono transition-all duration-300",
+        "fixed top-0 inset-x-0 w-full z-100 font-mono transition-all duration-300",
         className
       )}
     >
@@ -46,59 +46,49 @@ export function Navbar({ className }: NavbarProps) {
       >
         {/* Left: Company Name */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="p-2 bg-red-600 text-black border-2 border-transparent transition-colors">
-            <Terminal size={20} strokeWidth={3} />
+          <div className="p-2 border-2 border-transparent transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600">
+              <path d="M4 12L20 4V8L4 16V12Z" fill="currentColor" />
+              <path d="M4 8L20 16V20L4 12V8Z" fill="currentColor" />
+            </svg>
           </div>
-          <span className="text-xl font-black text-white tracking-tighter uppercase transition-all duration-300">
-            Zharnyx <span className="text-red-500">Academy</span>
+          <span className="text-2xl font-black text-white tracking-tighter uppercase transition-all duration-300">
+            ZHARNY<span className="text-red-600">X</span>
           </span>
         </Link>
 
         {/* Middle: Nav Links - Desktop */}
         <div className="hidden md:flex items-center gap-1">
-          <NavLink href="/" label="Home" />
+          <NavLink href="/" label="Home" isActive={pathname === "/"} />
+          
+          {/* Programs Dropdown */}
+          <div className="relative group">
+            <NavLink href="/programs" label="Programs" hasDropdown isActive={pathname?.startsWith("/programs")} />
+            <div className="absolute top-full left-0 w-56 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
+              <div className="bg-black border-2 border-white/20 shadow-[8px_8px_0px_0px_white] flex flex-col p-2 gap-1">
+                <DropdownItem href="/programs#soc" label="SOC Analyst" />
+                <DropdownItem href="/programs#vapt" label="VAPT" />
+                <DropdownItem href="/programs#cloud" label="Cloud Security" />
+                <DropdownItem href="/programs#dfir" label="DFIR" />
+              </div>
+            </div>
+          </div>
+
           {/* About Dropdown */}
           <div className="relative group">
-            <NavLink href="/about" label="About" hasDropdown />
-            <div className="absolute top-full left-0 w-56 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
-              <div className="bg-black border-2 border-white/20 shadow-[8px_8px_0px_0px_white] flex flex-col p-2 gap-1">
-                <DropdownItem href="/about#mission" label="Mission" />
-                <DropdownItem href="/about#core-pillars" label="Core Pillars" />
-                <DropdownItem href="/about#leadership" label="Leadership" />
-                <DropdownItem href="/about#journey" label="Our Journey" />
-              </div>
-            </div>
-          </div>
-          {/* Curriculum Dropdown */}
-          <div className="relative group">
-            <NavLink href="/curriculum" label="Curriculum" hasDropdown />
-            <div className="absolute top-full left-0 w-56 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
-              <div className="bg-black border-2 border-white/20 shadow-[8px_8px_0px_0px_white] flex flex-col p-2 gap-1">
-                <DropdownItem href="/curriculum#foundation" label="Foundation" />
-                <DropdownItem href="/curriculum#specialization" label="Specialization" />
-                <DropdownItem href="/curriculum#convergence" label="Convergence" />
-                <DropdownItem href="/curriculum#internship" label="Internship" />
-                <DropdownItem href="/curriculum#portfolio" label="Portfolio" />
-              </div>
-            </div>
-          </div>
-          <NavLink href="/programs" label="courses" />
-          {/* Why Us Dropdown */}
-          <div className="relative group">
-            <NavLink href="/#why-us" label="why us" hasDropdown />
+            <NavLink href="/about" label="About" hasDropdown isActive={pathname?.startsWith("/about")} />
             <div className="absolute top-full left-0 w-64 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
               <div className="bg-black border-2 border-white/20 shadow-[8px_8px_0px_0px_white] flex flex-col p-2 gap-1">
-                <DropdownItem href="/#why-us" label="Architecture" />
-                <DropdownItem href="/#master-plan" label="Master Plan" />
-                <DropdownItem href="/#methodology" label="Methodology" />
-                <DropdownItem href="/#war-room" label="War Rooms" />
-                <DropdownItem href="/#agency-ops" label="Agency Ops" />
-                <DropdownItem href="/#gatekeeping" label="Gatekeeping" />
-                <DropdownItem href="/#deployment-tiers" label="Deployment" />
+                <DropdownItem href="/about#mission" label="Mission" />
+                <DropdownItem href="/about#differentials" label="What Makes Us Different" />
+                <DropdownItem href="/about#founders" label="Meet the Founders" />
               </div>
             </div>
           </div>
-          <NavLink href="/contact" label="Contact" />
+
+          <NavLink href="/pricing" label="Pricing" isActive={pathname?.startsWith("/pricing")} />
+          <NavLink href="/blog" label="Blog" isActive={pathname?.startsWith("/blog")} />
+          <NavLink href="/contact" label="Contact" isActive={pathname?.startsWith("/contact")} />
         </div>
 
         {/* Right: CTA - Desktop */}
@@ -124,13 +114,13 @@ export function Navbar({ className }: NavbarProps) {
                 href="/auth?mode=signin"
                 className="px-6 py-2.5 text-white font-bold text-sm uppercase tracking-wider hover:text-red-500 transition-colors"
               >
-                Sign In
+                Student Login
               </Link>
               <Link
                 href="/auth?mode=signup"
                 className="relative px-6 py-2.5 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600 shadow-[4px_4px_0px_0px_white] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
               >
-                Get Started
+                Enroll Now
               </Link>
             </>
           )}
@@ -148,47 +138,32 @@ export function Navbar({ className }: NavbarProps) {
               <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10">
                   <span className="text-xl font-black text-white tracking-tighter uppercase">
-                    Zharnyx <span className="text-red-500">Academy</span>
+                    ZHARNY<span className="text-red-600">X</span>
                   </span>
                 </div>
                 <div className="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-4">
                   <MobileNavLink href="/" label="Home" />
 
+                  {/* Programs Mobile Dropdown */}
+                  <MobileNavDropdown label="Programs">
+                    <MobileNavLink href="/programs" label="Overview" />
+                    <MobileNavLink href="/programs#soc" label="SOC Analyst" isChild />
+                    <MobileNavLink href="/programs#vapt" label="VAPT" isChild />
+                    <MobileNavLink href="/programs#cloud" label="Cloud Security" isChild />
+                    <MobileNavLink href="/programs#dfir" label="DFIR" isChild />
+                  </MobileNavDropdown>
+
                   {/* About Mobile Dropdown */}
                   <MobileNavDropdown label="About">
                     <MobileNavLink href="/about" label="Overview" />
                     <MobileNavLink href="/about#mission" label="Mission" isChild />
-                    <MobileNavLink href="/about#core-pillars" label="Core Pillars" isChild />
-                    <MobileNavLink href="/about#leadership" label="Leadership" isChild />
-                    <MobileNavLink href="/about#journey" label="Our Journey" isChild />
+                    <MobileNavLink href="/about#differentials" label="What Makes Us Different" isChild />
+                    <MobileNavLink href="/about#founders" label="Meet the Founders" isChild />
                   </MobileNavDropdown>
 
-                  {/* Curriculum Mobile Dropdown */}
-                  <MobileNavDropdown label="Curriculum">
-                    <MobileNavLink href="/curriculum" label="Overview" />
-                    <MobileNavLink href="/curriculum#foundation" label="Foundation" isChild />
-                    <MobileNavLink href="/curriculum#specialization" label="Specialization" isChild />
-                    <MobileNavLink href="/curriculum#convergence" label="Convergence" isChild />
-                    <MobileNavLink href="/curriculum#internship" label="Internship" isChild />
-                    <MobileNavLink href="/curriculum#portfolio" label="Portfolio" isChild />
-                  </MobileNavDropdown>
-
-                  <MobileNavLink href="/programs" label="Courses" />
-
-                  {/* Why Us Mobile Dropdown */}
-                  <MobileNavDropdown label="Why Us">
-                    <MobileNavLink href="/#why-us" label="Architecture" isChild />
-                    <MobileNavLink href="/#master-plan" label="Master Plan" isChild />
-                    <MobileNavLink href="/#methodology" label="Methodology" isChild />
-                    <MobileNavLink href="/#war-room" label="War Rooms" isChild />
-                    <MobileNavLink href="/#agency-ops" label="Agency Ops" isChild />
-                    <MobileNavLink href="/#gatekeeping" label="Gatekeeping" isChild />
-                    <MobileNavLink href="/#deployment-tiers" label="Deployment" isChild />
-                  </MobileNavDropdown>
-
-                  <MobileNavLink href="/contact" label="Contact" />
                   <MobileNavLink href="/pricing" label="Pricing" />
-                  <MobileNavLink href="/apply" label="Join Us" />
+                  <MobileNavLink href="/blog" label="Blog" />
+                  <MobileNavLink href="/contact" label="Contact" />
                 </div>
                 <div className="p-6 border-t border-white/10 flex flex-col gap-4">
                   {session ? (
@@ -212,13 +187,13 @@ export function Navbar({ className }: NavbarProps) {
                         href="/auth?mode=signin"
                         className="w-full text-center px-6 py-3 text-white font-bold text-sm uppercase tracking-wider border-2 border-white/20 hover:bg-white/10"
                       >
-                        Sign In
+                        Student Login
                       </Link>
                       <Link
                         href="/auth?mode=signup"
                         className="w-full text-center px-6 py-3 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600"
                       >
-                        Get Started
+                        Enroll Now
                       </Link>
                     </>
                   )}
@@ -232,11 +207,14 @@ export function Navbar({ className }: NavbarProps) {
   );
 }
 
-function NavLink({ href, label, hasDropdown }: { href: string; label: string; hasDropdown?: boolean }) {
+function NavLink({ href, label, hasDropdown, isActive }: { href: string; label: string; hasDropdown?: boolean; isActive?: boolean }) {
   return (
     <TransitionLink
       href={href}
-      className="px-5 py-2 text-sm font-medium text-gray-400 uppercase tracking-wide hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all rounded-none flex items-center gap-1.5"
+      className={cn(
+        "px-5 py-2 text-sm font-medium uppercase tracking-wide border border-transparent hover:border-white/10 transition-all rounded-none flex items-center gap-1.5",
+        isActive ? "text-red-500 hover:text-red-400 hover:bg-red-500/10 font-bold" : "text-gray-300 hover:text-white hover:bg-white/5"
+      )}
     >
       {label}
       {hasDropdown && (

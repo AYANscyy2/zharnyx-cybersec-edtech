@@ -13,11 +13,6 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ course }: HeroSectionProps) {
-  const duration = "6 MONTHS";
-  const level = course?.level === "All Levels" ? "3 LVL" : course?.level || "3 LVL"; // Just a heuristic mapping
-  const price = "₹4,999";
-
-
   return (
     <div className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-36 pb-10">
       {/* Background Grid Accent - subtle static noise or pattern could go here */}
@@ -113,18 +108,6 @@ export function HeroSection({ course }: HeroSectionProps) {
           </motion.div>
         </div>
 
-        {/* Stats Grid - Neo Brutalist Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className="grid grid-cols-2 lg:grid-cols-4 w-full border-2 border-white/20 mt-12 bg-black/50 backdrop-blur-sm divide-x-2 divide-y-2 lg:divide-y-0 divide-white/20"
-        >
-          <StatItem value={duration} label="Duration" />
-          <StatItem value={level} label="Deployment" />
-          <StatItem value="100%" label="Exposure" />
-          <StatItem value={price} label="Investment" />
-        </motion.div>
       </main>
     </div>
   );
@@ -145,15 +128,3 @@ export function HeroSection({ course }: HeroSectionProps) {
 //   );
 // }
 
-function StatItem({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center p-6 hover:bg-white/5 transition-colors group">
-      <span className="text-3xl font-bold text-white group-hover:text-red-500 transition-colors">
-        {value}
-      </span>
-      <span className="text-xs font-bold text-gray-500 uppercase tracking-widest mt-1 group-hover:text-white transition-colors">
-        {label}
-      </span>
-    </div>
-  );
-}
