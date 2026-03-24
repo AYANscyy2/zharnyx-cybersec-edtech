@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
 
 const FAQS = [
   {
@@ -54,13 +55,25 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 export function FaqSection() {
+  const headerRef = useGsapScrollAnimation<HTMLDivElement>({
+    direction: "up",
+    duration: 0.65,
+  });
+  const listRef = useGsapScrollAnimation<HTMLDivElement>({
+    direction: "up",
+    duration: 0.65,
+    delay: 0.1,
+    stagger: 0.1,
+    childSelector: ".faq-item",
+  });
+
   return (
     <section
       id="faq"
       className="w-full py-24 px-6 font-mono bg-black border-t-2 border-white/10"
     >
       <div className="max-w-3xl mx-auto flex flex-col items-center gap-10">
-        <div className="text-center space-y-4">
+        <div ref={headerRef} className="text-center space-y-4">
           <div className="inline-block px-4 py-1 bg-white text-black font-bold uppercase tracking-widest text-xs border-2 border-white shadow-[4px_4px_0px_0px_red]">
             FAQ
           </div>
@@ -72,9 +85,11 @@ export function FaqSection() {
           </h2>
         </div>
 
-        <div className="flex flex-col gap-4 w-full">
+        <div ref={listRef} className="flex flex-col gap-4 w-full">
           {FAQS.map((faq) => (
-            <FaqItem key={faq.q} q={faq.q} a={faq.a} />
+            <div key={faq.q} className="faq-item">
+              <FaqItem q={faq.q} a={faq.a} />
+            </div>
           ))}
         </div>
       </div>

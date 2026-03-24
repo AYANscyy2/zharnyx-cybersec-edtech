@@ -2,27 +2,81 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { useState, useRef, useEffect } from "react";
 import { useSession, signOut } from "@/lib/auth/auth-client";
-import { Terminal, Menu, ChevronDown } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { TransitionLink } from "@/components/shared/transition-link";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import gsap from "gsap";
 
 interface NavbarProps {
   className?: string;
 }
 
 export function Navbar({ className }: NavbarProps) {
-  const { scrollY } = useScroll();
-  const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   const pathname = usePathname();
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setScrolled(latest > 50);
-  });
+  const lastScrollY = useRef(0);
+  const isHidden = useRef(false);
+  const hasEntered = useRef(false);
+
+  useEffect(() => {
+    const el = navRef.current;
+    if (!el) return;
+
+    // Initial state: hidden above viewport
+    gsap.set(el, { yPercent: -100, opacity: 0 });
+
+    // Entrance after 1.5s with smooth cubic bezier
+
+    gsap.to(el, {
+      yPercent: 0,
+      opacity: 1,
+      duration: 1,
+      ease: "cubic-bezier(0.16, 1, 0.3, 1)",
+      delay: 1.5,
+      onComplete: () => {
+        hasEntered.current = true;
+      },
+    })
+
+    const handleScroll = () => {
+      if (!hasEntered.current) return;
+
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollY.current;
+
+      if (delta > 6 && !isHidden.current) {
+        // Scrolling down — hide
+        isHidden.current = true;
+        gsap.to(el, {
+          yPercent: -100,
+          duration: 0.55,
+          ease: "power3.inOut",
+        });
+      } else if (delta < -4 && isHidden.current) {
+        // Scrolling up — show
+        isHidden.current = false;
+        gsap.to(el, {
+          yPercent: 0,
+          duration: 0.65,
+          ease: "cubic-bezier(0.16, 1, 0.3, 1)",
+        });
+      }
+
+      lastScrollY.current = currentY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   if (pathname?.startsWith("/dashboard") || pathname?.startsWith("/profile")) {
     return null;
@@ -30,17 +84,15 @@ export function Navbar({ className }: NavbarProps) {
 
   return (
     <div
+      ref={navRef}
       className={cn(
-        "fixed top-0 inset-x-0 w-full z-100 font-mono transition-all duration-300",
+        "fixed top-0 inset-x-0 w-full z-100 font-mono",
         className
       )}
     >
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+      <nav
         className={cn(
-          "relative flex items-center justify-between px-6 md:px-12 py-5 border-b-2 transition-all duration-300",
+          "relative flex items-center justify-between px-6 md:px-12 py-5 border-b-2 transition-colors duration-300",
           "bg-black border-red-900/40"
         )}
       >
@@ -52,7 +104,7 @@ export function Navbar({ className }: NavbarProps) {
               <path d="M4 8L20 16V20L4 12V8Z" fill="currentColor" />
             </svg>
           </div>
-          <span className="text-2xl font-black text-white tracking-tighter uppercase transition-all duration-300">
+          <span className="text-2xl font-black text-white tracking-tighter uppercase">
             ZHARNY<span className="text-red-600">X</span>
           </span>
         </Link>
@@ -60,8 +112,7 @@ export function Navbar({ className }: NavbarProps) {
         {/* Middle: Nav Links - Desktop */}
         <div className="hidden md:flex items-center gap-1">
           <NavLink href="/" label="Home" isActive={pathname === "/"} />
-          
-          {/* Programs Dropdown */}
+
           <div className="relative group">
             <NavLink href="/programs" label="Programs" hasDropdown isActive={pathname?.startsWith("/programs")} />
             <div className="absolute top-full left-0 w-56 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
@@ -74,7 +125,6 @@ export function Navbar({ className }: NavbarProps) {
             </div>
           </div>
 
-          {/* About Dropdown */}
           <div className="relative group">
             <NavLink href="/about" label="About" hasDropdown isActive={pathname?.startsWith("/about")} />
             <div className="absolute top-full left-0 w-64 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
@@ -143,8 +193,6 @@ export function Navbar({ className }: NavbarProps) {
                 </div>
                 <div className="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-4">
                   <MobileNavLink href="/" label="Home" />
-
-                  {/* Programs Mobile Dropdown */}
                   <MobileNavDropdown label="Programs">
                     <MobileNavLink href="/programs" label="Overview" />
                     <MobileNavLink href="/programs#soc" label="SOC Analyst" isChild />
@@ -152,15 +200,12 @@ export function Navbar({ className }: NavbarProps) {
                     <MobileNavLink href="/programs#cloud" label="Cloud Security" isChild />
                     <MobileNavLink href="/programs#dfir" label="DFIR" isChild />
                   </MobileNavDropdown>
-
-                  {/* About Mobile Dropdown */}
                   <MobileNavDropdown label="About">
                     <MobileNavLink href="/about" label="Overview" />
                     <MobileNavLink href="/about#mission" label="Mission" isChild />
                     <MobileNavLink href="/about#differentials" label="What Makes Us Different" isChild />
                     <MobileNavLink href="/about#founders" label="Meet the Founders" isChild />
                   </MobileNavDropdown>
-
                   <MobileNavLink href="/pricing" label="Pricing" />
                   <MobileNavLink href="/blog" label="Blog" />
                   <MobileNavLink href="/contact" label="Contact" />
@@ -168,31 +213,19 @@ export function Navbar({ className }: NavbarProps) {
                 <div className="p-6 border-t border-white/10 flex flex-col gap-4">
                   {session ? (
                     <>
-                      <Link
-                        href="/dashboard"
-                        className="w-full text-center px-6 py-3 bg-blue-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-blue-600"
-                      >
+                      <Link href="/dashboard" className="w-full text-center px-6 py-3 bg-blue-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-blue-600">
                         Command Center
                       </Link>
-                      <button
-                        onClick={() => signOut()}
-                        className="w-full px-6 py-3 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600"
-                      >
+                      <button onClick={() => signOut()} className="w-full px-6 py-3 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600">
                         Sign Out
                       </button>
                     </>
                   ) : (
                     <>
-                      <Link
-                        href="/auth?mode=signin"
-                        className="w-full text-center px-6 py-3 text-white font-bold text-sm uppercase tracking-wider border-2 border-white/20 hover:bg-white/10"
-                      >
+                      <Link href="/auth?mode=signin" className="w-full text-center px-6 py-3 text-white font-bold text-sm uppercase tracking-wider border-2 border-white/20 hover:bg-white/10">
                         Student Login
                       </Link>
-                      <Link
-                        href="/auth?mode=signup"
-                        className="w-full text-center px-6 py-3 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600"
-                      >
+                      <Link href="/auth?mode=signup" className="w-full text-center px-6 py-3 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600">
                         Enroll Now
                       </Link>
                     </>
@@ -202,7 +235,7 @@ export function Navbar({ className }: NavbarProps) {
             </SheetContent>
           </Sheet>
         </div>
-      </motion.nav>
+      </nav>
     </div>
   );
 }
@@ -218,10 +251,7 @@ function NavLink({ href, label, hasDropdown, isActive }: { href: string; label: 
     >
       {label}
       {hasDropdown && (
-        <ChevronDown
-          size={14}
-          className="transition-transform duration-300 group-hover:-rotate-180"
-        />
+        <ChevronDown size={14} className="transition-transform duration-300 group-hover:-rotate-180" />
       )}
     </TransitionLink>
   );
@@ -237,6 +267,7 @@ function DropdownItem({ href, label }: { href: string; label: string }) {
     </Link>
   );
 }
+
 function MobileNavLink({ href, label, isChild }: { href: string; label: string; isChild?: boolean }) {
   return (
     <SheetClose asChild>
@@ -250,12 +281,11 @@ function MobileNavLink({ href, label, isChild }: { href: string; label: string; 
         {label}
       </Link>
     </SheetClose>
-  )
+  );
 }
 
 function MobileNavDropdown({ label, children }: { label: string; children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="w-full">
       <button
@@ -278,7 +308,5 @@ function MobileNavDropdown({ label, children }: { label: string; children: React
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }
-
-

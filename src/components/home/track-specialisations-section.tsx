@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Shield, Crosshair, Cloud, Search, ArrowRight } from "lucide-react";
+import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
 
 const TRACKS = [
   {
@@ -67,10 +70,22 @@ const hoverMap: Record<string, string> = {
 };
 
 export function TrackSpecialisationsSection() {
+  const headerRef = useGsapScrollAnimation<HTMLDivElement>({
+    direction: "up",
+    duration: 0.65,
+  });
+  const cardsRef = useGsapScrollAnimation<HTMLDivElement>({
+    direction: "up",
+    duration: 0.7,
+    delay: 0.1,
+    stagger: 0.12,
+    childSelector: ".track-card",
+  });
+
   return (
     <section className="w-full py-24 px-6 font-mono bg-black">
       <div className="max-w-6xl mx-auto flex flex-col items-center gap-12">
-        <div className="text-center space-y-4">
+        <div ref={headerRef} className="text-center space-y-4">
           <div className="inline-block px-4 py-1 bg-white text-black font-bold uppercase tracking-widest text-xs border-2 border-white shadow-[4px_4px_0px_0px_red]">
             Choose Your Track
           </div>
@@ -82,17 +97,18 @@ export function TrackSpecialisationsSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+        <div
+          ref={cardsRef}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full"
+        >
           {TRACKS.map((track) => {
             const Icon = track.icon;
             return (
               <div
                 key={track.title}
-                className={`group flex flex-col gap-6 p-8 bg-[#050505] border-2 border-white/10 ${hoverMap[track.color]} transition-colors`}
+                className={`track-card group flex flex-col gap-6 p-8 bg-[#050505] border-2 border-white/10 ${hoverMap[track.color]} transition-colors`}
               >
-                <div
-                  className={`p-3 border-2 w-fit ${colorMap[track.color]}`}
-                >
+                <div className={`p-3 border-2 w-fit ${colorMap[track.color]}`}>
                   <Icon size={24} />
                 </div>
 

@@ -1,8 +1,12 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 import Link from "next/link";
 import { ArrowRight, Shield, Terminal, Crosshair } from "lucide-react";
+
+gsap.registerPlugin(SplitText);
 
 interface HeroSectionProps {
   course?: {
@@ -13,61 +17,183 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ course }: HeroSectionProps) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const headline1Ref = useRef<HTMLSpanElement>(null);
+  const headline2Ref = useRef<HTMLSpanElement>(null);
+  const subtextRef = useRef<HTMLParagraphElement>(null);
+  const redLineRef = useRef<HTMLSpanElement>(null);
+  const tagsRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Split headlines by words + lines (lines give us the overflow mask container)
+      const split1 = new SplitText(headline1Ref.current, {
+        type: "words,lines",
+        linesClass: "line-mask",
+      });
+      const split2 = new SplitText(headline2Ref.current, {
+        type: "words,lines",
+        linesClass: "line-mask",
+      });
+
+      // Split subtext by lines only
+      const splitSub = new SplitText(subtextRef.current, {
+        type: "lines",
+        linesClass: "line-mask",
+      });
+
+      // All line-mask elements get overflow hidden so words clip inside
+      gsap.set([...split1.lines, ...split2.lines, ...splitSub.lines], {
+        overflow: "hidden",
+        display: "block",
+      });
+
+      // Red line starts at width 0
+      gsap.set(redLineRef.current, { scaleX: 0, transformOrigin: "left center" });
+
+      // Master timeline
+      const tl = gsap.timeline();
+
+      // 1. Badge
+      tl.from(badgeRef.current, {
+        opacity: 0,
+        y: 18,
+        duration: 1,
+        delay: 1,
+      })
+
+        // 2. Headline 1 — words punch up through line masks
+        .from(
+          split1.words,
+          {
+            yPercent: 100,
+            opacity: 0,
+            duration: 0.9,
+            stagger: 0.2,
+          },
+          "-=0.5"
+        )
+
+        // 3. Headline 2 — same, overlaps
+        .from(
+          split2.words,
+          {
+            yPercent: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+          },
+          "-=0.7"
+        )
+
+        // 4. Subtext lines rise up
+        .from(
+          splitSub.lines,
+          {
+            yPercent: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.13,
+          },
+          "-=0.55"
+        )
+
+        // 5. Red underline draws left → right immediately after subtext
+        .to(
+          redLineRef.current,
+          {
+            scaleX: 1,
+            duration: 1
+          },
+          "-=0.6"
+        )
+
+        // 6. Tags
+        .from(
+          tagsRef.current,
+          {
+            opacity: 0,
+            y: 16,
+            duration: 0.9
+          },
+          "-=0.6"
+        )
+        .to(".button", {
+          opacity: 1,
+          y: 0,
+          duration: 0.9
+        }, "-=0.9")
+
+      // 7. CTA buttons — stagger each child
+
+
+      return () => {
+        split1.revert();
+        split2.revert();
+        splitSub.revert();
+        tl.kill();
+      };
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-36 pb-10">
-      {/* Background Grid Accent - subtle static noise or pattern could go here */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
+    <div
+      ref={sectionRef}
+      className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-36 pb-10"
+    >
+      {/* Background noise */}
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
 
       <main className="relative z-10 w-full max-w-7xl px-4 sm:px-6 flex flex-col items-center gap-8">
-        {/* Top Badge - Neo Brutalist */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+        {/* Badge */}
+        <div
+          ref={badgeRef}
           className="flex items-center gap-3 px-4 py-1.5 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white]"
         >
           <Terminal size={14} strokeWidth={3} />
           <span>Zharnyx 2.0 // Cyber-Agency</span>
-        </motion.div>
+        </div>
 
         {/* Hero Content */}
         <div className="flex flex-col items-center text-center max-w-5xl space-y-6">
+
           {/* Headline */}
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white leading-[1.1] uppercase flex flex-col items-center">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-white leading-[1.15] uppercase flex flex-col items-center gap-1 w-full">
+            <span ref={headline1Ref} className="block w-full">
               From Student to
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-white to-red-500 animate-gradient-x"
+            </span>
+            <span
+              ref={headline2Ref}
+              className="block w-full text-transparent bg-clip-text bg-linear-to-r from-red-500 via-white to-red-500 animate-gradient-x"
             >
               Security Consultant
-            </motion.span>
+            </span>
           </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-sm sm:text-base md:text-xl text-gray-300 max-w-2xl font-medium border-l-4 border-red-600 pl-4 text-left md:text-center md:border-l-0 md:border-b-4 md:pb-2"
-          >
-            A 6-month career residency producing{" "}
-            <span className="bg-white text-black px-1">
-              Day-1-ready engineers
-            </span>{" "}
-            via live war games & SOC operations.
-          </motion.p>
+          {/* Subtext with animated red underline */}
+          <div className="relative w-full flex flex-col items-center">
+            <p
+              ref={subtextRef}
+              className="text-sm sm:text-base md:text-xl text-gray-300 max-w-2xl font-medium text-center pb-4"
+            >
+              A 6-month career residency producing{" "}
+              <span className="bg-white text-black px-1">Day-1-ready engineers</span>{" "}
+              via live war games &amp; SOC operations.
+            </p>
+            {/* Animated red underline — draws left to right */}
+            <span
+              ref={redLineRef}
+              className="block h-[3px] w-full max-w-2xl bg-red-600 origin-left"
+            />
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+          {/* Tags */}
+          <div
+            ref={tagsRef}
             className="flex flex-wrap justify-center gap-4 text-xs font-bold uppercase tracking-widest text-red-500"
           >
             <span className="flex items-center gap-1">
@@ -77,54 +203,35 @@ export function HeroSection({ course }: HeroSectionProps) {
             <span className="flex items-center gap-1">
               <Shield size={12} /> Client Deployments
             </span>
-          </motion.div>
+          </div>
 
-          {/* Neo-Brutalist CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-6 mt-6 w-full justify-center"
+          {/* CTA Buttons — both same height via h-14 */}
+          <div
+            ref={ctaRef}
+            className="flex button translate-y-5 opacity-0 flex-col sm:flex-row gap-4 mt-6 w-full justify-center items-center"
           >
             <Link
               href="/#master-plan"
-              className="group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:translate-x-1 hover:translate-y-1 transition-transform"
+              className="group  relative flex items-center justify-center h-14 px-8 bg-red-600 text-black font-bold text-sm uppercase tracking-wider border-2 border-red-600 hover:translate-x-[3px] hover:translate-y-[3px] transition-transform w-full sm:w-auto"
             >
-              <span className="absolute inset-0 bg-white translate-x-1.5 translate-y-1.5 -z-10 border-2 border-white group-hover:translate-x-0 group-hover:translate-y-0 transition-transform"></span>
+              {/* brutalist shadow block */}
+              <span className="absolute inset-0 bg-white translate-x-[5px] translate-y-[5px] -z-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform border-2 border-white" />
               <span className="flex items-center gap-2">
-                View Blueprint{" "}
-                <ArrowRight
-                  size={20}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
+                View Blueprint
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </span>
             </Link>
+
             <Link
               href="/auth?mode=signup"
-              className="group px-8 py-4 bg-transparent text-white font-bold text-lg uppercase tracking-wider border-2 border-white hover:bg-white hover:text-black transition-colors"
+              className=" group   flex items-center justify-center h-14 px-8 bg-transparent text-white font-bold text-sm uppercase tracking-wider border-2 border-white hover:bg-white hover:text-black transition-colors w-full sm:w-auto"
             >
               Get Started
             </Link>
-          </motion.div>
-        </div>
+          </div>
 
+        </div>
       </main>
     </div>
   );
 }
-
-// function OverflowText({ text, delay }: { text: string; delay: number }) {
-//   return (
-//     <span className="inline-block overflow-hidden align-bottom">
-//       <motion.span
-//         initial={{ y: "100%" }}
-//         animate={{ y: 0 }}
-//         transition={{ duration: 0.5, delay, ease: [0.33, 1, 0.68, 1] }}
-//         className="inline-block"
-//       >
-//         {text}
-//       </motion.span>
-//     </span>
-//   );
-// }
-

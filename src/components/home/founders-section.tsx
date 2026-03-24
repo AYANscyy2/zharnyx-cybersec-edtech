@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
 
 const FOUNDERS = [
   {
@@ -23,10 +26,27 @@ const FOUNDERS = [
 ];
 
 export function FoundersSection() {
+  const headerRef = useGsapScrollAnimation<HTMLDivElement>({
+    direction: "up",
+    duration: 0.65,
+  });
+  const cardsRef = useGsapScrollAnimation<HTMLDivElement>({
+    direction: "up",
+    duration: 0.7,
+    delay: 0.1,
+    stagger: 0.13,
+    childSelector: ".founder-card",
+  });
+  const linkRef = useGsapScrollAnimation<HTMLAnchorElement>({
+    direction: "up",
+    duration: 0.5,
+    delay: 0.35,
+  });
+
   return (
     <section className="w-full py-24 px-6 font-mono bg-black border-t-2 border-white/10">
       <div className="max-w-6xl mx-auto flex flex-col items-center gap-12">
-        <div className="text-center space-y-4">
+        <div ref={headerRef} className="text-center space-y-4">
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white">
             Meet the{" "}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
@@ -35,11 +55,11 @@ export function FoundersSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           {FOUNDERS.map((f) => (
             <div
               key={f.name}
-              className="flex flex-col gap-6 p-8 border-2 border-white/10 bg-[#050505] hover:border-white/30 transition-colors"
+              className="founder-card flex flex-col gap-6 p-8 border-2 border-white/10 bg-[#050505] hover:border-white/30 transition-colors"
             >
               {/* Avatar */}
               <div className="w-16 h-16 border-2 border-red-600 bg-red-600/10 flex items-center justify-center text-2xl font-black text-red-500">
@@ -63,6 +83,7 @@ export function FoundersSection() {
         </div>
 
         <Link
+          ref={linkRef}
           href="/about"
           className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-400 hover:text-white transition-colors border-b border-white/20 hover:border-white pb-1"
         >
