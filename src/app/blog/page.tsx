@@ -1,10 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { FileText, ArrowRight, Rss, Terminal, Search } from "lucide-react";
+import { FileText, ArrowRight, Terminal, Search } from "lucide-react";
 import Link from "next/link";
+import { SectionBadge } from "@/components/ui/section-badge";
+
+import Autoplay from "embla-carousel-autoplay";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 gsap.registerPlugin(SplitText);
 
@@ -53,12 +63,15 @@ const blogPosts = [
   }
 ];
 
+const CATEGORIES = ["All", ...Array.from(new Set(blogPosts.map(p => p.category)))];
+
 export default function BlogPage() {
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const sidebarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     gsap.set(containerRef.current, { autoAlpha: 1 });
     const ctx = gsap.context(() => {
@@ -79,22 +92,17 @@ export default function BlogPage() {
         opacity: 1,
         y: 0,
         duration: 1,
-        delay: 1,
+        delay: 0.5,
       })
         .from(split.words, {
           yPercent: 100,
           duration: 0.9,
-          stagger: 0.4,
+          stagger: 0.1,
         }, "-=0.6")
         .to(contentRef.current, {
           opacity: 1,
           y: 0,
           duration: 1.2,
-        }, "-=0.8")
-        .to(sidebarRef.current, {
-          opacity: 1,
-          x: 0,
-          duration: 1.2
         }, "-=0.8")
 
 
@@ -108,21 +116,18 @@ export default function BlogPage() {
       {/* Background Accent */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
 
-      <main className="relative z-10 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <main className="relative z-10 w-full max-w-5xl mx-auto px-6">
 
         {/* Main Content Column */}
-        <div className="lg:col-span-8 flex flex-col gap-12">
+        <div className="flex flex-col gap-12">
 
           {/* Header Section */}
-          <section className="space-y-6">
-            <div ref={badgeRef} className="translate-y-5 flex items-center gap-2 px-4 py-1 bg-red-600 w-fit text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white] opacity-0">
-              <FileText size={14} strokeWidth={3} />
-              <span>Blog & Resources</span>
-            </div>
+          <section className="space-y-6 flex flex-col items-start">
+            <SectionBadge ref={badgeRef} text="Blog & Resources" icon={FileText} className="translate-y-5 opacity-0 items-start!" />
 
             <h1 ref={headingRef} className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase leading-tight">
               Cybersecurity <br />
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
+              <span className="text-red-500">
                 Insights
               </span>
             </h1>
@@ -130,83 +135,103 @@ export default function BlogPage() {
 
           <div ref={contentRef} className="flex flex-col gap-12 opacity-0">
             <p className="text-gray-400 font-medium text-lg border-l-2 border-red-600 pl-4 max-w-xl">
-              Career guides, tool tutorials, and industry insights for Tamil Nadu's cybersecurity community.
+              Career guides, tool tutorials, and industry insights for Tamil Nadu&apos;s cybersecurity community.
             </p>
 
-            {/* Articles Grid */}
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full mt-4">
-              {blogPosts.map((post, idx) => (
-                <BlogCard key={idx} post={post} featured={idx === 0} />
-              ))}
+            {/* Horizontal Categorical Filter + Search */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest border-2 transition-all ${
+                      activeCategory === cat 
+                      ? "bg-red-600 border-red-600 text-black shadow-[4px_4px_0_0_white]" 
+                      : "bg-transparent border-white/20 text-gray-500 hover:border-white hover:text-white"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
+              {/* Search Bar */}
+              <div className="flex items-center bg-white/5 border-2 border-white/10 px-3 py-1 group focus-within:border-red-600 transition-colors max-w-sm w-full md:w-64">
+                <input
+                  type="text"
+                  placeholder="SEARCH INTEL..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="bg-transparent border-none text-white focus:outline-hidden placeholder:text-gray-600 text-[10px] font-black uppercase tracking-widest flex-1 min-w-0"
+                />
+                <Search size={16} className="text-red-500 group-focus-within:scale-110 transition-transform" />
+              </div>
+            </div>
+
+            {/* Articles Grid - Two Rows */}
+            <section className="flex flex-col gap-12 mt-4">
+              {(() => {
+                const filteredPosts = blogPosts.filter(post => {
+                  const matchesCategory = activeCategory === "All" || post.category === activeCategory;
+                  const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                       post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+                  return matchesCategory && matchesSearch;
+                });
+
+                if (filteredPosts.length === 0) return (
+                  <div className="py-20 text-center border-2 border-dashed border-white/10 text-gray-500 uppercase font-black tracking-widest">
+                    No matching intel found
+                  </div>
+                );
+
+                const featuredPost = filteredPosts[0];
+                const carouselPosts = filteredPosts.slice(1);
+
+                return (
+                  <>
+                    {/* Row 1: Featured Post */}
+                    <div className="w-full">
+                      <BlogCard post={featuredPost} featured={true} />
+                    </div>
+
+                    {/* Row 2: Slider for Remaining Posts */}
+                    {carouselPosts.length > 0 && (
+                      <div className="w-full relative px-4 md:px-0">
+                        <Carousel
+                          opts={{
+                            align: "start",
+                            loop: true,
+                          }}
+                          plugins={[
+                            Autoplay({
+                              delay: 4000,
+                              stopOnInteraction: true,
+                            }),
+                          ]}
+                          className="w-full"
+                        >
+                          <CarouselContent className="-ml-6">
+                            {carouselPosts.map((post, idx) => (
+                              <CarouselItem key={idx} className="pl-6 md:basis-1/2 lg:basis-1/2">
+                                <BlogCard post={post} />
+                              </CarouselItem>
+                            ))}
+                          </CarouselContent>
+                          <div className="flex justify-start gap-4 mt-8">
+                            <CarouselPrevious className="static translate-y-0 rounded-none border-2 border-white/20 bg-black text-white hover:bg-white hover:text-black transition-colors w-12 h-12" />
+                            <CarouselNext className="static translate-y-0 rounded-none border-2 border-white/20 bg-black text-white hover:bg-white hover:text-black transition-colors w-12 h-12" />
+                          </div>
+                        </Carousel>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </section>
           </div>
         </div>
 
-        {/* Sidebar */}
-        <aside ref={sidebarRef} className="lg:col-span-4 translate-x-10 opacity-0 flex flex-col gap-8">
-
-          {/* Search Box */}
-          <div className="border-2 border-white/20 bg-black p-6">
-            <h3 className="text-lg font-black uppercase text-white mb-4 flex items-center gap-2">
-              <Search size={18} className="text-red-500" /> Search intel
-            </h3>
-            <div className="flex">
-              <input
-                type="text"
-                placeholder="Keywords..."
-                className="w-full bg-white/5 border-2 border-white/20 px-4 py-2 text-white focus:outline-hidden focus:border-red-500 transition-colors placeholder:text-gray-600 flex-1 min-w-0"
-              />
-              <button className="bg-red-600 border-2 border-red-600 px-4 text-black hover:bg-red-500 transition-colors">
-                <ArrowRight size={20} />
-              </button>
-            </div>
-          </div>
-
-          {/* Newsletter Box */}
-          <div className="border-2 border-red-600 bg-red-600/5 p-8 relative shadow-[8px_8px_0px_0px_rgba(220,38,38,1)]">
-            <div className="absolute top-0 right-0 p-2 bg-red-600 text-black">
-              <Rss size={20} />
-            </div>
-            <h3 className="text-2xl font-black uppercase text-white mb-2 pr-8 leading-tight">
-              Weekly Tamil Nadu <span className="text-red-500">Cyber Insights</span>
-            </h3>
-            <p className="text-gray-400 text-sm mb-6 mt-4">
-              Get career guides, tool tutorials, and job market updates directly in your inbox. No spam, just signal.
-            </p>
-
-            <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder="EMAIL ADDRESS"
-                className="w-full bg-black border-2 border-white/20 px-4 py-3 text-white focus:outline-hidden focus:border-red-500 transition-colors uppercase tracking-widest text-xs font-bold"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full bg-white text-black font-black uppercase tracking-widest text-sm py-3 border-2 border-white hover:bg-black hover:text-white transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
-
-          {/* Categories */}
-          <div className="border-2 border-white/20 bg-black p-6">
-            <h3 className="text-lg font-black uppercase text-white mb-4 flex items-center gap-2">
-              <Terminal size={18} className="text-red-500" /> Categories
-            </h3>
-            <ul className="flex flex-col gap-2">
-              {["Career Guides", "Tool Tutorials", "Industry Analytics", "DFIR", "Cloud Security", "Red Teaming"].map(cat => (
-                <li key={cat}>
-                  <Link href="#" className="flex items-center justify-between text-sm text-gray-400 hover:text-white hover:pl-2 transition-all p-2 hover:bg-white/5">
-                    <span className="uppercase tracking-wide">{cat}</span>
-                    <span className="text-red-500 text-xs font-bold">[+]</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
 
       </main>
     </div>

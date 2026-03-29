@@ -33,7 +33,7 @@ export function WarRoomSection() {
             className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none"
           >
             War Rooms: Where Real <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-purple-500 to-blue-500">
+            <span className="text-blue-500">
               Engineers Are Built
             </span>
           </motion.h2>

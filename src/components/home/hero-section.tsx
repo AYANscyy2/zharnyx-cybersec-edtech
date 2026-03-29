@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import Link from "next/link";
 import { ArrowRight, Shield, Terminal, Crosshair } from "lucide-react";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 gsap.registerPlugin(SplitText);
 
@@ -150,13 +151,7 @@ export function HeroSection({ course }: HeroSectionProps) {
 
       <main className="relative z-10 w-full max-w-7xl px-4 sm:px-6 flex flex-col items-center gap-8">
         {/* Badge */}
-        <div
-          ref={badgeRef}
-          className="flex items-center gap-3 px-4 py-1.5 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white]"
-        >
-          <Terminal size={14} strokeWidth={3} />
-          <span>Zharnyx 2.0 // Cyber-Agency</span>
-        </div>
+        <SectionBadge ref={badgeRef} text="Zharnyx // Cyber-EdTech" icon={Terminal} />
 
         {/* Hero Content */}
         <div className="flex flex-col items-center text-center max-w-5xl space-y-6">
@@ -168,7 +163,7 @@ export function HeroSection({ course }: HeroSectionProps) {
             </span>
             <span
               ref={headline2Ref}
-              className="block w-full text-transparent bg-clip-text bg-linear-to-r from-red-500 via-white to-red-500 animate-gradient-x"
+              className="block w-full text-red-500"
             >
               Security Consultant
             </span>

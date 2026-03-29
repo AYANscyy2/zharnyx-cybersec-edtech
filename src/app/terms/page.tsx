@@ -1,4 +1,5 @@
-import { Scale } from "lucide-react";
+import { Shield } from "lucide-react";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 export const metadata = {
   title: "Terms & Conditions | Zharnyx Academy",
@@ -14,14 +15,11 @@ export default function TermsPage() {
       <main className="relative z-10 w-full max-w-4xl mx-auto px-6 flex flex-col gap-16">
         
         {/* Header Section */}
-        <section className="flex flex-col space-y-6 border-b-4 border-red-600 pb-12">
-          <div className="flex items-center gap-2 px-4 py-1 bg-white text-black font-bold uppercase tracking-widest text-xs border-2 border-white shadow-[4px_4px_0px_0px_red] w-fit">
-            <Scale size={14} strokeWidth={3} />
-            <span>LEGAL AGREEMENT</span>
-          </div>
+        <section className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-6 border-b-4 border-red-600 pb-12">
+          <SectionBadge text="TERMS_OF_SERVICE" icon={Shield} />
           
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase leading-tight">
-            Terms & <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">Conditions</span>
+            Terms & <span className="text-red-500">Conditions</span>
           </h1>
           
           <p className="text-xl text-gray-500 font-bold tracking-widest uppercase">

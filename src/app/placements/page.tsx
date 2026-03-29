@@ -3,8 +3,9 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { Briefcase, Building2, TrendingUp, Award, CheckSquare, ArrowRight, ShieldCheck, FileText, Users, Target } from "lucide-react";
+import { Briefcase, Building2, TrendingUp, Award, CheckSquare, ArrowRight, ShieldCheck, FileText, Users, Target, Server } from "lucide-react";
 import Link from "next/link";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 gsap.registerPlugin(SplitText);
 
@@ -61,13 +62,10 @@ export default function PlacementsPage() {
 
         {/* Header Section */}
         <section className="flex flex-col items-center text-center max-w-3xl space-y-6">
-          <div ref={badgeRef} className="translate-y-5 flex items-center gap-2 px-4 py-1 bg-white text-black font-bold uppercase tracking-widest text-xs border-2 border-white shadow-[4px_4px_0px_0px_red]">
-            <Briefcase size={14} strokeWidth={3} />
-            <span>PLACEMENT & CAREERS</span>
-          </div>
+          <SectionBadge ref={badgeRef} text="PLACEMENT & CAREERS" icon={Briefcase} className="translate-y-5 opacity-0" />
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight">
-            From Training to <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">Career Launch</span>
+            From Training to <span className="text-red-500">Career Launch</span>
           </h1>
         </section>
 
@@ -137,8 +135,8 @@ export default function PlacementsPage() {
 
           {/* Recommended Certifications */}
           <section className="w-full space-y-8">
-            <div className="flex items-center gap-4 border-b-2 border-white/20 pb-4">
-              <Award className="text-red-500" size={32} />
+            <div className="flex flex-col gap-4 border-b-2 border-white/20 pb-4">
+              <SectionBadge text="Gateway_Protocol_Initiated" icon={Server} />
               <h2 className="text-3xl font-black uppercase tracking-tight text-white">Recommended Certifications</h2>
             </div>
 

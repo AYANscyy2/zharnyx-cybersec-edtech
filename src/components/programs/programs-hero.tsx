@@ -28,7 +28,7 @@ export function ProgramsHero() {
                 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 max-w-7xl mx-auto uppercase text-white leading-[0.9]"
             >
                 Operational <br className="hidden md:block" />
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-orange-500 to-yellow-500 decoration-red-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
+                <span className="text-red-500 decoration-red-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
                     Training Arsenal
                 </span>
             </motion.h1>
@@ -58,7 +58,7 @@ export function ProgramsHero() {
             </motion.div>
 
             {/* Decorative Grid */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none opacity-50" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none opacity-50" />
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
         </motion.section>
     );

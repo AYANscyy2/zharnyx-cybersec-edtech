@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, User, Building2, GraduationCap } from "lucide-react";
+import { ArrowRight, User, Building2, GraduationCap, Server, FolderKanban } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 export default function ApplyPage() {
   return (
@@ -12,9 +13,7 @@ export default function ApplyPage() {
 
       <div className="relative z-10 max-w-7xl w-full text-center space-y-12">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 border-2 border-white/20 bg-white/5 text-zinc-400 text-xs font-mono font-bold uppercase tracking-widest mb-6">
-            Gateway_Protocol_Initiated
-          </div>
+          <SectionBadge text="Gateway_Protocol_Initiated" icon={Server} />
           <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">
             Select{" "}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-purple-500 to-blue-500">

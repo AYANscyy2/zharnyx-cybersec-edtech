@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Shield, Target, MapPin, Users, Zap, BookOpen, Briefcase, Award, Terminal } from "lucide-react";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 gsap.registerPlugin(SplitText);
 
@@ -66,14 +67,11 @@ export default function AboutPage() {
 
         {/* Hero Section */}
         <section className="flex flex-col items-center text-center max-w-4xl space-y-6">
-          <div ref={badgeRef} className="translate-y-5 flex items-center gap-2 px-4 py-1 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white]">
-            <MapPin size={14} strokeWidth={3} />
-            <span>Serving Coimbatore & Chennai</span>
-          </div>
+          <SectionBadge ref={badgeRef} text="Serving Coimbatore & Chennai" icon={MapPin} className="translate-y-5 opacity-0" />
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight ">
             Tamil Nadu's Own <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
+            <span className="text-red-500">
               Cybersecurity Academy
             </span>
           </h1>
@@ -154,7 +152,7 @@ export default function AboutPage() {
           {/* Founders */}
           <section id="founders" className="w-full space-y-12 mb-12">
             <div className="text-center">
-              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-white to-gray-500">Meet the Founders</h2>
+              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white">Meet the Founders</h2>
               <p className="text-red-500 font-bold uppercase tracking-widest text-sm mt-4">The team behind the academy</p>
             </div>
 

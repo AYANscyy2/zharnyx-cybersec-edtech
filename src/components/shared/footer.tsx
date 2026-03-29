@@ -15,10 +15,10 @@ export function Footer() {
   return (
     <footer className="bg-black text-white pt-16 pb-8 border-t border-white/10 font-sans">
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
-          
+
           {/* Column 1: Brand & Info */}
           <div className="space-y-6 flex flex-col">
             <Link href="/" className="flex items-center gap-2 mb-2 w-fit">
@@ -29,10 +29,10 @@ export function Footer() {
                 </span>
                 {/* Simplified cross-shapes logo mark next to text in the screenshot */}
                 <div className="ml-[-110px] mr-2 text-red-600 pointer-events-none opacity-80 flex gap-0.5">
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
-                      <path d="M18 6L6 18M6 6l12 12"></path>
-                      <path d="M4 12h16" className="opacity-50"></path>
-                   </svg>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
+                    <path d="M18 6L6 18M6 6l12 12"></path>
+                    <path d="M4 12h16" className="opacity-50"></path>
+                  </svg>
                 </div>
               </div>
             </Link>
@@ -79,7 +79,7 @@ export function Footer() {
           <div>
             <h4 className="text-white font-bold text-base mb-6 tracking-wide">Support</h4>
             <ul className="space-y-4 text-sm text-gray-400">
-              <li><Link href="/auth?mode=signup" className="hover:text-white transition-colors">Contact / Enroll</Link></li>
+              <li><Link href="/auth?mode=signup" className="hover:text-white transition-colors">Enroll</Link></li>
               <li><Link href="/#faq" className="hover:text-white transition-colors">FAQ</Link></li>
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
@@ -94,7 +94,7 @@ export function Footer() {
           <p>© {currentYear} Zharnyx Cybersecurity Academy. All rights reserved.</p>
           <p>Founded by Sanjai R</p>
         </div>
-        
+
       </div>
     </footer>
   );

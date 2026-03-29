@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, HelpCircle } from "lucide-react";
 import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 const FAQS = [
   {
@@ -73,13 +74,11 @@ export function FaqSection() {
       className="w-full py-24 px-6 font-mono bg-black border-t-2 border-white/10"
     >
       <div className="max-w-3xl mx-auto flex flex-col items-center gap-10">
-        <div ref={headerRef} className="text-center space-y-4">
-          <div className="inline-block px-4 py-1 bg-white text-black font-bold uppercase tracking-widest text-xs border-2 border-white shadow-[4px_4px_0px_0px_red]">
-            FAQ
-          </div>
+        <div ref={headerRef} className="text-center space-y-4 flex flex-col items-center">
+          <SectionBadge text="FAQ" icon={HelpCircle} />
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white">
             Frequently Asked{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
+            <span className="text-red-500">
               Questions
             </span>
           </h2>

@@ -28,7 +28,7 @@ export function JoinHero() {
         className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-8 max-w-7xl mx-auto uppercase text-white leading-[0.9]"
       >
         Choose Your <br className="hidden md:block" />
-        <span className="text-transparent bg-clip-text bg-linear-to-br from-green-400 via-white to-green-600 decoration-green-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
+        <span className="text-green-500 decoration-green-500 underline decoration-4 underline-offset-8 decoration-skip-ink-none">
           Designation
         </span>
       </motion.h1>

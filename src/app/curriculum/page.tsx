@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Terminal } from "lucide-react";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 gsap.registerPlugin(SplitText);
 
@@ -105,13 +106,10 @@ export default function CurriculumPage() {
 
         {/* Header Section */}
         <section className="flex flex-col items-center text-center max-w-3xl space-y-6">
-          <div ref={badgeRef} className="translate-y-5 flex items-center gap-2 px-4 py-1.5 bg-white text-black font-bold uppercase tracking-widest text-xs border-2 border-white shadow-[4px_4px_0px_0px_red]">
-            <Terminal size={14} strokeWidth={3} />
-            <span>FULL CURRICULUM</span>
-          </div>
+          <SectionBadge ref={badgeRef} text="FULL CURRICULUM" icon={Terminal} className="translate-y-5 opacity-0" />
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-tight">
-            28 Weeks. <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">Every Detail.</span>
+            28 Weeks. <span className="text-red-500">Every Detail.</span>
           </h1>
 
           <div ref={contentRef} className="opacity-0 flex flex-col items-center gap-12 w-full">
@@ -135,26 +133,48 @@ export default function CurriculumPage() {
               ))}
             </section>
 
-            {/* Curriculum Grid */}
-            <section className="w-full mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Curriculum Horizontal List */}
+            <section className="w-full mt-12">
+              <div className="flex flex-col gap-4">
                 {filteredData.map((item) => (
                   <div
                     key={`week-${item.week}`}
-                    className="bg-[#080808] border border-white/10 rounded-xl p-6 flex flex-col gap-6 hover:border-white/20 transition-colors"
+                    className="bg-[#080808] border border-white/5 p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 group hover:border-red-500/30 transition-all hover:bg-white/2"
                   >
-                    <div className="flex justify-between items-center text-xs font-bold tracking-widest uppercase">
-                      <span className="text-[#ff3b3b]">Week {item.week}</span>
-                      <span className="text-gray-600">{item.category}</span>
+                    {/* Week Indicator */}
+                    <div className="flex flex-col items-start md:items-center min-w-[100px] shrink-0">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-[#ff3b3b] mb-1">
+                        PROTOCOL_PHASE
+                      </span>
+                      <span className="text-2xl md:text-3xl font-black text-white">
+                        W_{item.week.toString().padStart(2, '0')}
+                      </span>
                     </div>
 
-                    <h3 className="text-white font-bold text-lg leading-snug">
-                      {item.title}
-                    </h3>
+                    {/* Content Section */}
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center gap-3">
+                        <span className="bg-white/5 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-gray-500 border border-white/10">
+                          {item.category}
+                        </span>
+                      </div>
+                      <h3 className="text-white font-bold text-lg md:text-xl leading-tight group-hover:text-red-500 transition-colors">
+                        {item.title}
+                      </h3>
+                    </div>
 
-                    <div className="mt-auto text-sm font-mono pt-4">
-                      <span className="text-[#ff3b3b]">Tools: </span>
-                      <span className="text-gray-500">{item.tools}</span>
+                    {/* Tools Section */}
+                    <div className="flex flex-col items-start md:items-end min-w-[200px] shrink-0 gap-2">
+                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-600">
+                        Required_Toolkit
+                      </span>
+                      <div className="flex flex-wrap md:justify-end gap-2 text-xs font-mono">
+                        {item.tools.split(', ').map(tool => (
+                          <span key={tool} className="text-gray-400 bg-white/5 px-2 py-1 rounded-sm border border-white/5">
+                            {tool}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 ))}

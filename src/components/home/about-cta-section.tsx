@@ -63,7 +63,7 @@ export function AboutCTASection() {
             className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-20"
           >
             About{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-purple-500">
+            <span className="text-red-500">
               Zharnyx
             </span>
           </h2>
@@ -114,7 +114,7 @@ export function AboutCTASection() {
             className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-tight mb-4"
           >
             If You&apos;re Serious About <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 via-purple-500 to-blue-500">
+            <span className="text-red-500">
               Cybersecurity, Apply.
             </span>
           </h2>

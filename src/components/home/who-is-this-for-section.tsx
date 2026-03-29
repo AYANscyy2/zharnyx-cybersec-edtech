@@ -43,7 +43,7 @@ export function WhoIsThisForSection() {
         <div ref={headerRef} className="text-center space-y-4">
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white">
             Who Is This{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
+            <span className="text-red-500">
               For?
             </span>
           </h2>

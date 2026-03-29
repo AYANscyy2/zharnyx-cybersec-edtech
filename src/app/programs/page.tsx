@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Crosshair, Shield, Terminal, ArrowRight, Zap, Cloud, Code } from "lucide-react";
 import Link from "next/link";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 gsap.registerPlugin(SplitText);
 
@@ -68,14 +69,11 @@ export default function ProgramsPage() {
 
         {/* Header Section */}
         <section className="flex flex-col items-center text-center max-w-4xl space-y-6">
-          <div ref={badgeRef} className="translate-y-5 flex items-center gap-2 px-4 py-1 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white] opacity-0">
-            <Terminal size={14} strokeWidth={3} />
-            <span>Curriculum Overview</span>
-          </div>
+          <SectionBadge ref={badgeRef} text="Curriculum Overview" icon={Terminal} className="translate-y-5 opacity-0" />
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase leading-tight">
             7 Months. 4 Tracks. <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
+            <span className="text-red-500">
               100% Hands-On.
             </span>
           </h1>

@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Check, Shield, Zap, Terminal, Plus, Minus } from "lucide-react";
 import Link from "next/link";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 gsap.registerPlugin(SplitText);
 
@@ -62,14 +63,11 @@ export default function PricingPage() {
 
         {/* Hero Section */}
         <section className="flex flex-col items-center text-center space-y-6">
-          <div ref={badgeRef} className="translate-y-5 flex items-center gap-2 px-4 py-1 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white] opacity-0">
-            <Shield size={14} strokeWidth={3} />
-            <span>Investment in Your Future</span>
-          </div>
+          <SectionBadge ref={badgeRef} text="Investment in Your Future" icon={Shield} className="translate-y-5 opacity-0" />
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight">
             Affordable By <br />
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
+            <span className="text-red-500">
               Design
             </span>
           </h1>
@@ -82,6 +80,46 @@ export default function PricingPage() {
           </p>
 
           {/* Detailed Package Breakdowns */}
+
+
+          {/* Modules Breakdown */}
+          <section className="w-full flex flex-col gap-10">
+            <div className="text-center">
+              <h2 className="text-3xl font-black uppercase tracking-tighter">Standalone Modules</h2>
+              <p className="text-gray-500 text-sm font-bold uppercase tracking-widest mt-2">Build your own journey</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Foundation */}
+              <PricingCard
+                title="Foundation Phase"
+                tagline="Master the basics"
+                price="₹4,999"
+                originalPrice="₹9,999"
+                color="white"
+                features={["Linux & Windows Internals", "Networking Deep Dive", "Security Fundamentals", "Python for InfoSec"]}
+              />
+
+              {/* Specialization */}
+              <PricingCard
+                title="Specialization Track"
+                tagline="Choose your path"
+                price="₹34,999"
+                color="red"
+                highlight
+                features={["SOC / VAPT / Cloud / DFIR", "Enterprise Tooling", "Real-world Lab Scenarios", "Advanced Threat Simulation"]}
+              />
+
+              {/* Career Launch */}
+              <PricingCard
+                title="Career Launch"
+                tagline="Get hired"
+                price="₹9,999"
+                color="gray"
+                features={["72-Hour Live Capstone", "Resume Optimization", "Mock Technical Interviews", "Placement Assistance"]}
+              />
+            </div>
+          </section>
           <section className="w-full flex justify-center mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
               {/* Student Package */}
@@ -182,45 +220,6 @@ export default function PricingPage() {
                   </Link>
                 </div>
               </div>
-            </div>
-          </section>
-
-          {/* Modules Breakdown */}
-          <section className="w-full flex flex-col gap-10">
-            <div className="text-center">
-              <h2 className="text-3xl font-black uppercase tracking-tighter">Standalone Modules</h2>
-              <p className="text-gray-500 text-sm font-bold uppercase tracking-widest mt-2">Build your own journey</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Foundation */}
-              <PricingCard
-                title="Foundation Phase"
-                tagline="Master the basics"
-                price="₹4,999"
-                originalPrice="₹9,999"
-                color="white"
-                features={["Linux & Windows Internals", "Networking Deep Dive", "Security Fundamentals", "Python for InfoSec"]}
-              />
-
-              {/* Specialization */}
-              <PricingCard
-                title="Specialization Track"
-                tagline="Choose your path"
-                price="₹34,999"
-                color="red"
-                highlight
-                features={["SOC / VAPT / Cloud / DFIR", "Enterprise Tooling", "Real-world Lab Scenarios", "Advanced Threat Simulation"]}
-              />
-
-              {/* Career Launch */}
-              <PricingCard
-                title="Career Launch"
-                tagline="Get hired"
-                price="₹9,999"
-                color="gray"
-                features={["72-Hour Live Capstone", "Resume Optimization", "Mock Technical Interviews", "Placement Assistance"]}
-              />
             </div>
           </section>
 

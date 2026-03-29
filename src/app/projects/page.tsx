@@ -4,7 +4,8 @@ import { AnimatedBackground } from "@/components/shared/animated-background";
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { motion } from "motion/react";
-import { FolderGit2, Shield, Terminal } from "lucide-react";
+import { FolderGit2, Shield, Terminal, FolderKanban } from "lucide-react";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 export default function ProjectsPage() {
   const projects = [
@@ -43,7 +44,8 @@ export default function ProjectsPage() {
           transition={{ duration: 0.5 }}
           className="max-w-5xl mx-auto space-y-12"
         >
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-4 flex flex-col items-center">
+            <SectionBadge text="MISSION_PORTFOLIO" icon={FolderKanban} />
             <h1 className="text-4xl md:text-5xl font-bold font-mono text-white">
               Student Projects
             </h1>

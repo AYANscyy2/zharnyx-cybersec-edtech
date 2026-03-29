@@ -49,7 +49,7 @@ export function FoundersSection() {
         <div ref={headerRef} className="text-center space-y-4">
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white">
             Meet the{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
+            <span className="text-red-500">
               Founders
             </span>
           </h2>

@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Shield, Swords, Gavel, Rocket } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,10 +29,8 @@ export function MasterPlanSection() {
         <div className="absolute left-4 top-32 bottom-32 w-1 bg-white/10 -translate-x-1/2 md:hidden" />
 
         {/* Header */}
-        <div ref={headerRef} className="text-center mb-24 relative z-10">
-          <div className="text-blue-500 font-mono text-xs uppercase tracking-widest mb-4 font-bold">
-            // Strategic Framework
-          </div>
+        <div ref={headerRef} className="text-center mb-24 relative z-10 flex flex-col items-center">
+          <SectionBadge text="Strategic Framework" />
           <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">
             The Zharnyx <span className="text-purple-500">Master Plan</span>
           </h2>

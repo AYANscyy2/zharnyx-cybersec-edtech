@@ -30,7 +30,7 @@ export function ProblemStatementSection() {
             <span className="text-red-500">Syllabus.</span>
             <br />
             We Teach the{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-red-500 to-red-600">
+            <span className="text-red-500">
               Skill.
             </span>
           </h2>

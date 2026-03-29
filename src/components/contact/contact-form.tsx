@@ -1,167 +1,190 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Send,
-  Terminal,
   MapPin,
   Mail,
+  Phone,
   Globe,
   Github,
   Linkedin,
   Twitter,
+  Zap,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function ContactForm() {
+  const formRef = useRef<HTMLDivElement>(null);
+  const leftPanelRef = useRef<HTMLDivElement>(null);
+  const rightPanelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from([leftPanelRef.current, rightPanelRef.current], {
+        opacity: 0,
+        y: 40,
+        duration: 1,
+        stagger: 0.3,
+        ease: "power3.out",
+      });
+    }, formRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="min-h-screen py-20 px-4 md:px-8 bg-black relative flex items-center justify-center">
-      {/* Decorative Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#222_1px,transparent_1px),linear-gradient(to_bottom,#222_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] z-0 pointer-events-none opacity-50" />
+    <section ref={formRef} className="w-full max-w-7xl mx-auto py-12">
+      <div className="flex flex-col items-center gap-16">
 
-      <div className="max-w-6xl w-full mx-auto border-2 border-white bg-black relative z-10 grid grid-cols-1 lg:grid-cols-3 shadow-[8px_8px_0px_0px_#ef4444]">
-        {/* Left Panel: Contact Details */}
-        <div className="border-b-2 lg:border-b-0 lg:border-r-2 border-white p-8 md:p-12 space-y-12 bg-black">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 border-2 border-red-600 bg-red-600/10 text-red-500 text-xs font-mono font-bold uppercase tracking-widest mb-6 shadow-[4px_4px_0px_0px_#ef4444]">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-              Comm Link Active
-            </div>
-            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none mb-4">
-              Get In <br />{" "}
-              <span className="text-stroke-1 text-transparent bg-clip-text bg-linear-to-r from-red-500 to-white">
-                Touch
-              </span>
-            </h2>
-            <p className="text-zinc-400 font-mono text-sm leading-relaxed border-l-4 border-red-600 pl-4">
-              Operators standing by. Signal us for deployment inquiries,
-              partnership proposals, or general reconnaissance.
-            </p>
-          </div>
 
-          <div className="space-y-6">
-            <div className="flex items-start gap-4 group">
-              <div className="p-3 border-2 border-white bg-black text-red-500 group-hover:bg-red-600 group-hover:text-white group-hover:shadow-[4px_4px_0px_0px_white] transition-all">
-                <MapPin className="w-5 h-5" />
+        {/* Middle: The Form Section */}
+        <div ref={rightPanelRef} className="w-full max-w-5xl">
+          <div className="relative p-1 bg-linear-to-br from-white/10 to-transparent">
+            <div className="bg-[#080808] border border-white/10 p-8 md:p-12 space-y-10 shadow-[20px_20px_0px_0px_rgba(255,59,59,0.05)]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+                <Field label="Full Name" placeholder="EX: Jane Doe" />
+                <Field label="Email Address" placeholder="EX: jane@example.com" />
+                <Field label="Contact Number" placeholder="EX: +91 00000 00000" />
+                <Field label="Organization / Institution" placeholder="EX: University or Company Name" />
+                <Field label="Subject Of Inquiry" placeholder="EX: Admission Query / Partnership Proposal" />
+                <SelectField
+                  label="Nature of Query"
+                  placeholder="SELECT_CATEGORY..."
+                  options={[
+                    "Course Enrollment & Admissions",
+                    "Corporate Training & Bulk Enquiries",
+                    "Placement & Hiring Partnerships",
+                    "Institutional Collaborations",
+                    "General Program Feedback",
+                    "Technical Support / Website Issues"
+                  ]}
+                />
               </div>
-              <div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-1">
-                  Base of Operations
-                </h4>
-                <p className="text-zinc-400 text-sm font-mono">
-                  Zharnyx HQ, Cyber City
-                  <br />
-                  Bengaluru, KA 560001
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-start gap-4 group">
-              <div className="p-3 border-2 border-white bg-black text-red-500 group-hover:bg-red-600 group-hover:text-white group-hover:shadow-[4px_4px_0px_0px_white] transition-all">
-                <Mail className="w-5 h-5" />
+              <div className="space-y-4">
+                <label className="text-xs font-mono text-gray-400 uppercase font-black tracking-widest block">
+                  {"// HOW CAN WE HELP?"}
+                </label>
+                <Textarea
+                  placeholder="Tell us about your requirements or questions..."
+                  className="bg-transparent border-0 border-b border-white/20 text-white font-mono placeholder:text-zinc-700 min-h-[160px] rounded-none focus-visible:ring-0 focus-visible:border-white transition-all resize-none p-0 pb-4 text-xl md:text-2xl"
+                />
               </div>
-              <div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-1">
-                  Direct Uplink
-                </h4>
-                <p className="text-zinc-400 text-sm font-mono">
-                  ops@zharnyx.com
-                  <br />
-                  support@zharnyx.com
-                </p>
-              </div>
-            </div>
-          </div>
 
-          <div className="pt-8 border-t-2 border-white/20">
-            <h4 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4">
-              Secure Channels
-            </h4>
-            <div className="flex gap-4">
-              <SocialIcon icon={Github} href="#" color="hover:bg-red-600" />
-              <SocialIcon icon={Linkedin} href="#" color="hover:bg-red-600" />
-              <SocialIcon icon={Twitter} href="#" color="hover:bg-red-600" />
-              <SocialIcon icon={Globe} href="#" color="hover:bg-red-600" />
+              <div className="pt-6">
+                <Button className="w-full md:w-auto px-12 bg-red-600 text-black font-black uppercase tracking-wider h-16 text-lg border-2 border-red-600 shadow-[8px_8px_0px_0px_white] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] hover:bg-red-500 rounded-none transition-all group">
+                  <span>Send Message</span>
+                  <Send className="w-5 h-5 ml-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Right Panel: Form */}
-        <div className="lg:col-span-2 bg-black">
-          {/* Terminal Header */}
-          <div className="bg-black border-b-2 border-white p-4 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-red-500" />
-              <span className="text-xs font-mono text-white uppercase font-bold tracking-widest">
-                root@zharnyx:~/contact-uplink
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <div className="w-2 h-2 bg-red-500"></div>
-              <div className="w-2 h-2 bg-red-500"></div>
-              <div className="w-2 h-2 bg-red-500"></div>
+        {/* Bottom: Professional Contact Footer Bar */}
+        <div ref={leftPanelRef} className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-12 pt-16 border-t border-white/10 mt-8">
+          <div className="space-y-4">
+            <h4 className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em]">Base of Operations</h4>
+            <div className="flex gap-4 group/item">
+              <MapPin size={20} className="text-gray-500 shrink-0 group-hover/item:text-red-500 transition-colors" />
+              <a 
+                href="https://maps.google.com/?q=Zharnyx+HQ+Cyber+City+Coimbatore" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="font-mono text-white text-sm leading-relaxed hover:text-red-500 transition-colors"
+              >
+                Zharnyx HQ, Cyber City,<br /> Coimbatore, TN 641001
+              </a>
             </div>
           </div>
 
-          <div className="p-8 md:p-12 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <label className="text-xs font-mono text-red-500 uppercase font-black tracking-widest border-b-2 border-red-500 inline-block pb-1">
-                  Identity_String
-                </label>
-                <Input
-                  placeholder="ENTER_FULL_NAME"
-                  className="bg-black border-2 border-white text-white font-mono placeholder:text-zinc-700 h-14 rounded-none focus-visible:ring-0 focus-visible:border-red-500 focus-visible:shadow-[4px_4px_0px_0px_#ef4444] transition-all"
-                />
-              </div>
-              <div className="space-y-4">
-                <label className="text-xs font-mono text-red-500 uppercase font-black tracking-widest border-b-2 border-red-500 inline-block pb-1">
-                  Return_Address
-                </label>
-                <Input
-                  placeholder="ENTER_EMAIL_ADDRESS"
-                  className="bg-black border-2 border-white text-white font-mono placeholder:text-zinc-700 h-14 rounded-none focus-visible:ring-0 focus-visible:border-red-500 focus-visible:shadow-[4px_4px_0px_0px_#ef4444] transition-all"
-                />
-              </div>
-            </div>
-
+          <div className="space-y-4">
+            <h4 className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em]">Direct Uplink</h4>
             <div className="space-y-4">
-              <label className="text-xs font-mono text-white uppercase font-black tracking-widest border-b-2 border-white inline-block pb-1">
-                Transmission_Packet
-              </label>
-              <Textarea
-                placeholder="ENTER_MESSAGE_CONTENT..."
-                className="bg-black border-2 border-white text-white font-mono placeholder:text-zinc-700 min-h-[200px] rounded-none focus-visible:ring-0 focus-visible:border-white focus-visible:shadow-[4px_4px_0px_0px_#ffffff] transition-all resize-none p-4"
-              />
+              <div className="flex gap-4 group/item text-sm">
+                <Mail size={20} className="text-gray-500 shrink-0 group-hover/item:text-red-500 transition-colors" />
+                <div className="font-mono text-white space-y-1">
+                  <a href="mailto:ops@zharnyx.com" className="block hover:text-red-500 transition-colors underline-offset-4 hover:underline">ops@zharnyx.com</a>
+                  <a href="mailto:support@zharnyx.com" className="block hover:text-red-500 transition-colors underline-offset-4 hover:underline">support@zharnyx.com</a>
+                </div>
+              </div>
+              <div className="flex gap-4 group/item text-sm">
+                <Phone size={20} className="text-gray-500 shrink-0 group-hover/item:text-red-500 transition-colors" />
+                <a href="tel:+914222345678" className="font-mono text-white hover:text-red-500 transition-colors tracking-tighter underline-offset-4 hover:underline">
+                  +91 (422) 234-5678
+                </a>
+              </div>
             </div>
+          </div>
 
-            <Button className="w-full bg-red-600 text-white font-black uppercase tracking-wider h-16 text-xl border-2 border-white shadow-[6px_6px_0px_0px_white] hover:shadow-[2px_2px_0px_0px_white] hover:translate-x-[4px] hover:translate-y-[4px] hover:bg-red-700 rounded-none transition-all group">
-              <span className="mr-3">&gt; Execute_Transmission</span>
-              <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+          <div className="space-y-4">
+            <h4 className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em]">Secure Channels</h4>
+            <div className="flex gap-3">
+              <SocialLink icon={Github} href="https://github.com/zharnyx" />
+              <SocialLink icon={Linkedin} href="https://linkedin.com/company/zharnyx" />
+              <SocialLink icon={Twitter} href="https://twitter.com/zharnyx" />
+              <SocialLink icon={Globe} href="https://zharnyx.com" />
+            </div>
           </div>
         </div>
+
       </div>
     </section>
   );
 }
 
-function SocialIcon({
-  icon: Icon,
-  href,
-  color,
-}: {
-  icon: React.ElementType;
-  href: string;
-  color: string;
-}) {
+
+function Field({ label, placeholder }: { label: string, placeholder: string }) {
   return (
-    <a
-      href={href}
-      className={`w-12 h-12 border-2 border-white bg-black flex items-center justify-center text-white ${color} hover:shadow-[4px_4px_0px_0px_white] hover:-translate-y-1 transition-all`}
-    >
-      <Icon className="w-5 h-5" />
+    <div className="space-y-4">
+      <label className="text-xs font-mono text-gray-500 uppercase font-black tracking-widest block">
+        {`// ${label}`}
+      </label>
+      <Input
+        placeholder={placeholder}
+        className="bg-transparent border-0 border-b border-white/20 text-white font-mono placeholder:text-zinc-800 h-12 rounded-none focus-visible:ring-0 focus-visible:border-white transition-all p-0 text-lg"
+      />
+    </div>
+  )
+}
+
+function SelectField({ label, placeholder, options }: { label: string, placeholder: string, options: string[] }) {
+  return (
+    <div className="space-y-4">
+      <label className="text-xs font-mono text-gray-500 uppercase font-black tracking-widest block">
+        {`// ${label}`}
+      </label>
+      <Select>
+        <SelectTrigger className="w-full bg-transparent border-0 border-b border-white/20 text-white font-mono h-12 rounded-none focus:ring-0 focus:border-white transition-all p-0 text-lg hover:bg-transparent shadow-none">
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent className="bg-zinc-900 border-white/20 text-white font-mono rounded-none">
+          {options.map(opt => (
+            <SelectItem key={opt} value={opt.toLowerCase().replace(/\s+/g, '_')} className="focus:bg-red-600 focus:text-black">
+              {opt}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  )
+}
+
+function SocialLink({ icon: Icon, href }: { icon: React.ElementType, href: string }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center border border-white/10 bg-white/5 text-gray-400 hover:text-white hover:border-white hover:bg-red-600 transition-all">
+      <Icon size={20} />
     </a>
-  );
+  )
 }
