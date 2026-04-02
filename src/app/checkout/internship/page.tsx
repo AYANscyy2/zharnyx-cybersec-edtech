@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSession } from "@/lib/auth/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Terminal, Shield, Zap, Target, Lock, ArrowRight, Loader2 } from "lucide-react";
@@ -20,7 +20,7 @@ const TRACKS = [
   "DFIR",
 ];
 
-export default function CheckoutPage() {
+function CheckoutPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tierParam = searchParams.get("tier");
@@ -264,5 +264,20 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black text-white flex items-center justify-center font-mono">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-500 uppercase tracking-widest text-xs">Initializing...</p>
+        </div>
+      </div>
+    }>
+      <CheckoutPageInner />
+    </Suspense>
   );
 }

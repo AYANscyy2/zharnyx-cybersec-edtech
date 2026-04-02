@@ -3,10 +3,10 @@
 import { CheckCircle2, ShieldCheck, Terminal, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, Suspense } from "react";
 import confetti from "canvas-confetti";
 
-export default function CheckoutSuccessPage() {
+function CheckoutSuccessPageInner() {
   const searchParams = useSearchParams();
   const track = searchParams.get("track") || "Specialization Track";
   const plan = searchParams.get("plan") || "Internship Program";
@@ -89,5 +89,17 @@ export default function CheckoutSuccessPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black text-white flex items-center justify-center font-mono">
+        <div className="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <CheckoutSuccessPageInner />
+    </Suspense>
   );
 }
