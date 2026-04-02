@@ -6,6 +6,7 @@ import { SplitText } from "gsap/SplitText";
 import Link from "next/link";
 import { ArrowRight, Shield, Terminal, Crosshair } from "lucide-react";
 import { SectionBadge } from "@/components/ui/section-badge";
+import { HeroBanner } from "./hero-banner";
 
 gsap.registerPlugin(SplitText);
 
@@ -225,6 +226,8 @@ export function HeroSection({ course }: HeroSectionProps) {
             </Link>
           </div>
 
+          {/* Hero Banner Announcement */}
+          <HeroBanner />
         </div>
       </main>
     </div>

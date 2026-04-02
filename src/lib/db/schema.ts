@@ -113,6 +113,7 @@ export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
   enrollments: many(enrollment),
+  internshipEnrollments: many(internshipEnrollment),
   progress: many(studentProgress),
   assessmentResponses: many(assessmentResponse),
   projectSubmissions: many(projectSubmission),
@@ -546,6 +547,36 @@ export const enrollmentRelations = relations(enrollment, ({ one }) => ({
   course: one(course, {
     fields: [enrollment.courseId],
     references: [course.id],
+  }),
+}));
+
+export const internshipEnrollment = pgTable(
+  "internship_enrollment",
+  {
+    id: text("id").primaryKey(),
+    studentId: text("student_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    track: text("track").notNull(),
+    tier: text("tier").notNull(),
+    paymentStatus: text("payment_status", {
+      enum: ["paid", "pending", "cancelled"],
+    })
+      .default("pending")
+      .notNull(),
+    amount: integer("amount"),
+    currency: text("currency").default("INR"),
+    enrolledAt: timestamp("enrolled_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("internship_enrollment_studentId_idx").on(table.studentId),
+  ]
+);
+
+export const internshipEnrollmentRelations = relations(internshipEnrollment, ({ one }) => ({
+  student: one(user, {
+    fields: [internshipEnrollment.studentId],
+    references: [user.id],
   }),
 }));
 

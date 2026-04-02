@@ -1,6 +1,7 @@
 import { HeroSection } from "@/components/home/hero-section";
 import { ProblemStatementSection } from "@/components/home/problem-statement-section";
 import { TrackSpecialisationsSection } from "@/components/home/track-specialisations-section";
+import { ProgramDetailsSection } from "@/components/internships/program-details-section";
 import { WhyZharnyxSection } from "@/components/home/why-zharnyx-section";
 import { MasterPlanSection } from "@/components/home/master-plan-section";
 import { WhoIsThisForSection } from "@/components/home/who-is-this-for-section";
@@ -33,6 +34,9 @@ export default async function Home() {
 
       {/* 3. Track Specialisations */}
       <TrackSpecialisationsSection />
+
+      {/* Internship Integration */}
+      <ProgramDetailsSection />
 
       {/* 4. Why Zharnyx */}
       <WhyZharnyxSection />

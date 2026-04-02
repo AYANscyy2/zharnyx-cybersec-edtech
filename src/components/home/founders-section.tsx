@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Users } from "lucide-react";
 import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 const FOUNDERS = [
   {
@@ -46,7 +47,8 @@ export function FoundersSection() {
   return (
     <section className="w-full py-24 px-6 font-mono bg-black border-t-2 border-white/10">
       <div className="max-w-6xl mx-auto flex flex-col items-center gap-12">
-        <div ref={headerRef} className="text-center space-y-4">
+        <div ref={headerRef} className="text-center space-y-4 flex flex-col items-center">
+          <SectionBadge text="Leadership" icon={Users} />
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white">
             Meet the{" "}
             <span className="text-red-500">

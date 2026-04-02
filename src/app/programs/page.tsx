@@ -89,17 +89,20 @@ export default function ProgramsPage() {
             <PhaseCard
               step="01"
               title="Foundation"
+              href="/foundation"
               desc="All students start here. Master systems, networking, security fundamentals, and Python scripting. Build your first lab environment."
             />
             <PhaseCard
               step="02"
               title="Specialization"
+              href="/specialization"
               desc="Choose your track — SOC, VAPT, Cloud Security, or DFIR. Deep dive into real tools and industry scenarios."
               highlight
             />
             <PhaseCard
               step="03"
               title="Career Launch"
+              href="/capstone"
               desc="72-hour live-fire capstone, resume optimization, mock interviews, Demo Day with hiring partners, and placement support."
             />
           </section>
@@ -115,29 +118,54 @@ export default function ProgramsPage() {
               <TrackCard
                 id="soc"
                 title="SOC Analyst"
+                href="/programs/soc"
                 icon={<Shield size={32} className="text-red-500" />}
                 bullets={["Threat Hunting", "SIEM (Splunk/Sentinel)", "Incident Response", "Network Traffic Analysis"]}
               />
               <TrackCard
                 id="vapt"
                 title="VAPT"
+                href="/programs/vapt"
                 icon={<Crosshair size={32} className="text-red-500" />}
                 bullets={["Web App Penetration Testing", "Network Vulnerability Assessment", "Exploit Development", "Report Writing"]}
               />
               <TrackCard
                 id="cloud"
                 title="Cloud Security"
+                href="/programs/cloud-security"
                 icon={<Cloud size={32} className="text-red-500" />}
                 bullets={["AWS/Azure Security", "IAM Implementation", "Infrastructure as Code", "Cloud Compliance"]}
               />
               <TrackCard
                 id="dfir"
                 title="DFIR"
+                href="/programs/dfir"
                 icon={<Terminal size={32} className="text-red-500" />}
                 bullets={["Digital Forensics", "Malware Analysis", "Memory Forensics", "Chain of Custody"]}
               />
             </div>
           </section>
+
+          {/* Certification Callout — single banner */}
+          <Link
+            href="/certifications"
+            className="group w-full flex flex-col sm:flex-row items-start sm:items-center gap-5 border-2 border-white/10 hover:border-red-500 bg-white/2 hover:bg-red-500/5 px-6 py-5 transition-all"
+          >
+            <div className="flex items-center gap-2 shrink-0">
+              {["ZSA", "ZPT", "ZCS", "ZDF"].map((code) => (
+                <span key={code} className="px-2 py-0.5 border border-red-500/50 text-red-500 text-xs font-black tracking-widest">
+                  {code}
+                </span>
+              ))}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-bold text-sm uppercase tracking-wide mb-0.5">Zharnyx Certification Authority</p>
+              <p className="text-gray-500 text-sm font-sans">Every track is engineered to prepare you for a corresponding hands-on practical certification — no MCQs, ever. Currently in active development.</p>
+            </div>
+            <span className="shrink-0 text-xs font-bold uppercase tracking-widest text-gray-600 group-hover:text-red-500 transition-colors flex items-center gap-1 whitespace-nowrap">
+              Learn More <ArrowRight size={12} />
+            </span>
+          </Link>
 
           {/* Standalone Modules */}
           <section className="w-full max-w-4xl p-8 border-2 border-white/20 bg-black/40 relative mt-12">
@@ -194,17 +222,26 @@ export default function ProgramsPage() {
   );
 }
 
-function PhaseCard({ step, title, desc, highlight }: { step: string; title: string; desc: string; highlight?: boolean }) {
-  return (
-    <div className={`p-6 border-2 flex flex-col gap-4 transition-colors ${highlight ? 'border-red-600 bg-red-600/5' : 'border-white/20 bg-black/40 hover:border-white/40'}`}>
+function PhaseCard({ step, title, desc, highlight, href }: { step: string; title: string; desc: string; highlight?: boolean; href?: string }) {
+  const inner = (
+    <div className={`p-6 border-2 flex flex-col gap-4 transition-colors h-full ${highlight ? 'border-red-600 bg-red-600/5' : 'border-white/20 bg-black/40 hover:border-white/40'}`}>
       <span className={`text-5xl font-black opacity-20 ${highlight ? 'text-red-500' : 'text-white'}`}>{step}</span>
       <h3 className="text-2xl font-bold uppercase tracking-wide text-white">{title}</h3>
       <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
+      {href && <span className="text-xs font-bold uppercase tracking-widest text-gray-600 group-hover:text-white transition-colors mt-auto pt-2 flex items-center gap-1">Learn more →</span>}
     </div>
-  )
+  );
+  if (href) {
+    return (
+      <Link href={href} className="group block">
+        {inner}
+      </Link>
+    );
+  }
+  return inner;
 }
 
-function TrackCard({ id, title, icon, bullets }: { id: string; title: string; icon: React.ReactNode; bullets: string[] }) {
+function TrackCard({ id, title, icon, bullets, href }: { id: string; title: string; icon: React.ReactNode; bullets: string[]; href: string }) {
   return (
     <div id={id} className="group p-8 border-2 border-white/20 bg-black relative transition-all hover:translate-x-1 hover:-translate-y-1 hover:border-red-500 hover:shadow-[8px_8px_0px_0px_rgba(220,38,38,1)] flex flex-col">
       <div className="mb-6">{icon}</div>
@@ -217,7 +254,7 @@ function TrackCard({ id, title, icon, bullets }: { id: string; title: string; ic
           </li>
         ))}
       </ul>
-      <Link href="/auth?mode=signup" className="mt-auto flex items-center justify-between text-white font-bold uppercase tracking-wider text-sm group-hover:text-red-500 transition-colors">
+      <Link href={href} className="mt-auto flex items-center justify-between text-white font-bold uppercase tracking-wider text-sm group-hover:text-red-500 transition-colors">
         <span>Explore Track</span>
         <ArrowRight size={18} className="transform group-hover:translate-x-2 transition-transform" />
       </Link>

@@ -26,7 +26,7 @@ export default function ApplyPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Student Card */}
           <Link href="/programs" className="group block text-left">
             <div className="h-full border-2 bg-zinc-950 p-8 border-red-500 shadow-[8px_8px_0px_0px_#ef4444] transition-all duration-300 relative overflow-hidden hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#ef4444]">
@@ -50,6 +50,34 @@ export default function ApplyPage() {
                 className="p-0 text-white uppercase font-bold tracking-widest bg-transparent hover:bg-transparent hover:text-red-400"
               >
                 Start Residency{" "}
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
+          </Link>
+          
+          {/* Internship Card */}
+          <Link href="/internships" className="group block text-left">
+            <div className="h-full border-2 bg-zinc-950 p-8 border-orange-500 shadow-[8px_8px_0px_0px_#f97316] transition-all duration-300 relative overflow-hidden hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#f97316]">
+              <div className="absolute top-0 right-0 p-4 opacity-50">
+                <FolderKanban className="w-12 h-12 text-orange-500/20 transition-colors" />
+              </div>
+
+              <div className="mb-6 inline-flex p-3 border-2 border-orange-600 bg-orange-600 text-white transition-colors">
+                <FolderKanban className="w-6 h-6" />
+              </div>
+
+              <h3 className="text-2xl font-black uppercase tracking-wide mb-2 text-orange-400 transition-colors">
+                Internship
+              </h3>
+              <p className="text-zinc-400 text-sm font-mono mb-8">
+                Pan-India remote cybersecurity internship tiers.
+              </p>
+
+              <Button
+                variant="ghost"
+                className="p-0 text-white uppercase font-bold tracking-widest bg-transparent hover:bg-transparent hover:text-orange-400"
+              >
+                View Tiers{" "}
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>

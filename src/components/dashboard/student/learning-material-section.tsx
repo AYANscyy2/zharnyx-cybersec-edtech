@@ -40,6 +40,7 @@ import {
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { DashboardCourseMonth, DashboardCourseWeek, CourseAssessment, DashboardCourse } from "@/types/dashboard";
 import {
   Accordion,
@@ -228,6 +229,39 @@ export function LearningMaterialSection({
         <div className="text-white font-mono">Loading content...</div>
       ) : (
         <div className="space-y-8">
+          {(() => {
+            // Determine if the course requires payment by checking if the very first core week is locked.
+            // Other weeks might be 'progress-locked', which shouldn't trigger the payment banner.
+            const week1 = courseContent.flatMap(m => m.weeks).find(w => w.id === 'w-int-1' || w.title.includes('Week 1'));
+            const isPaymentLocked = week1 ? week1.isLocked : false;
+
+            if (!isPaymentLocked) return null;
+
+            const activeCourse = courses.find(c => c.id === selectedCourseId);
+            const courseTitleMatch = activeCourse?.title.match(/Internship: (.*) \(Tier .*\)/);
+            const courseTrack = courseTitleMatch ? courseTitleMatch[1] : "";
+
+            return (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 md:p-6 bg-black border-2 border-red-600/50 rounded-none shadow-[4px_4px_0px_0px_rgba(220,38,38,0.2)]">
+                <div className="flex items-start gap-4">
+                  <Lock className="w-5 h-5 text-red-500 shrink-0 mt-1" />
+                  <div className="space-y-1">
+                    <h4 className="text-red-500 font-bold font-mono uppercase tracking-wide">Locked Modules Detected</h4>
+                    <p className="text-gray-400 font-mono text-sm max-w-lg leading-relaxed">
+                      You are previewing the free Foundation module. Initialize your payment to unlock the entire core curriculum and proceed.
+                    </p>
+                  </div>
+                </div>
+                <Button 
+                  asChild
+                  className="w-full sm:w-auto shrink-0 bg-red-600 text-black hover:bg-white hover:text-black font-bold font-mono uppercase tracking-widest rounded-none border-2 border-transparent hover:border-white transition-all duration-300"
+                >
+                  <Link href={`/checkout/internship?track=${encodeURIComponent(courseTrack)}`}>Pay to Unlock All</Link>
+                </Button>
+              </div>
+            );
+          })()}
+
           {courseContent.map((month) => (
             <div key={month.id} className="space-y-3 md:space-y-4">
               <h3 className="text-base md:text-lg font-bold text-blue-500 font-mono uppercase tracking-wide border-b border-blue-500/30 pb-2">
@@ -247,7 +281,19 @@ export function LearningMaterialSection({
                         : "border-white/10 hover:border-blue-500/30 hover:bg-zinc-900/50"
                     )}
                   >
-                    <AccordionTrigger disabled={week.isLocked} className="w-full px-3 py-3 md:px-4 md:py-4 hover:no-underline">
+                    <AccordionTrigger 
+                      disabled={week.isLocked} 
+                      className="w-full px-3 py-3 md:px-4 md:py-4 hover:no-underline"
+                      onMouseEnter={() => {
+                        if (week.isLocked) {
+                          toast.error("pay for course to access these contents", {
+                            id: "locked-course-toast",
+                            position: "bottom-right",
+                            duration: 3000
+                          });
+                        }
+                      }}
+                    >
                       <div className="flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4 w-full">
                         {week.isLocked ? (
                           <Lock className="w-5 h-5 text-gray-400" />

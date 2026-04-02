@@ -27,6 +27,7 @@ import { Label } from "@/components/ui/label";
 function AuthContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [mode, setMode] = useState<"signin" | "signup">(
     searchParams.get("mode") === "signup" ? "signup" : "signin"
   );
@@ -117,7 +118,7 @@ function AuthContent() {
         });
       }
 
-      router.push("/dashboard");
+      router.push(callbackUrl);
       router.refresh();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : mode === "signin" ? "Failed to sign in" : "Failed to create account";
@@ -164,7 +165,7 @@ function AuthContent() {
                   onClick={async () => {
                     await signIn.social({
                       provider: "google",
-                      callbackURL: "/dashboard",
+                      callbackURL: callbackUrl,
                       fetchOptions: { onError: (ctx) => { toast.error("Sign in failed", { description: ctx.error.message }); } }
                     });
                   }}

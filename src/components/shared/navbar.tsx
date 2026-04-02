@@ -112,6 +112,7 @@ export function Navbar({ className }: NavbarProps) {
         {/* Middle: Nav Links - Desktop */}
         <div className="hidden md:flex items-center gap-1">
           <NavLink href="/" label="Home" isActive={pathname === "/"} />
+          <NavLink href="/internships" label="Internships" isActive={pathname?.startsWith("/internships")} />
 
           <div className="relative group">
             <NavLink href="/programs" label="Programs" hasDropdown isActive={pathname?.startsWith("/programs")} />
@@ -193,6 +194,7 @@ export function Navbar({ className }: NavbarProps) {
                 </div>
                 <div className="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-4">
                   <MobileNavLink href="/" label="Home" />
+                  <MobileNavLink href="/internships" label="Internships" />
                   <MobileNavDropdown label="Programs">
                     <MobileNavLink href="/programs" label="Overview" />
                     <MobileNavLink href="/programs#soc" label="SOC Analyst" isChild />

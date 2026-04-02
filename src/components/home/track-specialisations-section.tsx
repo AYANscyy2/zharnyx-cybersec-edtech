@@ -10,6 +10,7 @@ const TRACKS = [
     icon: Shield,
     color: "blue",
     title: "SOC Analyst",
+    href: "/programs/soc",
     skills: [
       "Splunk & Sentinel",
       "MITRE ATT&CK Framework",
@@ -22,6 +23,7 @@ const TRACKS = [
     icon: Crosshair,
     color: "red",
     title: "Offensive Security (VAPT)",
+    href: "/programs/vapt",
     skills: [
       "Web Pentesting",
       "Network Pentesting",
@@ -34,6 +36,7 @@ const TRACKS = [
     icon: Cloud,
     color: "sky",
     title: "Cloud Security",
+    href: "/programs/cloud-security",
     skills: [
       "AWS / Azure Security",
       "Identity & IAM",
@@ -46,6 +49,7 @@ const TRACKS = [
     icon: Search,
     color: "purple",
     title: "Digital Forensics & IR",
+    href: "/programs/dfir",
     skills: [
       "Memory Forensics",
       "Registry Analysis",
@@ -135,7 +139,7 @@ export function TrackSpecialisationsSection() {
                 </div>
 
                 <Link
-                  href="/programs"
+                  href={track.href}
                   className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500 group-hover:text-white transition-colors"
                 >
                   Explore Track{" "}

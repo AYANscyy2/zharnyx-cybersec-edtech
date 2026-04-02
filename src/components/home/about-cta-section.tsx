@@ -3,6 +3,7 @@
 import { Shield, Target, Building2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 export function AboutCTASection() {
   const labelRef = useGsapScrollAnimation<HTMLDivElement>({
@@ -51,12 +52,10 @@ export function AboutCTASection() {
       <div className="container mx-auto px-4 max-w-5xl">
         {/* --- PART 1: ABOUT ZHARNYX --- */}
         <div className="text-center mb-24">
-          <div
+          <SectionBadge
             ref={labelRef}
-            className="text-gray-500 font-mono text-xs uppercase tracking-widest mb-4 font-bold"
-          >
-            {"// Who We Are"}
-          </div>
+            text="Who We Are"
+          />
 
           <h2
             ref={headingRef}

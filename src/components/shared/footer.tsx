@@ -54,12 +54,12 @@ export function Footer() {
           <div>
             <h4 className="text-white font-bold text-base mb-6 tracking-wide">Programs</h4>
             <ul className="space-y-4 text-sm text-gray-400">
-              <li><Link href="/programs#overview" className="hover:text-white transition-colors">Overview</Link></li>
+              <li><Link href="/programs" className="hover:text-white transition-colors">Overview</Link></li>
               <li><Link href="/foundation" className="hover:text-white transition-colors">Foundation Phase</Link></li>
-              <li><Link href="/programs#soc" className="hover:text-white transition-colors">SOC Analyst</Link></li>
-              <li><Link href="/programs#vapt" className="hover:text-white transition-colors">VAPT</Link></li>
-              <li><Link href="/programs#cloud" className="hover:text-white transition-colors">Cloud Security</Link></li>
-              <li><Link href="/programs#dfir" className="hover:text-white transition-colors">DFIR</Link></li>
+              <li><Link href="/programs/soc" className="hover:text-white transition-colors">SOC Analyst</Link></li>
+              <li><Link href="/programs/vapt" className="hover:text-white transition-colors">VAPT</Link></li>
+              <li><Link href="/programs/cloud-security" className="hover:text-white transition-colors">Cloud Security</Link></li>
+              <li><Link href="/programs/dfir" className="hover:text-white transition-colors">DFIR</Link></li>
             </ul>
           </div>
 
@@ -72,6 +72,7 @@ export function Footer() {
               <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
               <li><Link href="/curriculum" className="hover:text-white transition-colors">Full Curriculum</Link></li>
               <li><Link href="/capstone" className="hover:text-white transition-colors">Capstone</Link></li>
+              <li><Link href="/certifications" className="hover:text-white transition-colors">Certifications</Link></li>
             </ul>
           </div>
 

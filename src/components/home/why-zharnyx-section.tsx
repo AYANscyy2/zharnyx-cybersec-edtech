@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { X, Check, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
+import { SectionBadge } from "@/components/ui/section-badge";
 
 export function WhyZharnyxSection() {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -117,11 +118,8 @@ export function WhyZharnyxSection() {
     <section className="py-24 relative bg-black border-t-2 border-white/20">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
-        <div ref={headerRef} className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-black border-2 border-white shadow-[4px_4px_0px_0px_#333] text-xs font-bold uppercase tracking-widest mb-6">
-            <AlertTriangle size={14} strokeWidth={3} className="text-red-600" />
-            <span>Problem Statement</span>
-          </div>
+        <div ref={headerRef} className="text-center mb-20 flex flex-col items-center">
+          <SectionBadge text="Problem Statement" icon={AlertTriangle} />
 
           <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
             <div className="text-gray-500 line-through decoration-red-600 decoration-4">
