@@ -228,7 +228,7 @@ export default function SpecializationPage() {
             </div>
             <div className="flex flex-col sm:flex-row gap-6 w-full justify-center">
               <Link
-                href="/auth?mode=signup"
+                href="/pricing"
                 className="group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:-translate-y-1 transition-transform shadow-[4px_4px_0px_0px_white] hover:shadow-[2px_2px_0px_0px_white] flex items-center justify-center gap-3"
               >
                 Enroll Now <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />

@@ -133,6 +133,8 @@ export function Navbar({ className }: NavbarProps) {
                 <DropdownItem href="/about#mission" label="Mission" />
                 <DropdownItem href="/about#differentials" label="What Makes Us Different" />
                 <DropdownItem href="/about#founders" label="Meet the Founders" />
+                <DropdownItem href="/partners" label="Hiring Network" />
+                <DropdownItem href="/colleges" label="Academic Alliances" />
               </div>
             </div>
           </div>
@@ -207,6 +209,8 @@ export function Navbar({ className }: NavbarProps) {
                     <MobileNavLink href="/about#mission" label="Mission" isChild />
                     <MobileNavLink href="/about#differentials" label="What Makes Us Different" isChild />
                     <MobileNavLink href="/about#founders" label="Meet the Founders" isChild />
+                    <MobileNavLink href="/partners" label="Hiring Network" isChild />
+                    <MobileNavLink href="/colleges" label="Academic Alliances" isChild />
                   </MobileNavDropdown>
                   <MobileNavLink href="/pricing" label="Pricing" />
                   <MobileNavLink href="/blog" label="Blog" />

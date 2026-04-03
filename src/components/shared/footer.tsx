@@ -73,6 +73,8 @@ export function Footer() {
               <li><Link href="/curriculum" className="hover:text-white transition-colors">Full Curriculum</Link></li>
               <li><Link href="/capstone" className="hover:text-white transition-colors">Capstone</Link></li>
               <li><Link href="/certifications" className="hover:text-white transition-colors">Certifications</Link></li>
+              <li><Link href="/partners" className="hover:text-white transition-colors">Hiring Partners & Placements</Link></li>
+              <li><Link href="/colleges" className="hover:text-white transition-colors">Partner Colleges</Link></li>
             </ul>
           </div>
 

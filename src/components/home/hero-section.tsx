@@ -27,6 +27,7 @@ export function HeroSection({ course }: HeroSectionProps) {
   const redLineRef = useRef<HTMLSpanElement>(null);
   const tagsRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const bannerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -127,6 +128,11 @@ export function HeroSection({ course }: HeroSectionProps) {
           y: 0,
           duration: 0.9
         }, "-=0.9")
+        .to(bannerRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.9
+        }, "-=0.6")
 
       // 7. CTA buttons — stagger each child
 
@@ -227,7 +233,9 @@ export function HeroSection({ course }: HeroSectionProps) {
           </div>
 
           {/* Hero Banner Announcement */}
-          <HeroBanner />
+          <div ref={bannerRef} className="w-full opacity-0 translate-y-5">
+            <HeroBanner />
+          </div>
         </div>
       </main>
     </div>

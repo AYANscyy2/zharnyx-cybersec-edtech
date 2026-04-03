@@ -72,39 +72,38 @@ export default function InternshipsPage() {
       {/* Background Grid Accent */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
 
-      <main className="relative z-10 w-full mx-auto flex flex-col items-center gap-16">
+      <main className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center gap-16">
 
         {/* Header Section */}
-        <section className="flex flex-col items-center text-center max-w-4xl space-y-6 px-6 mx-auto w-full">
+        <section className="flex flex-col items-center text-center max-w-4xl space-y-6">
           <SectionBadge ref={badgeRef} text="Active Enrollments" icon={Terminal} className="translate-y-5 opacity-0" />
 
-          <h1 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight">
-            Kickstart Your <br />
-            <span className="text-red-500 whitespace-nowrap">
-              Cybersecurity Career
-            </span> <br />
-            Anywhere in India.
+          <h1 ref={headingRef} className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase leading-tight">
+            Pan-India Cybersecurity <br />
+            <span className="text-red-500">
+              Internships & Courses.
+            </span>
           </h1>
 
-          <p className="para opacity-0 translate-y-5 text-lg md:text-xl text-gray-400 font-medium max-w-3xl border-l-4 border-red-600 pl-4 text-left">
-            Our Pan-India Internships are officially LIVE. Plus, enrollments for our complete 7-Month Track-Specialised Courses are now open. Secure your seat in April; the first cohort begins in May.
+          <p className="para opacity-0 translate-y-5 text-lg md:text-xl text-gray-400 font-medium max-w-2xl border-l-4 border-red-600 pl-4 text-left">
+            Our Pan-India Internships are officially LIVE. Enrollments for our complete 7-Month Track-Specialised Courses are now open. First cohort begins in May.
           </p>
-          
-          <div className="cta-buttons opacity-0 translate-y-5 flex flex-col sm:flex-row gap-6 mt-8 w-full justify-center items-center">
+
+          <div className="cta-buttons opacity-0 translate-y-5 flex flex-col sm:flex-row gap-4 mt-4 w-full justify-center items-center">
             <Link
               href="#program-details"
-              className="group relative flex items-center justify-center h-16 w-full sm:w-80 px-8 bg-red-600 text-black font-black text-lg uppercase tracking-widest border-2 border-red-600 hover:translate-x-[4px] hover:translate-y-[4px] transition-transform"
+              className="group relative flex items-center justify-center h-14 w-full sm:w-auto px-8 bg-red-600 text-black font-black text-sm uppercase tracking-widest border-2 border-red-600 hover:translate-x-[3px] hover:translate-y-[3px] transition-transform"
             >
-              <span className="absolute inset-0 bg-white translate-x-[6px] translate-y-[6px] -z-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform border-2 border-white" />
+              <span className="absolute inset-0 bg-white translate-x-[5px] translate-y-[5px] -z-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform border-2 border-white" />
               <span className="flex items-center gap-2">
                 Apply for Internship
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </span>
             </Link>
 
             <Link
-              href="/apply"
-              className="flex items-center justify-center h-16 w-full sm:w-80 px-8 bg-transparent text-white font-black text-lg uppercase tracking-widest border-2 border-white/40 hover:border-white hover:bg-white/10 transition-colors"
+              href="/pricing"
+              className="flex items-center justify-center h-14 w-full sm:w-auto px-8 bg-transparent text-white font-black text-sm uppercase tracking-widest border-2 border-white/40 hover:border-white hover:bg-white/10 transition-colors"
             >
               Enroll in May Cohort
             </Link>

@@ -6,6 +6,7 @@ import { SplitText } from "gsap/SplitText";
 import { Check, Shield, Zap, Terminal, Plus, Minus } from "lucide-react";
 import Link from "next/link";
 import { SectionBadge } from "@/components/ui/section-badge";
+import { toast } from "sonner";
 
 gsap.registerPlugin(SplitText);
 
@@ -164,12 +165,12 @@ export default function PricingPage() {
                   <div className="text-red-500 text-xs font-medium mb-4">
                     50% discount on Foundation Phase
                   </div>
-                  <Link
-                    href="/auth?mode=signup"
-                    className="w-full block text-center py-4 bg-[#f83146] hover:bg-[#ff4055] text-white font-bold rounded-xl transition-colors"
+                  <button
+                    onClick={() => toast.info("courses will be live soon")}
+                    className="w-full block text-center py-4 bg-[#f83146] hover:bg-[#ff4055] text-white font-bold rounded-xl transition-colors cursor-pointer"
                   >
                     Enroll as Student
-                  </Link>
+                  </button>
                 </div>
               </div>
 
@@ -212,12 +213,12 @@ export default function PricingPage() {
                 </div>
 
                 <div className="mt-auto pt-8">
-                  <Link
-                    href="/auth?mode=signup"
-                    className="w-full block text-center py-4 bg-transparent border border-white/20 hover:bg-white/5 hover:border-white/40 text-white font-bold rounded-xl transition-all"
+                  <button
+                    onClick={() => toast.info("courses will be live soon")}
+                    className="w-full block text-center py-4 bg-transparent border border-white/20 hover:bg-white/5 hover:border-white/40 text-white font-bold rounded-xl transition-all cursor-pointer"
                   >
                     Enroll Now
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
@@ -287,12 +288,12 @@ export default function PricingPage() {
             <p className="text-gray-400 max-w-xl">
               Limited seats per cohort. Secure your spot today.
             </p>
-            <Link
-              href="/auth?mode=signup"
-              className="group relative px-10 py-5 bg-red-600 text-white font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:-translate-y-1 transition-transform shadow-[6px_6px_0px_0px_white] hover:shadow-[2px_2px_0px_0px_white]"
+            <button
+              onClick={() => toast.info("courses will be live soon")}
+              className="group relative px-10 py-5 bg-red-600 text-white font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:-translate-y-1 transition-transform shadow-[6px_6px_0px_0px_white] hover:shadow-[2px_2px_0px_0px_white] cursor-pointer"
             >
               Enroll Now
-            </Link>
+            </button>
           </section>
         </div>
       </main>
@@ -336,15 +337,15 @@ function PricingCard({ title, tagline, price, originalPrice, highlight, features
         ))}
       </ul>
 
-      <Link
-        href="/auth?mode=signup"
-        className={`w-full py-4 text-center font-bold text-sm uppercase tracking-widest border-2 transition-all ${highlight
+      <button
+        onClick={() => toast.info("courses will be live soon")}
+        className={`w-full py-4 text-center font-bold text-sm uppercase tracking-widest border-2 transition-all cursor-pointer ${highlight
           ? "bg-red-600 text-white border-red-600 hover:bg-transparent"
           : "bg-transparent text-white border-white/20 hover:border-white hover:bg-white/5"
           }`}
       >
         Select Phase
-      </Link>
+      </button>
     </div>
   )
 }

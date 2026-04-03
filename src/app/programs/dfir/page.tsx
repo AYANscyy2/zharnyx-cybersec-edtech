@@ -131,7 +131,7 @@ export default function DFIRPage() {
               <p className="text-red-400 font-bold uppercase tracking-widest text-sm">Enroll in the DFIR Track</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-6 w-full justify-center">
-              <Link href="/auth?mode=signup" className="group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:-translate-y-1 transition-transform shadow-[4px_4px_0px_0px_white] hover:shadow-[2px_2px_0px_0px_white]">
+              <Link href="/pricing" className="group relative px-8 py-4 bg-red-600 text-black font-bold text-lg uppercase tracking-wider border-2 border-red-600 hover:-translate-y-1 transition-transform shadow-[4px_4px_0px_0px_white] hover:shadow-[2px_2px_0px_0px_white]">
                 Apply for Cohort
               </Link>
               <Link href="/programs" className="px-8 py-4 border-2 border-white/20 text-white font-bold text-lg uppercase tracking-wider hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
