@@ -185,7 +185,7 @@ export function ContactForm() {
               <FloatField id="subject" label="Subject of Inquiry" icon={FileText} placeholder="Admission Query / Partnership" required />
 
               {/* Custom dropdown */}
-              <div className="form-field space-y-2" ref={dropdownRef}>
+              <div className={`form-field space-y-2 relative ${open ? "z-30" : "z-0"}`} ref={dropdownRef}>
                 <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] flex items-center gap-2">
                   <ChevronDown size={10} className="text-red-500" />
                   Nature of Query
