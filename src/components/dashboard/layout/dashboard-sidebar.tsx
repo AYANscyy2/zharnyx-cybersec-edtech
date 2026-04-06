@@ -36,6 +36,7 @@ import {
   Handshake,
 } from "lucide-react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { authClient } from "@/lib/auth/auth-client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -217,36 +218,14 @@ export function DashboardSidebar({
     >
       <SidebarHeader className="border-b-2 border-white/20 p-4 h-[80px] flex items-center justify-center bg-black group-data-[collapsible=icon]:p-2">
         {/* Logo / Title Area */}
-        <div className="flex items-center gap-3 overflow-hidden w-full group">
-          {/* Icon - Color depends on Role */}
-          <div
-            className={cn(
-              "flex items-center justify-center shrink-0 w-10 h-10 border-2 border-white/20 shadow-[2px_2px_0px_0px_white] group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 transition-all",
-              effectiveRole === "mentor"
-                ? "bg-purple-600"
-                : effectiveRole === "student"
-                  ? "bg-blue-600"
-                  : effectiveRole === "partner_agency"
-                    ? "bg-green-600"
-                    : "bg-red-600"
-            )}
-          >
-            <div
-              className={cn(
-                "text-black h-6 w-6 group-data-[collapsible=icon]:h-4 group-data-[collapsible=icon]:w-4 flex items-center justify-center"
-              )}
-            >
-              {effectiveRole === "mentor" ? (
-                <GraduationCap strokeWidth={2.5} />
-              ) : effectiveRole === "student" ? (
-                <BookOpen strokeWidth={2.5} />
-              ) : effectiveRole === "partner_agency" ? (
-                <Briefcase strokeWidth={2.5} />
-              ) : (
-                <Terminal strokeWidth={2.5} />
-              )}
-            </div>
-          </div>
+        <div className="flex items-center gap-0 overflow-hidden w-full group">
+          <Link href="/" className="flex items-center gap-1.5 shrink-0 -mr-2">
+            <img
+              src="https://ik.imagekit.io/bkt3emitco/zharnyxincress.png"
+              alt="Zharnyx Logo"
+              className="h-12 w-auto object-contain group-data-[collapsible=icon]:h-8 transition-all"
+            />
+          </Link>
 
           {/* Text - White - Hide via CSS when collapsed if state isn't enough */}
           <div
@@ -256,7 +235,7 @@ export function DashboardSidebar({
             )}
           >
             <span className="font-black text-xl text-white tracking-tighter uppercase leading-none">
-              ZHARNYX
+              ZHARNY<span className="text-red-600">X</span>
             </span>
             <span
               className={cn(

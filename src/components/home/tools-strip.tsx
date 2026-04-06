@@ -1,3 +1,7 @@
+"use client"
+
+import { useRouter } from "next/navigation";
+
 const TOOLS = [
   "Splunk", "Metasploit", "Burp Suite", "Wireshark", "Nmap", "Nessus",
   "Kali Linux", "MITRE ATT&CK", "Cobalt Strike", "Volatility", "Autopsy",
@@ -11,6 +15,7 @@ const TOOLS = [
 const ITEMS = [...TOOLS, ...TOOLS, ...TOOLS];
 
 export function ToolsStrip() {
+  const router = useRouter()
   return (
     <div className="w-full bg-black border-y border-white/6 relative flex items-stretch overflow-hidden">
       {/* Neo label */}
@@ -35,7 +40,9 @@ export function ToolsStrip() {
           style={{ animation: "tools-scroll 45s linear infinite" }}
         >
           {ITEMS.map((tool, i) => (
-            <span key={i} className="flex items-center shrink-0">
+            <span onClick={() => {
+              router.push("/blog")
+            }} key={i} className="flex items-center shrink-0">
               <span className="text-[11px] font-black uppercase tracking-widest text-gray-600 hover:text-red-500 transition-colors cursor-default px-4 whitespace-nowrap font-mono">
                 {tool}
               </span>

@@ -97,12 +97,13 @@ export function Navbar({ className }: NavbarProps) {
         )}
       >
         {/* Left: Company Name */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="p-2 border-2 border-transparent transition-colors">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600">
-              <path d="M4 12L20 4V8L4 16V12Z" fill="currentColor" />
-              <path d="M4 8L20 16V20L4 12V8Z" fill="currentColor" />
-            </svg>
+        <Link href="/" className="flex items-center gap-0">
+          <div className="flex items-center justify-center shrink-0 -mr-2">
+            <img
+              src="https://ik.imagekit.io/bkt3emitco/zharnyxincress.png"
+              alt="Zharnyx Logo"
+              className="h-12 w-auto object-contain "
+            />
           </div>
           <span className="text-2xl font-black text-white tracking-tighter uppercase">
             ZHARNY<span className="text-red-600">X</span>
@@ -190,9 +191,16 @@ export function Navbar({ className }: NavbarProps) {
             <SheetContent side="right" className="bg-black border-l-2 border-white/20 p-0 w-[300px]">
               <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10">
-                  <span className="text-xl font-black text-white tracking-tighter uppercase">
-                    ZHARNY<span className="text-red-600">X</span>
-                  </span>
+                  <Link href="/" className="flex items-center gap-1.5">
+                    <img
+                      src="https://ik.imagekit.io/bkt3emitco/zharnyxincress.png"
+                      alt="Zharnyx Logo"
+                      className="h-8 w-auto object-contain"
+                    />
+                    <span className="text-xl font-black text-white tracking-tighter uppercase">
+                      ZHARNY<span className="text-red-600">X</span>
+                    </span>
+                  </Link>
                 </div>
                 <div className="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-4">
                   <MobileNavLink href="/" label="Home" />

@@ -31,13 +31,13 @@ function AuthContent() {
   const [mode, setMode] = useState<"signin" | "signup">(
     searchParams.get("mode") === "signup" ? "signup" : "signin"
   );
-  
+
   // Base Auth Fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
+
   // Extended Signup Fields
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
@@ -79,13 +79,13 @@ function AuthContent() {
         toast.error("Validation failed", { description: errorMsg });
         return;
       }
-      
+
       if (!preferredTrack) {
         const errorMsg = "Please select a preferred track";
         setError(errorMsg);
         return;
       }
-      
+
       if (studentStatus === "College Student" && !collegeName) {
         const errorMsg = "College name is required for students";
         setError(errorMsg);
@@ -141,12 +141,17 @@ function AuthContent() {
         className={`w-full relative z-10 transition-all duration-500 ease-in-out ${mode === "signup" ? "max-w-2xl" : "max-w-md"}`}
       >
         <div className="bg-black border-2 border-white/20 p-8 md:p-10 shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] backdrop-blur-sm">
-          
+
           <div className="flex flex-col items-center text-center space-y-2 mb-8">
-            <div className="flex items-center gap-3 px-4 py-1.5 bg-red-600 text-black font-bold uppercase tracking-widest text-xs border-2 border-red-600 shadow-[4px_4px_0px_0px_white] mb-4">
-              <Terminal size={14} strokeWidth={3} />
-              <span>Zharnyx 2.0</span>
-            </div>
+            {/* <div className="flex items-center gap-2 px-3 py-1.5 bg-red-600 text-white font-bold uppercase tracking-widest text-[10px] border-2 border-red-600 shadow-[4px_4px_0px_0px_white] mb-4">
+              <img
+                src="https://ik.imagekit.io/bkt3emitco/zharnyxincress.png"
+                alt="Logo"
+                className="h-5 w-auto brightness-0 invert"
+              />  <span className="text-xl md:text-2xl font-black tracking-tighter text-white uppercase">
+                ZHARNY<span className="text-red-600">X</span>
+              </span>
+            </div> */}
             <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">
               {mode === "signin" ? "Operator Login" : "Join the Academy"}
             </h1>
@@ -156,11 +161,11 @@ function AuthContent() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            
+
             {/* SIGNIN ONLY FIELDS */}
             {mode === "signin" && (
               <div className="space-y-6">
-                 <button
+                <button
                   type="button"
                   onClick={async () => {
                     await signIn.social({
@@ -198,7 +203,7 @@ function AuthContent() {
                 </div>
 
                 <div className="space-y-1">
-                   <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                     <Label htmlFor="password" className="text-white text-xs font-bold uppercase tracking-wider">Password</Label>
                     <a href="#" className="text-[10px] text-gray-500 hover:text-red-500 uppercase tracking-widest transition-colors font-bold">Difficulties?</a>
                   </div>
@@ -213,7 +218,7 @@ function AuthContent() {
             {/* SIGNUP ONLY FIELDS */}
             {mode === "signup" && (
               <div className="space-y-6">
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-1">
                     <Label htmlFor="name" className="text-white text-xs font-bold uppercase tracking-wider">Full Name</Label>

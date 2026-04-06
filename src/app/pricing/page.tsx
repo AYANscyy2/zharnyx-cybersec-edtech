@@ -238,9 +238,12 @@ export default function PricingPage() {
               </div>
               <div className="shrink-0 flex flex-col gap-3">
                 <span className="text-xs font-bold text-gray-500 uppercase tracking-widest md:text-right">Institution / Batch</span>
-                <button className="px-6 py-3 border-2 border-white/20 text-white font-bold text-sm uppercase tracking-wider hover:bg-white/10 transition-colors text-center whitespace-nowrap">
+                <a
+                  href="mailto:sanjai@zharnyx.com"
+                  className="px-6 py-3 border-2 border-white/20 text-white font-bold text-sm uppercase tracking-wider hover:bg-white/10 transition-colors text-center whitespace-nowrap"
+                >
                   Pricing on Request
-                </button>
+                </a>
               </div>
             </div>
             <p className="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mt-4">

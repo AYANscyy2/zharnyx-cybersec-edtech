@@ -48,15 +48,15 @@ function CheckoutPageInner() {
           setPendingEnrollments(res.data);
           const targetTrack = searchParams.get("track");
           if (targetTrack) {
-             setSelectedTrack(targetTrack);
+            setSelectedTrack(targetTrack);
           } else if (res.data.length > 0) {
-             setSelectedTrack(res.data[0].track);
+            setSelectedTrack(res.data[0].track);
           }
         }
         setIsLoadingPending(false);
       });
     } else if (!isPending) {
-       setIsLoadingPending(false);
+      setIsLoadingPending(false);
     }
   }, [session, isPending, searchParams]);
 
@@ -125,25 +125,25 @@ function CheckoutPageInner() {
       <div className="relative z-10 max-w-2xl mx-auto space-y-6">
 
         {/* User Status Bar */}
-        <div className="w-full bg-white/5 border border-white/10 p-3 flex items-center justify-between text-xs tracking-widest uppercase">
-          <span className="text-gray-500">System_Clearance_Level</span>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            {/* <span className="text-green-500 font-bold">Authenticated: {session?.user?.name || ""}</span> */}
-          </div>
-        </div>
+        {/* <div className="w-full bg-white/5 border border-white/10 p-3 flex items-center justify-between text-xs tracking-widest uppercase"> */}
+        {/* <span className="text-gray-500">System_Clearance_Level</span> */}
+        {/* <div className="flex items-center gap-2"> */}
+        {/* <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> */}
+        {/* <span className="text-green-500 font-bold">Authenticated: {session?.user?.name || ""}</span> */}
+        {/* </div> */}
+        {/* </div> */}
 
         {/* Main Terminal Card */}
         <div className="bg-black border-2 border-red-600 shadow-[8px_8px_0px_0px_rgba(220,38,38,1)] overflow-hidden">
 
           {/* Header */}
-          <div className="bg-red-600/10 border-b-2 border-red-600 p-6 flex flex-col items-center justify-center text-center space-y-2">
+          {/* <div className="bg-red-600/10 border-b-2 border-red-600 p-6 flex flex-col items-center justify-center text-center space-y-2">
             <h1 className="text-red-500 font-black text-xl uppercase tracking-widest flex items-center gap-2">
               <Terminal size={20} />
               &gt; FINALIZE_DEPLOYMENT
             </h1>
             <p className="text-gray-400 text-xs tracking-wider uppercase">Configure operational parameters before initialization</p>
-          </div>
+          </div> */}
 
           <div className="p-8 space-y-8">
 
@@ -178,7 +178,7 @@ function CheckoutPageInner() {
                         }
                       `}
                     >
-                      {track} 
+                      {track}
                       {isTrackPending && (
                         <span className="block text-[10px] text-red-500 mt-1 uppercase tracking-widest font-black">
                           (Pending Payment)
@@ -213,11 +213,11 @@ function CheckoutPageInner() {
             {/* CTAs */}
             <div className="space-y-4 text-center">
               {activePending && (
-                 <div className="mb-6 bg-red-950/20 border-2 border-red-600/30 p-4 text-center shadow-[4px_4px_0px_0px_rgba(220,38,38,0.2)]">
-                   <p className="text-red-500 font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2">
-                     <Lock size={14} className="shrink-0" /> PENDING ENROLLMENT DETECTED FOR THIS TRACK.
-                   </p>
-                 </div>
+                <div className="mb-6 bg-red-950/20 border-2 border-red-600/30 p-4 text-center shadow-[4px_4px_0px_0px_rgba(220,38,38,0.2)]">
+                  <p className="text-red-500 font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+                    <Lock size={14} className="shrink-0" /> PENDING ENROLLMENT DETECTED FOR THIS TRACK.
+                  </p>
+                </div>
               )}
 
               <button

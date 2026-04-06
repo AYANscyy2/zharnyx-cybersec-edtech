@@ -21,20 +21,15 @@ export function Footer() {
 
           {/* Column 1: Brand & Info */}
           <div className="space-y-6 flex flex-col">
-            <Link href="/" className="flex items-center gap-2 mb-2 w-fit">
-              {/* ZHARNYX Logo (matching navbar style) */}
-              <div className="flex items-center">
-                <span className="text-xl md:text-2xl font-black tracking-widest text-white">
-                  ZHARNY<span className="text-red-600">X</span>
-                </span>
-                {/* Simplified cross-shapes logo mark next to text in the screenshot */}
-                <div className="ml-[-110px] mr-2 text-red-600 pointer-events-none opacity-80 flex gap-0.5">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
-                    <path d="M18 6L6 18M6 6l12 12"></path>
-                    <path d="M4 12h16" className="opacity-50"></path>
-                  </svg>
-                </div>
-              </div>
+            <Link href="/" className="flex items-center gap-0 mb-2  w-fit group">
+              <img
+                src="https://ik.imagekit.io/bkt3emitco/zharnyxincress.png"
+                alt="Zharnyx Logo"
+                className="h-12 w-auto -mr-2 object-contain transition-transform group-hover:scale-105"
+              />
+              <span className="text-xl md:text-2xl font-black tracking-tighter text-white uppercase">
+                ZHARNY<span className="text-red-600">X</span>
+              </span>
             </Link>
 
             <div className="space-y-4 pt-2">

@@ -167,29 +167,31 @@ export default function ProgramsPage() {
             </span>
           </Link>
 
-          {/* Standalone Modules */}
-          <section className="w-full max-w-4xl p-8 border-2 border-white/20 bg-black/40 relative mt-12">
-            <div className="absolute -top-4 left-6 bg-black px-2 text-sm font-bold text-red-500 uppercase tracking-widest">
-              Standalone Modules
-            </div>
-            <div className="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
+          {/* AI Add-On */}
+          <section className="w-full mt-12">
+            <div className="w-full border-2 border-white/20 bg-black/40 p-8 flex flex-col md:flex-row gap-8 items-start md:items-center justify-between hover:border-white/50 transition-colors">
               <div className="space-y-4">
                 <h3 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
                   <Zap className="text-yellow-500" />
-                  AI for Cybersecurity
+                  AI for Cybersecurity Add-On
                 </h3>
-                <p className="text-gray-400 text-sm md:text-base">
-                  Optional standalone course covering AI/ML applications in cybersecurity — threat detection, anomaly analysis, and automated response.<br /><br />
-                  Can't commit to the full 7 months? Take individual phases.
+                <p className="text-gray-400 text-sm">
+                  Standalone module covering AI/ML in cybersecurity — threat detection, anomaly analysis, and response. Available to all students regardless of track.
                 </p>
               </div>
-              <div className="shrink-0 flex flex-col gap-2">
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest text-right">Available to all students</span>
-                <button className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-bold text-sm uppercase tracking-wider border-2 border-white/20 transition-all text-center">
+              <div className="shrink-0 flex flex-col gap-3">
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest md:text-right">Institution / Batch</span>
+                <a 
+                  href="mailto:sanjai@zharnyx.com"
+                  className="px-6 py-3 border-2 border-white/20 text-white font-bold text-sm uppercase tracking-wider hover:bg-white/10 transition-colors text-center whitespace-nowrap"
+                >
                   Pricing on Request
-                </button>
+                </a>
               </div>
             </div>
+            <p className="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mt-4">
+              EMI options available on request · Institutional / college batch pricing on request
+            </p>
           </section>
 
           {/* CTA */}
