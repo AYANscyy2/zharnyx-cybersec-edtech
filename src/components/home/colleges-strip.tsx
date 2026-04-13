@@ -38,7 +38,7 @@ export function CollegesStrip() {
           <div className="border border-white/20 group-hover:border-red-500/60 transition-colors px-3 py-1.5 flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-red-500/60 group-hover:bg-red-500 transition-colors" />
             <span className="text-[9px] font-black text-gray-500 group-hover:text-red-500 uppercase tracking-[0.25em] whitespace-nowrap transition-colors">
-              Partner Colleges · Tamil Nadu
+              Collaborated companies · Tamil Nadu
             </span>
           </div>
           <div className="h-px w-12 bg-white/10" />

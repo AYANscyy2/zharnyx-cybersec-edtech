@@ -82,10 +82,9 @@ export default function CertificationsPage() {
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight">
             The Zharnyx <br />
-            Certification Authority.{" "}
-            <span className="text-red-500">
-              Harder than the rest.
-            </span>
+            Certification <br />
+            Authority. <span className="text-red-500">Harder</span> <br />
+            <span className="text-red-500">than the rest.</span>
           </h1>
 
           <p className="para opacity-0 translate-y-5 text-sm font-bold uppercase tracking-widest text-gray-400 mt-2">

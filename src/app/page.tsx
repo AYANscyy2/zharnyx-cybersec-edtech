@@ -40,7 +40,7 @@ export default async function Home() {
       <ProblemStatementSection />
 
       {/* Partners Strip — hiring partners ticker */}
-      <div className="flex flex-col items-center bg-[#040404]">
+      {/* <div className="flex flex-col items-center bg-[#040404]">
         <PartnersStrip />
         <Link 
           href="/partners" 
@@ -48,7 +48,7 @@ export default async function Home() {
         >
           [ View Full Placement Network <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span> ]
         </Link>
-      </div>
+      </div> */}
 
       {/* 3. Track Specialisations */}
       <TrackSpecialisationsSection />
@@ -60,7 +60,7 @@ export default async function Home() {
       <WhyZharnyxSection />
 
       {/* 5. 7-Month Plan */}
-      <MasterPlanSection />
+      {/* <MasterPlanSection /> */}
 
       {/* 6. Who Is This For */}
       <WhoIsThisForSection />
@@ -74,8 +74,8 @@ export default async function Home() {
       {/* Colleges Strip — Tamil Nadu colleges ticker */}
       <div className="flex flex-col items-center bg-black">
         <CollegesStrip />
-        <Link 
-          href="/colleges" 
+        <Link
+          href="/colleges"
           className="pb-12 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-gray-700 hover:text-red-500 transition-all flex items-center gap-1.5 group"
         >
           [ See All Supported Campuses <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span> ]

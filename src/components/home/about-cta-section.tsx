@@ -138,10 +138,7 @@ export function AboutCTASection() {
             ref={ctaMetaRef}
             className="flex flex-wrap justify-center gap-6 mt-16 text-[10px] md:text-xs font-mono text-gray-500 uppercase tracking-widest"
           >
-            <span className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-red-500 rounded-full" /> 6-month
-              intensive
-            </span>
+
             <span className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" /> Limited
               seats per cohort
