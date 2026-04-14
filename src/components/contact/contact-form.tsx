@@ -7,10 +7,9 @@ import {
   MapPin,
   Mail,
   Phone,
-  Globe,
-  Github,
   Linkedin,
   Twitter,
+  Instagram,
   User,
   AtSign,
   Smartphone,
@@ -114,20 +113,20 @@ export function ContactForm() {
               <div className="space-y-3">
                 <div className="flex gap-3 items-center">
                   <Mail size={16} className="text-gray-600 shrink-0" />
-                  <a href="mailto:ops@zharnyx.com" className="text-gray-300 text-sm hover:text-red-500 transition-colors font-sans">
-                    ops@zharnyx.com
-                  </a>
-                </div>
-                <div className="flex gap-3 items-center">
-                  <Mail size={16} className="text-gray-600 shrink-0" />
                   <a href="mailto:support@zharnyx.com" className="text-gray-300 text-sm hover:text-red-500 transition-colors font-sans">
                     support@zharnyx.com
                   </a>
                 </div>
                 <div className="flex gap-3 items-center">
+                  <Mail size={16} className="text-gray-600 shrink-0" />
+                  <a href="mailto:sanjai@zharnyx.com" className="text-gray-300 text-sm hover:text-red-500 transition-colors font-sans">
+                    sanjai@zharnyx.com
+                  </a>
+                </div>
+                <div className="flex gap-3 items-center">
                   <Phone size={16} className="text-gray-600 shrink-0" />
-                  <a href="tel:+914222345678" className="text-gray-300 text-sm hover:text-red-500 transition-colors font-sans">
-                    +91 (422) 234-5678
+                  <a href="tel:+918807371294" className="text-gray-300 text-sm hover:text-red-500 transition-colors font-sans">
+                    +91 88073 71294
                   </a>
                 </div>
               </div>
@@ -137,10 +136,9 @@ export function ContactForm() {
               <p className="text-[10px] font-black text-red-500 uppercase tracking-[0.25em] mb-5">Secure Channels</p>
               <div className="flex gap-2">
                 {[
-                  { icon: Github, href: "https://github.com/zharnyx" },
                   { icon: Linkedin, href: "https://linkedin.com/company/zharnyx" },
                   { icon: Twitter, href: "https://twitter.com/zharnyx" },
-                  { icon: Globe, href: "https://zharnyx.com" },
+                  { icon: Instagram, href: "https://instagram.com/zharnyx" },
                 ].map(({ icon: Icon, href }) => (
                   <a key={href} href={href} target="_blank" rel="noopener noreferrer"
                     className="w-10 h-10 flex items-center justify-center border border-white/10 text-gray-500 hover:text-white hover:border-red-500 hover:bg-red-600/10 transition-all"

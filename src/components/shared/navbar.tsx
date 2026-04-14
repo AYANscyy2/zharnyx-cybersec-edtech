@@ -86,7 +86,7 @@ export function Navbar({ className }: NavbarProps) {
     <div
       ref={navRef}
       className={cn(
-        "fixed top-0 inset-x-0 w-full z-100 font-mono",
+        "fixed top-0 inset-x-0 w-full z-[10000] font-mono",
         className
       )}
     >
@@ -105,7 +105,7 @@ export function Navbar({ className }: NavbarProps) {
               className="h-12 w-auto object-contain "
             />
           </div>
-          <span className="text-2xl font-black text-white tracking-tighter uppercase">
+          <span className="relative z-10 text-2xl font-black text-white tracking-tighter uppercase">
             ZHARNY<span className="text-red-600">X</span>
           </span>
         </Link>
@@ -197,7 +197,7 @@ export function Navbar({ className }: NavbarProps) {
                       alt="Zharnyx Logo"
                       className="h-8 w-auto object-contain"
                     />
-                    <span className="text-xl font-black text-white tracking-tighter uppercase">
+                    <span className="relative z-10 text-xl font-black text-white tracking-tighter uppercase">
                       ZHARNY<span className="text-red-600">X</span>
                     </span>
                   </Link>

@@ -27,7 +27,7 @@ export function Footer() {
                 alt="Zharnyx Logo"
                 className="h-12 w-auto -mr-2 object-contain transition-transform group-hover:scale-105"
               />
-              <span className="text-xl md:text-2xl font-black tracking-tighter text-white uppercase">
+              <span className="relative z-10 text-xl md:text-2xl font-black tracking-tighter text-white uppercase">
                 ZHARNY<span className="text-red-600">X</span>
               </span>
             </Link>
@@ -65,7 +65,7 @@ export function Footer() {
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link href="/placements" className="hover:text-white transition-colors">Placements</Link></li>
               <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
-              {/* <li><Link href="/curriculum" className="hover:text-white transition-colors">Full Curriculum</Link></li> */}
+
               <li><Link href="/capstone" className="hover:text-white transition-colors">Capstone</Link></li>
               <li><Link href="/certifications" className="hover:text-white transition-colors">Certifications</Link></li>
               <li><Link href="/partners" className="hover:text-white transition-colors">Hiring Partners & Placements</Link></li>

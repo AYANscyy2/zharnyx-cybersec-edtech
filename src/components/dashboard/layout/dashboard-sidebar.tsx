@@ -234,7 +234,7 @@ export function DashboardSidebar({
               state === "collapsed" ? "opacity-0 w-0 hidden" : "opacity-100"
             )}
           >
-            <span className="font-black text-xl text-white tracking-tighter uppercase leading-none">
+            <span className="relative z-10 font-black text-xl text-white tracking-tighter uppercase leading-none">
               ZHARNY<span className="text-red-600">X</span>
             </span>
             <span

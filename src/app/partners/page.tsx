@@ -170,7 +170,7 @@ export default function PartnersPage() {
           </div>
 
           {/* Block 2: Partner Grid */}
-          <section className="w-full space-y-8">
+          {/* <section className="w-full space-y-8">
             <div className="flex items-center gap-4 border-b-2 border-white/10 pb-4">
               <Building2 className="text-red-500" size={24} />
               <h2 className="text-2xl font-black uppercase tracking-tight text-white">Partner Companies</h2>
@@ -182,36 +182,31 @@ export default function PartnersPage() {
                   key={p.name}
                   className="group bg-[#050505] border-2 border-white/10 hover:border-red-500 transition-all duration-300 p-6 flex flex-col gap-5 relative overflow-hidden"
                 >
-                  {/* Ghost watermark */}
+                
                   <div className="absolute -bottom-4 -right-4 text-[80px] font-black text-white/3 group-hover:text-red-500/5 transition-colors leading-none select-none pointer-events-none">
                     {p.initial}
                   </div>
-
-                  {/* Top row */}
                   <div className="flex items-start justify-between gap-3 z-10">
-                    {/* Logo placeholder */}
-                    <div className={`w-12 h-12 border-2 flex items-center justify-center font-black text-xl shrink-0 transition-colors ${
-                      p.color === "red"
+                   
+                    <div className={`w-12 h-12 border-2 flex items-center justify-center font-black text-xl shrink-0 transition-colors ${p.color === "red"
                         ? "border-red-500 bg-red-500/10 text-red-500 group-hover:bg-red-500/20"
                         : "border-white/20 bg-white/5 text-white group-hover:border-red-500 group-hover:text-red-400"
-                    }`}>
+                      }`}>
                       {p.initial}
                     </div>
 
                     <div className="flex flex-col items-end gap-1">
-                      <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-2 py-0.5 border ${
-                        p.type === "Core Partner"
+                      <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-2 py-0.5 border ${p.type === "Core Partner"
                           ? "border-red-500/60 text-red-500 bg-red-500/10"
                           : p.type === "Govt. Body"
-                          ? "border-sky-500/60 text-sky-400 bg-sky-500/10"
-                          : "border-white/20 text-gray-400"
-                      }`}>
+                            ? "border-sky-500/60 text-sky-400 bg-sky-500/10"
+                            : "border-white/20 text-gray-400"
+                        }`}>
                         {p.type}
                       </span>
                     </div>
                   </div>
 
-                  {/* Name */}
                   <div className="z-10">
                     <h3 className="text-xl font-black uppercase tracking-wide text-white group-hover:text-red-400 transition-colors">
                       {p.name}
@@ -227,12 +222,11 @@ export default function PartnersPage() {
                     </div>
                   </div>
 
-                  {/* Description */}
                   <p className="text-gray-500 text-sm leading-relaxed font-sans z-10 flex-1">{p.desc}</p>
                 </div>
               ))}
             </div>
-          </section>
+          </section> */}
 
           {/* Block 3: Placement CTA */}
           <section className="w-full bg-red-600/10 border-2 border-red-600 p-8 md:p-12 text-center shadow-[8px_8px_0px_0px_rgba(220,38,38,1)] flex flex-col items-center gap-8">
@@ -255,12 +249,12 @@ export default function PartnersPage() {
                 Contact Placement Cell
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link
+              {/* <Link
                 href="/programs"
                 className="flex items-center justify-center gap-2 px-10 py-4 border-2 border-white/20 text-white font-black text-sm uppercase tracking-widest hover:border-white hover:bg-white/5 transition-colors"
               >
                 View Our Curriculum
-              </Link>
+              </Link> */}
             </div>
           </section>
 

@@ -78,7 +78,7 @@ export default function PlacementsPage() {
           <section className="w-full space-y-8">
             <div className="flex items-center gap-4 border-b-2 border-white/20 pb-4">
               <Building2 className="text-red-500" size={32} />
-              <h2 className="text-3xl font-black uppercase tracking-tight text-white">Hiring Partners</h2>
+              <h2 className="text-3xl font-black uppercase tracking-tight text-white">Where Talents Gets Placed</h2>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -134,7 +134,7 @@ export default function PlacementsPage() {
           </section>
 
           {/* Recommended Certifications */}
-          <section className="w-full space-y-8">
+          {/* <section className="w-full space-y-8">
             <div className="flex flex-col gap-4 border-b-2 border-white/20 pb-4">
               <SectionBadge text="Gateway_Protocol_Initiated" icon={Server} />
               <h2 className="text-3xl font-black uppercase tracking-tight text-white">Recommended Certifications</h2>
@@ -151,7 +151,7 @@ export default function PlacementsPage() {
                 </div>
               ))}
             </div>
-          </section>
+          </section> */}
 
           {/* Final CTA */}
           <section className="w-full bg-red-600/10 border-2 border-red-600 p-8 md:p-12 text-center shadow-[8px_8px_0px_0px_rgba(220,38,38,1)] flex flex-col items-center gap-8">

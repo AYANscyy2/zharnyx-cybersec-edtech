@@ -181,7 +181,7 @@ export default function ProgramsPage() {
               </div>
               <div className="shrink-0 flex flex-col gap-3">
                 <span className="text-xs font-bold text-gray-500 uppercase tracking-widest md:text-right">Institution / Batch</span>
-                <a 
+                <a
                   href="mailto:sanjai@zharnyx.com"
                   className="px-6 py-3 border-2 border-white/20 text-white font-bold text-sm uppercase tracking-wider hover:bg-white/10 transition-colors text-center whitespace-nowrap"
                 >
@@ -209,12 +209,7 @@ export default function ProgramsPage() {
               >
                 Enroll Now
               </Link>
-              <Link
-                href="/curriculum"
-                className="px-10 py-4 border-2 border-white/20 text-white font-bold text-lg uppercase tracking-wider hover:bg-white/10 transition-colors flex items-center gap-2"
-              >
-                Full Curriculum
-              </Link>
+
             </div>
           </section>
 

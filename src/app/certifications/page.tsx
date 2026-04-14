@@ -81,9 +81,9 @@ export default function CertificationsPage() {
           <SectionBadge ref={badgeRef} text="Under Active Development" icon={Construction} className="translate-y-5 opacity-0" />
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight">
-            The Zharnyx <br />
-            Certification <br />
-            Authority. <span className="text-red-500">Harder</span> <br />
+            The Zharnyx<br />
+            Certification<br />
+            Authority. <span className="text-red-500">Harder</span><br />
             <span className="text-red-500">than the rest.</span>
           </h1>
 
