@@ -146,7 +146,7 @@ export default function PartnersPage() {
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase leading-tight">
             The Zharnyx <br />
-            <span className="text-red-500">Placement Network</span>
+            <span className="text-red-500">Collaborated Companies</span>
           </h1>
         </section>
 
@@ -233,7 +233,7 @@ export default function PartnersPage() {
             <div>
               <p className="text-xs font-black uppercase tracking-[0.25em] text-red-500 mb-4">For Employers</p>
               <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white mb-3">
-                Become a Hiring Partner
+                Become a collaborated Partner
               </h2>
               <p className="text-gray-400 max-w-2xl mx-auto font-sans leading-relaxed">
                 Are you looking for deployment-ready Tier-1 cybersecurity talent? Hire directly from our specialized cohorts — SOC analysts, penetration testers, cloud security engineers, and DFIR investigators.

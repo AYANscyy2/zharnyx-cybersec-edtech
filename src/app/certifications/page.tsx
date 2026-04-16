@@ -77,35 +77,35 @@ export default function CertificationsPage() {
       <main className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center gap-24">
         
         {/* SECTION 1: HERO */}
-        <section className="flex flex-col items-center text-center max-w-4xl space-y-6">
+        <section className="flex flex-col items-center text-center max-w-5xl space-y-8">
           <SectionBadge ref={badgeRef} text="Under Active Development" icon={Construction} className="translate-y-5 opacity-0" />
 
-          <h1 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight">
-            The Zharnyx<br />
-            Certification<br />
-            Authority. <span className="text-red-500">Harder</span><br />
-            <span className="text-red-500">than the rest.</span>
-          </h1>
+          <div className="space-y-6">
+            <h1 ref={headingRef} className="text-3xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-[1.1]">
+              The Zharnyx Certification Authority. <br />
+              <span className="text-red-500 italic">Harder than the rest.</span>
+            </h1>
+          </div>
 
-          <p className="para opacity-0 translate-y-5 text-sm font-bold uppercase tracking-widest text-gray-400 mt-2">
-            Built for India.
+          <p className="para opacity-0 translate-y-5 text-sm font-bold uppercase tracking-[0.5em] text-gray-600 mt-6 flex items-center justify-center gap-6 w-full">
+            <span className="h-px flex-1 bg-red-600/30"></span>
+            Built for the Indian Infosec Ecosystem
+            <span className="h-px flex-1 bg-red-600/30"></span>
           </p>
 
-          <p className="para opacity-0 translate-y-5 text-base md:text-lg text-gray-400 font-medium max-w-2xl border-l-4 border-red-600 pl-4 text-left mt-4">
-            We are currently building the infrastructure, live lab environments, and deeply technical exam portals for India's toughest cybersecurity certifications.
+          <p className="para opacity-0 translate-y-5 text-base md:text-xl text-gray-400 font-medium max-w-2xl border-l-[6px] border-red-600 pl-8 text-left mt-8 leading-relaxed">
+            We are engineering the infrastructure, high-fidelity labs, and iron-clad exam portals for India's most rigorous cybersecurity certifications. No compromises.
           </p>
 
-          <div className="para opacity-0 pt-6">
-            <a href="#waitlist" className="group relative inline-flex items-center justify-center px-10 py-4 bg-red-600 text-white font-black text-sm uppercase tracking-widest transition-transform hover:-translate-y-1 shadow-[8px_8px_0px_0px_rgba(220,38,38,0.5)] hover:shadow-[4px_4px_0px_0px_rgba(220,38,38,0.8)]">
-              <span className="flex items-center gap-3">
-                JOIN THE WAITLIST
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </span>
+          <div className="para opacity-0 pt-10">
+            <a href="#waitlist" className="group relative inline-flex items-center justify-center px-12 py-5 bg-red-600 text-white font-black text-base uppercase tracking-widest transition-all hover:-translate-x-1 hover:-translate-y-1 active:translate-x-0 active:translate-y-0 shadow-[10px_10px_0px_0px_rgba(255,255,255,0.1)] hover:shadow-[14px_14px_0px_0px_rgba(220,38,38,0.5)]">
+              JOIN THE ACCESS LIST
+              <ArrowRight size={20} className="ml-3 group-hover:translate-x-2 transition-transform" />
             </a>
           </div>
         </section>
 
-        <div ref={contentRef} className="w-full flex flex-col items-center gap-24 opacity-0 mt-8">
+        <div ref={contentRef} className="w-full flex flex-col items-center gap-32 opacity-0 mt-8">
             
           {/* SECTION 2: PHILOSOPHY */}
           <section className="w-full space-y-12">
@@ -200,16 +200,22 @@ function PhilosophyCard({ icon, title, desc }: { icon: React.ReactNode, title: s
 
 function DomainCard({ prefix, title, icon, desc }: { prefix: string, title: string, icon: React.ReactNode, desc: string }) {
   return (
-    <div className="group border-2 border-white/20 bg-black hover:border-red-500 transition-colors overflow-hidden flex flex-col md:flex-row">
-      <div className="md:w-64 bg-white/5 p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10 group-hover:bg-red-600/10 transition-colors">
-        <div className="group-hover:scale-110 transition-transform mb-4 text-gray-400 group-hover:text-red-500">
+    <div className="group border-2 border-white/10 bg-zinc-950 hover:border-red-600 transition-all duration-300 overflow-hidden flex flex-col md:flex-row hover:shadow-[10px_10px_0px_0px_rgba(220,38,38,0.2)]">
+      <div className="md:w-64 bg-white/5 p-10 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10 group-hover:bg-red-600/10 transition-colors relative">
+        <div className="absolute top-4 left-4">
+          <span className="px-2 py-0.5 bg-red-600 text-black text-[10px] font-black uppercase tracking-tighter">Verified_Auth</span>
+        </div>
+        <div className="text-gray-500 group-hover:text-red-500 group-hover:scale-110 transition-all duration-500 mb-4">
             {icon}
         </div>
-        <h3 className="font-black text-3xl tracking-widest text-white">{prefix}</h3>
+        <h3 className="font-black text-4xl tracking-tighter text-white group-hover:text-red-600 transition-colors">{prefix}</h3>
       </div>
-      <div className="p-8 flex-1 flex flex-col justify-center">
-        <h4 className="text-xl font-bold uppercase tracking-wider text-white mb-4 group-hover:text-red-500 transition-colors">{title}</h4>
-        <p className="text-gray-400 text-base leading-relaxed">{desc}</p>
+      <div className="p-10 flex-1 flex flex-col justify-center space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 bg-red-600"></div>
+          <h4 className="text-2xl font-black uppercase tracking-tight text-white group-hover:text-red-500 transition-colors">{title}</h4>
+        </div>
+        <p className="text-gray-400 text-sm md:text-base leading-relaxed font-medium">{desc}</p>
       </div>
     </div>
   )

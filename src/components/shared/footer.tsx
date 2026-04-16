@@ -85,8 +85,8 @@ export function Footer() {
                 <li><Link href="/blog" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Blog</Link></li>
                 <li><Link href="/certifications" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Certifications</Link></li>
                 <li><Link href="/capstone" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Capstone</Link></li>
-                <li><Link href="/#faq" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">FAQ</Link></li>
-                <li><Link href="/auth?mode=signup" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Portal</Link></li>
+                <li><Link href="/faq" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">FAQ</Link></li>
+                <li><Link href="/apply" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">apply</Link></li>
               </ul>
             </div>
 
@@ -99,7 +99,7 @@ export function Footer() {
                 <li><Link href="/contact" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Contact</Link></li>
                 <li><Link href="/pricing" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Pricing</Link></li>
                 <li><Link href="/partners" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Partners</Link></li>
-                <li><Link href="/colleges" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Hubs</Link></li>
+                <li><Link href="/colleges" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Colleges</Link></li>
               </ul>
             </div>
           </div>

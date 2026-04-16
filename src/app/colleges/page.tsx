@@ -115,14 +115,14 @@ export default function CollegesPage() {
                 Serving all 38 districts. From Anna University to local engineering hubs, Zharnyx is upgrading the cybersecurity skill level of students across the state.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-4 shrink-0">
+            {/* <div className="grid grid-cols-2 gap-4 shrink-0">
               {STATS.map(({ value, label }) => (
                 <div key={label} className="border-2 border-white/10 bg-white/2 px-6 py-4 text-center">
                   <p className="text-2xl font-black text-red-500">{value}</p>
                   <p className="text-[10px] uppercase tracking-widest text-gray-500 mt-1">{label}</p>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Block 2: College Directory */}
@@ -139,9 +139,8 @@ export default function CollegesPage() {
               {HUBS.map((hub) => (
                 <div
                   key={hub.region}
-                  className={`bg-[#050505] border-2 p-6 flex flex-col gap-4 ${
-                    hub.color === "red" ? "border-red-600/40" : "border-white/10"
-                  }`}
+                  className={`bg-[#050505] border-2 p-6 flex flex-col gap-4 ${hub.color === "red" ? "border-red-600/40" : "border-white/10"
+                    }`}
                 >
                   {/* Hub Header */}
                   <div className="flex items-center gap-3 pb-3 border-b border-white/10">
@@ -160,11 +159,10 @@ export default function CollegesPage() {
                       <li key={college} className="flex items-center gap-3 group">
                         <GraduationCap
                           size={12}
-                          className={`shrink-0 transition-colors ${
-                            hub.color === "red"
+                          className={`shrink-0 transition-colors ${hub.color === "red"
                               ? "text-red-500/50 group-hover:text-red-500"
                               : "text-gray-700 group-hover:text-gray-400"
-                          }`}
+                            }`}
                         />
                         <span className="text-sm text-gray-400 group-hover:text-white transition-colors font-sans leading-snug">
                           {college}
