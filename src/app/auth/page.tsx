@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, Suspense } from "react";
-import { signIn, signUp } from "@/lib/auth/auth-client";
+import { useState, useEffect, Suspense } from "react";
+import { signIn, signUp, useSession, signOut } from "@/lib/auth/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "@/components/shared/toast";
 import { motion, AnimatePresence } from "motion/react";
@@ -20,6 +20,8 @@ import {
   Target,
   Upload,
   MessageSquare,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,15 +30,27 @@ function AuthContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  const [mode, setMode] = useState<"signin" | "signup">(
-    searchParams.get("mode") === "signup" ? "signup" : "signin"
+  const [mode, setMode] = useState<"signin" | "signup" | "complete-profile">(
+    ["signup", "complete-profile"].includes(searchParams.get("mode")!) ? searchParams.get("mode") as any : "signin"
   );
+
+  // Allow dynamic change of mode via URL
+  useEffect(() => {
+    const urlMode = searchParams.get("mode");
+    if (urlMode === "signup" || urlMode === "complete-profile") {
+      setMode(urlMode as any);
+    } else {
+      setMode("signin");
+    }
+  }, [searchParams]);
 
   // Base Auth Fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Extended Signup Fields
   const [phone, setPhone] = useState("");
@@ -45,19 +59,59 @@ function AuthContent() {
   const [preferredTrack, setPreferredTrack] = useState("");
   const [collegeName, setCollegeName] = useState("");
   const [message, setMessage] = useState("");
-  const [idProofUrl, setIdProofUrl] = useState(""); // Mock for file upload
+  const [imageUrl, setImageUrl] = useState(""); // ImageKit URL for proof
   const [fileName, setFileName] = useState("");
 
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { data: session } = useSession();
+
+  // Redirect if they ALREADY have all info and mode is complete-profile
+  useEffect(() => {
+    if (mode === "complete-profile" && session?.user?.phone && session?.user?.preferredTrack) {
+      router.push(callbackUrl);
+    }
+  }, [mode, session, router, callbackUrl]);
+
+  // Pre-fill if known
+  useEffect(() => {
+    if (mode === "complete-profile" && session?.user) {
+      if (session.user.name) setName(session.user.name);
+      if (session.user.email) setEmail(session.user.email);
+      if (session.user.phone) setPhone(session.user.phone);
+      if (session.user.city) setCity(session.user.city);
+      if (session.user.studentStatus) setStudentStatus(session.user.studentStatus as any);
+      if (session.user.preferredTrack) setPreferredTrack(session.user.preferredTrack);
+      if (session.user.collegeName) setCollegeName(session.user.collegeName);
+    }
+  }, [mode, session]);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setFileName(file.name);
-      // In a real scenario, you'd upload the file to S3/Cloud Storage here and get a URL back.
-      // For now, we simulate a successful URL assignment.
-      setIdProofUrl(`https://storage.zharnyx.com/proofs/${file.name}`);
+      
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      try {
+        const { uploadToImageKit } = await import("@/actions/upload");
+        const toastId = toast.loading("Uploading ID Proof...");
+        const result = await uploadToImageKit(formData);
+        
+        if (result.success && result.url) {
+          setImageUrl(result.url);
+          toast.success("ID Proof uploaded successfully!", { id: toastId });
+        } else {
+          toast.error("Upload failed", { description: result.error, id: toastId });
+          setFileName(""); // reset if failed
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        toast.error("Upload failed", { description: "An unexpected error occurred" });
+        setFileName("");
+      }
     }
   };
 
@@ -65,15 +119,15 @@ function AuthContent() {
     e.preventDefault();
     setError("");
 
-    if (mode === "signup") {
-      if (password !== confirmPassword) {
+    if (mode === "signup" || mode === "complete-profile") {
+      if (mode === "signup" && password !== confirmPassword) {
         const errorMsg = "Passwords do not match";
         setError(errorMsg);
         toast.error("Validation failed", { description: errorMsg });
         return;
       }
 
-      if (password.length < 8) {
+      if (mode === "signup" && password.length < 8) {
         const errorMsg = "Password must be at least 8 characters long";
         setError(errorMsg);
         toast.error("Validation failed", { description: errorMsg });
@@ -97,10 +151,37 @@ function AuthContent() {
 
     try {
       if (mode === "signin") {
-        await signIn.email({ email, password });
+        const { error: signInError } = await signIn.email({ email, password });
+        
+        if (signInError) {
+          setError(signInError.message || "Invalid credentials");
+          toast.error("Sign in failed", { description: signInError.message || "Invalid credentials" });
+          return;
+        }
+
         toast.success("Signed in successfully!", { description: "Redirecting to dashboard..." });
+        router.push("/dashboard");
+        router.refresh();
+      } else if (mode === "complete-profile") {
+        const { updateStudentProfile } = await import("@/actions/student/profile");
+        await updateStudentProfile({
+          phone,
+          city,
+          studentStatus,
+          preferredTrack,
+          collegeName: studentStatus === "College Student" ? collegeName : undefined,
+          message,
+          imageUrl,
+        });
+
+        toast.success("Profile completed successfully!", {
+          description: "Redirecting...",
+        });
+        
+        router.push(callbackUrl);
+        router.refresh();
       } else {
-        await signUp.email({
+        const { error: signUpError } = await signUp.email({
           email,
           password,
           name,
@@ -110,20 +191,31 @@ function AuthContent() {
           preferredTrack,
           collegeName: studentStatus === "College Student" ? collegeName : undefined,
           message,
-          idProofUrl,
+          imageUrl,
         } as any);
 
-        toast.success("Account created successfully!", {
-          description: "Welcome! Redirecting to dashboard...",
-        });
-      }
+        if (signUpError) {
+          setError(signUpError.message || "Failed to create account");
+          toast.error("Signup failed", { description: signUpError.message || "Email may already be in use" });
+          return;
+        }
 
-      router.push(callbackUrl);
-      router.refresh();
+        toast.success("Account created successfully!", {
+          description: "Please sign in to access your dashboard.",
+        });
+
+        // The user specifically requested: Signup -> Sign in manually -> Dashboard.
+        // We ensure they are signed out to force the manual login flow.
+        await signOut();
+        setMode("signin");
+        setPassword(""); // Clear password for security
+        window.scroll({ top: 0, behavior: 'smooth' });
+        router.refresh();
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : mode === "signin" ? "Failed to sign in" : "Failed to create account";
       setError(errorMessage);
-      toast.error(mode === "signin" ? "Sign in failed" : "Sign up failed", { description: errorMessage });
+      toast.error(mode === "signin" ? "Sign in failed" : "Action failed", { description: errorMessage });
     } finally {
       setIsLoading(false);
     }
@@ -153,24 +245,24 @@ function AuthContent() {
               </span>
             </div> */}
             <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">
-              {mode === "signin" ? "Operator Login" : "Join the Academy"}
+              {mode === "signin" ? "Operator Login" : mode === "complete-profile" ? "Complete Profile" : "Join the Academy"}
             </h1>
             <p className="text-gray-400 font-mono text-xs md:text-sm uppercase tracking-widest">
-              {mode === "signin" ? "Identify yourself to access the mainframe." : "Begin your initialization sequence."}
+              {mode === "signin" ? "Identify yourself to access the mainframe." : mode === "complete-profile" ? "Operator additional data required." : "Begin your initialization sequence."}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
 
-            {/* SIGNIN ONLY FIELDS */}
-            {mode === "signin" && (
+            {/* SOCIAL AUTH FOR SIGNIN & SIGNUP */}
+            {(mode === "signin" || mode === "signup") && (
               <div className="space-y-6">
                 <button
                   type="button"
                   onClick={async () => {
                     await signIn.social({
                       provider: "google",
-                      callbackURL: callbackUrl,
+                      callbackURL: "/dashboard",
                       fetchOptions: { onError: (ctx) => { toast.error("Sign in failed", { description: ctx.error.message }); } }
                     });
                   }}
@@ -182,7 +274,7 @@ function AuthContent() {
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                   </svg>
-                  Sign in with Google
+                  Continue with Google
                 </button>
 
                 <div className="relative my-6">
@@ -193,6 +285,12 @@ function AuthContent() {
                     <span className="bg-black px-2 text-zinc-500 font-mono tracking-widest">Or continue with email</span>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* SIGNIN ONLY FIELDS */}
+            {mode === "signin" && (
+              <div className="space-y-6">
 
                 <div className="space-y-1">
                   <Label htmlFor="email" className="text-white text-xs font-bold uppercase tracking-wider">Email Address</Label>
@@ -209,32 +307,48 @@ function AuthContent() {
                   </div>
                   <div className="relative group">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
-                    <Input id="password" type="password" required placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                    <Input id="password" type={showPassword ? "text" : "password"} required placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-10 pr-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors" tabIndex={-1}>
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* SIGNUP ONLY FIELDS */}
-            {mode === "signup" && (
+            {/* SIGNUP & COMPLETE PROFILE FIELDS */}
+            {(mode === "signup" || mode === "complete-profile") && (
               <div className="space-y-6">
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-1">
-                    <Label htmlFor="name" className="text-white text-xs font-bold uppercase tracking-wider">Full Name</Label>
-                    <div className="relative group">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
-                      <Input id="name" type="text" placeholder="Your full name" required value={name} onChange={(e) => setName(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
-                    </div>
-                  </div>
+                {mode === "complete-profile" && (
+                   <div className="bg-red-950/20 border border-red-500/30 p-4 mb-4">
+                     <p className="text-red-400 font-mono text-xs uppercase font-bold text-center">
+                       MANDATORY SECURE ENROLLMENT DATA REQUIRED BEFORE PROCEEDING
+                     </p>
+                   </div>
+                )}
 
-                  <div className="space-y-1">
-                    <Label htmlFor="email" className="text-white text-xs font-bold uppercase tracking-wider">Email Address</Label>
-                    <div className="relative group">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
-                      <Input id="email" type="email" placeholder="you@email.com" required value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                {mode === "signup" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-1">
+                      <Label htmlFor="name" className="text-white text-xs font-bold uppercase tracking-wider">Full Name</Label>
+                      <div className="relative group">
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
+                        <Input id="name" type="text" placeholder="Your full name" required value={name} onChange={(e) => setName(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <Label htmlFor="email" className="text-white text-xs font-bold uppercase tracking-wider">Email Address</Label>
+                      <div className="relative group">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
+                        <Input id="email" type="email" placeholder="you@email.com" required value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                      </div>
                     </div>
                   </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                   <div className="space-y-1">
                     <Label htmlFor="phone" className="text-white text-xs font-bold uppercase tracking-wider">Phone</Label>
@@ -308,22 +422,30 @@ function AuthContent() {
                 </div>
 
                 {/* Password Fields */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-1">
-                    <Label htmlFor="password" className="text-white text-xs font-bold uppercase tracking-wider">Password</Label>
-                    <div className="relative group">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
-                      <Input id="password" type="password" required placeholder="Min 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                {mode === "signup" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-1">
+                      <Label htmlFor="password" className="text-white text-xs font-bold uppercase tracking-wider">Password</Label>
+                      <div className="relative group">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
+                        <Input id="password" type={showPassword ? "text" : "password"} required placeholder="Min 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-10 pr-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors" tabIndex={-1}>
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="confirm-password" className="text-white text-xs font-bold uppercase tracking-wider">Confirm Password</Label>
+                      <div className="relative group">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
+                        <Input id="confirm-password" type={showConfirmPassword ? "text" : "password"} required placeholder="••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="pl-10 pr-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                        <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors" tabIndex={-1}>
+                          {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="confirm-password" className="text-white text-xs font-bold uppercase tracking-wider">Confirm Password</Label>
-                    <div className="relative group">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
-                      <Input id="confirm-password" type="password" required placeholder="••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
-                    </div>
-                  </div>
-                </div>
+                )}
 
                 <div className="space-y-1">
                   <Label htmlFor="message" className="text-white text-xs font-bold uppercase tracking-wider">Message (Optional)</Label>
@@ -354,7 +476,7 @@ function AuthContent() {
                   <Loader2 className="animate-spin" size={20} />
                 ) : (
                   <>
-                    {mode === "signin" ? "Establish Link" : "Submit Enrollment Request"}{" "}
+                    {mode === "signin" ? "Establish Link" : mode === "complete-profile" ? "Initialize Data" : "Submit Enrollment Request"}{" "}
                     <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
@@ -363,17 +485,20 @@ function AuthContent() {
           </form>
 
           <div className="mt-8 text-center flex flex-col gap-3">
-            <button
-              className="text-gray-500 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors"
-              onClick={() => {
-                setMode(mode === "signin" ? "signup" : "signin");
-                setError("");
-              }}
-            >
-              {mode === "signin"
-                ? "No credentials? Request Access"
-                : "Already active? Operator Login"}
-            </button>
+            {mode !== "complete-profile" && (
+              <button
+                type="button"
+                className="text-gray-500 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors"
+                onClick={() => {
+                  setMode(mode === "signin" ? "signup" : "signin");
+                  setError("");
+                }}
+              >
+                {mode === "signin"
+                  ? "No credentials? Request Access"
+                  : "Already active? Operator Login"}
+              </button>
+            )}
           </div>
         </div>
       </motion.div>

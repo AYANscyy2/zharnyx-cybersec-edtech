@@ -32,17 +32,23 @@ function CheckoutPageInner() {
   const [pendingEnrollments, setPendingEnrollments] = useState<any[]>([]);
   const [isLoadingPending, setIsLoadingPending] = useState(true);
 
-  // Authentication Redirect Logic
+  // Authentication & Completeness Redirect Logic
   useEffect(() => {
-    if (!isPending && !session) {
+    if (isPending) return;
+    
+    const currentUrl = encodeURIComponent(`/checkout/internship?tier=${tierParam || "1"}`);
+    
+    if (!session) {
       // Redirect to specific auth page with callback URL
-      const currentUrl = encodeURIComponent(`/checkout/internship?tier=${tierParam || "1"}`);
       router.push(`/auth?mode=signup&callbackUrl=${currentUrl}`);
+    } else if (!session.user.phone || !session.user.preferredTrack) {
+      // Missing mandatory enrollment fields (e.g. Google Sign in bypass)
+      router.push(`/auth?mode=complete-profile&callbackUrl=${currentUrl}`);
     }
   }, [session, isPending, router, tierParam]);
 
   useEffect(() => {
-    if (!isPending && session) {
+    if (!isPending && session && session.user.phone && session.user.preferredTrack) {
       getExistingInternshipEnrollments().then((res: any) => {
         if (res.success && res.data) {
           setPendingEnrollments(res.data);
@@ -51,6 +57,8 @@ function CheckoutPageInner() {
             setSelectedTrack(targetTrack);
           } else if (res.data.length > 0) {
             setSelectedTrack(res.data[0].track);
+          } else if ((session.user as any).preferredTrack) {
+            setSelectedTrack((session.user as any).preferredTrack);
           }
         }
         setIsLoadingPending(false);

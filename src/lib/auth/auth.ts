@@ -30,7 +30,7 @@ export const auth = betterAuth({
       preferredTrack: { type: "string", required: false },
       collegeName: { type: "string", required: false },
       message: { type: "string", required: false },
-      idProofUrl: { type: "string", required: false },
+      imageUrl: { type: "string", required: false },
     },
   },
 });

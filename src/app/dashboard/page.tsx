@@ -17,6 +17,8 @@ import {
   User,
   Mail,
   Fingerprint,
+  AlertTriangle,
+  ArrowRight,
 } from "lucide-react";
 import { HubUserControls } from "@/components/dashboard/hub/user-controls";
 
@@ -32,9 +34,31 @@ export default async function DashboardPage() {
   const userEmail = session.user.email;
   const userId = session.user.id;
 
+  // Check if profile is incomplete (common for Google sign-in users)
+  const profileIncomplete = !session.user.phone || !session.user.preferredTrack || !session.user.city;
+
   return (
     <div className="flex min-h-screen w-full bg-black font-sans">
       <div className="relative flex flex-col flex-1 z-10 w-full px-3 pb-3 pt-2 md:pl-6 md:pr-6 md:pb-6 md:pt-4">
+        {/* Incomplete Profile Banner */}
+        {profileIncomplete && (
+          <div className="mb-4 border-2 border-yellow-500/60 bg-yellow-500/10 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="text-yellow-400 shrink-0 mt-0.5" size={18} />
+              <div>
+                <p className="text-yellow-300 font-mono font-bold text-sm uppercase tracking-wider">Profile Incomplete</p>
+                <p className="text-yellow-500/80 font-mono text-xs mt-0.5">Complete your profile to unlock full platform features and enroll in internships.</p>
+              </div>
+            </div>
+            <Link
+              href="/auth?mode=complete-profile"
+              className="shrink-0 flex items-center gap-2 px-4 py-2 bg-yellow-500 text-black font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition-colors border-2 border-yellow-500 hover:border-yellow-400"
+            >
+              Complete Profile <ArrowRight size={14} />
+            </Link>
+          </div>
+        )}
+
         {/* Header - Hub Style */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md:mb-8 pb-2 md:pb-4 border-b-2 border-white/20">
           <div className="flex flex-col">

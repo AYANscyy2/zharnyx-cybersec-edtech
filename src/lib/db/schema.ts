@@ -40,7 +40,7 @@ export const user = pgTable("user", {
   preferredTrack: text("preferred_track"),
   collegeName: text("college_name"),
   message: text("message"),
-  idProofUrl: text("id_proof_url"),
+  imageUrl: text("image_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
