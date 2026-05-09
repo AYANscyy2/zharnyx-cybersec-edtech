@@ -153,7 +153,7 @@ export function Navbar({ className }: NavbarProps) {
                 href="/dashboard"
                 className="relative px-6 py-2.5 bg-blue-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-blue-600 shadow-[4px_4px_0px_0px_white] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
               >
-                Command Center
+                Dashboard
               </Link>
               <button
                 onClick={() => signOut()}

@@ -6,6 +6,7 @@ import { LoaderProvider } from "@/components/shared/loader-context";
 import { Suspense } from "react";
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
+import { FloatingChatbot } from "@/components/shared/floating-chatbot";
 
 export const metadata: Metadata = {
   title: "Zharnyx Academy | Tamil Nadu's Elite Cybersecurity Residency",
@@ -49,6 +50,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Footer />
+          <FloatingChatbot />
           <Toaster position="bottom-right" expand={false} />
         </LoaderProvider>
       </body>

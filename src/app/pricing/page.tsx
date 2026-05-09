@@ -224,32 +224,7 @@ export default function PricingPage() {
             </div>
           </section>
 
-          {/* AI Add-On */}
-          <section className="w-full">
-            <div className="w-full border-2 border-white/20 bg-black/40 p-8 flex flex-col md:flex-row gap-8 items-start md:items-center justify-between hover:border-white/50 transition-colors">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
-                  <Zap className="text-yellow-500" />
-                  AI for Cybersecurity Add-On
-                </h3>
-                <p className="text-gray-400 text-sm">
-                  Standalone module covering AI/ML in cybersecurity — threat detection, anomaly analysis, and response. Available to all students regardless of track.
-                </p>
-              </div>
-              <div className="shrink-0 flex flex-col gap-3">
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest md:text-right">Institution / Batch</span>
-                <a
-                  href="mailto:sanjai@zharnyx.com"
-                  className="px-6 py-3 border-2 border-white/20 text-white font-bold text-sm uppercase tracking-wider hover:bg-white/10 transition-colors text-center whitespace-nowrap"
-                >
-                  Pricing on Request
-                </a>
-              </div>
-            </div>
-            <p className="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mt-4">
-              EMI options available on request · Institutional / college batch pricing on request
-            </p>
-          </section>
+
 
           {/* FAQ Section */}
           <section className="w-full max-w-3xl flex flex-col gap-8">

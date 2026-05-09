@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: "Is this online, offline, or hybrid?",
-    a: "Zharnyx runs in Coimbatore, Chennai, and fully remote. All labs are cloud-hosted so you can access them from anywhere. Weekend-intensive batches are available for working professionals.",
+    a: "Zharnyx runs in TN (Tamil Nadu) and fully remote. All labs are cloud-hosted so you can access them from anywhere. Weekend-intensive batches are available for working professionals.",
   },
   {
     q: "What happens after I finish the program?",

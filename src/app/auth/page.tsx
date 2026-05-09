@@ -359,14 +359,13 @@ function AuthContent() {
                   </div>
 
                   <div className="space-y-1">
-                    <Label htmlFor="city" className="text-white text-xs font-bold uppercase tracking-wider">City</Label>
+                    <Label htmlFor="city" className="text-white text-xs font-bold uppercase tracking-wider">Region</Label>
                     <div className="relative group">
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
                       <select id="city" required value={city} onChange={(e) => setCity(e.target.value)} className="pl-10 w-full bg-white/5 border-2 border-white/20 text-white focus:border-red-600 focus:ring-0 outline-hidden rounded-none h-12 font-mono text-sm transition-colors appearance-none">
-                        <option value="" disabled className="text-black">Select city</option>
-                        <option value="Coimbatore" className="text-black">Coimbatore</option>
-                        <option value="Chennai" className="text-black">Chennai</option>
-                        <option value="Other" className="text-black">Other (Tamil Nadu)</option>
+                        <option value="" disabled className="text-black">Select region</option>
+                        <option value="TN (Tamil Nadu)" className="text-black">TN (Tamil Nadu)</option>
+                        <option value="Other" className="text-black">Other</option>
                       </select>
                     </div>
                   </div>

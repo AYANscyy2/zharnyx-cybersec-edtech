@@ -64,8 +64,8 @@ export const FOUNDERS_DATA: Record<string, Founder> = {
     name: "Antony",
     role: "Co-Founder, Operations",
     image: "https://ik.imagekit.io/bkt3emitco/Screenshot%20From%202026-04-03%2014-12-51.png",
-    shortDesc: "Connects students to hiring partners across Coimbatore & Chennai.",
-    longDesc: "Drives operations, placement partnerships, and student success. Antony builds and maintains the hiring network that connects Zharnyx graduates to real opportunities in Chennai, Coimbatore, and across Tamil Nadu.",
+    shortDesc: "Connects students to hiring partners across TN (Tamil Nadu).",
+    longDesc: "Drives operations, placement partnerships, and student success. Antony builds and maintains the hiring network that connects Zharnyx graduates to real opportunities across TN (Tamil Nadu).",
     responsibilities: [
       "Operations",
       "Placement Partnerships",

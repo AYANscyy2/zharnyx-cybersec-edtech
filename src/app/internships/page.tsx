@@ -6,7 +6,7 @@ import { SplitText } from "gsap/SplitText";
 import { ArrowRight, Terminal } from "lucide-react";
 import Link from "next/link";
 import { SectionBadge } from "@/components/ui/section-badge";
-import { WeekZeroSection } from "@/components/internships/week-zero-section";
+
 import { ProgramDetailsSection } from "@/components/internships/program-details-section";
 import { CourseReminderSection } from "@/components/internships/course-reminder-section";
 
@@ -112,8 +112,7 @@ export default function InternshipsPage() {
 
         {/* Content Section containing the other blocks */}
         <div ref={contentRef} className="w-full flex flex-col items-center opacity-0 mt-8">
-          {/* Block 2: The "Week 0" Lead Magnet */}
-          <WeekZeroSection />
+
 
           {/* Block 3: Pan-India Internship Program (3-Column Layout) */}
           <ProgramDetailsSection />

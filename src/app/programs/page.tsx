@@ -6,6 +6,7 @@ import { SplitText } from "gsap/SplitText";
 import { Crosshair, Shield, Terminal, ArrowRight, Zap, Cloud, Code } from "lucide-react";
 import Link from "next/link";
 import { SectionBadge } from "@/components/ui/section-badge";
+import { WeekZeroSection } from "@/components/internships/week-zero-section";
 
 gsap.registerPlugin(SplitText);
 
@@ -167,32 +168,7 @@ export default function ProgramsPage() {
             </span>
           </Link>
 
-          {/* AI Add-On */}
-          <section className="w-full mt-12">
-            <div className="w-full border-2 border-white/20 bg-black/40 p-8 flex flex-col md:flex-row gap-8 items-start md:items-center justify-between hover:border-white/50 transition-colors">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
-                  <Zap className="text-yellow-500" />
-                  AI for Cybersecurity Add-On
-                </h3>
-                <p className="text-gray-400 text-sm">
-                  Standalone module covering AI/ML in cybersecurity — threat detection, anomaly analysis, and response. Available to all students regardless of track.
-                </p>
-              </div>
-              <div className="shrink-0 flex flex-col gap-3">
-                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest md:text-right">Institution / Batch</span>
-                <a
-                  href="mailto:sanjai@zharnyx.com"
-                  className="px-6 py-3 border-2 border-white/20 text-white font-bold text-sm uppercase tracking-wider hover:bg-white/10 transition-colors text-center whitespace-nowrap"
-                >
-                  Pricing on Request
-                </a>
-              </div>
-            </div>
-            <p className="text-center text-gray-500 text-xs font-bold uppercase tracking-widest mt-4">
-              EMI options available on request · Institutional / college batch pricing on request
-            </p>
-          </section>
+          <WeekZeroSection />
 
           {/* CTA */}
           <section className="flex flex-col items-center text-center mt-12 space-y-8">

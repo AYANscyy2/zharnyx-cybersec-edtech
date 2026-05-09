@@ -71,7 +71,7 @@ export default function AboutPage() {
 
         {/* Hero Section */}
         <section className="flex flex-col items-center text-center max-w-4xl space-y-6">
-          <SectionBadge ref={badgeRef} text="Serving Coimbatore & Chennai" icon={MapPin} className="translate-y-5 opacity-0" />
+          <SectionBadge ref={badgeRef} text="Serving TN (Tamil Nadu)" icon={MapPin} className="translate-y-5 opacity-0" />
 
           <h1 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white uppercase leading-tight ">
             Tamil Nadu's Own <br />
@@ -128,7 +128,7 @@ export default function AboutPage() {
               <DiffCard
                 icon={<Briefcase className="text-red-500" size={24} />}
                 title="Tamil Nadu Focused Placements"
-                desc="We partner directly with companies based in Chennai and Coimbatore to map our curriculum to their hiring needs."
+                desc="We partner directly with companies based in TN (Tamil Nadu) to map our curriculum to their hiring needs."
               />
               <DiffCard
                 icon={<Users className="text-red-500" size={24} />}

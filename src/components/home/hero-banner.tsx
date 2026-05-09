@@ -25,14 +25,14 @@ export function HeroBanner() {
         {/* Content */}
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4 flex-1 pr-6">
           <div className="shrink-0 font-mono text-xs font-bold text-red-500 tracking-widest uppercase bg-red-600/10 px-2 py-1 border border-red-600/20">
-            [ FREE INTERNSHIP PREVIEW ]
+            [ START FOR FREE ]
           </div>
           <div className="flex flex-col text-left">
             <span className="text-white font-bold text-sm md:text-base tracking-wide">
-              Launch your Cybersecurity Career with our Virtual Internships.
+              Week 0: The Foundation is now live.
             </span>
             <span className="text-gray-400 text-xs md:text-sm mt-0.5">
-              Experience the exact training our elite tracks receive. Week 0 foundational access is completely free.
+              Experience the exact training our elite tracks receive before committing.
             </span>
           </div>
         </div>
@@ -40,7 +40,7 @@ export function HeroBanner() {
         {/* Action */}
         <div className="w-full md:w-auto shrink-0 mt-2 md:mt-0">
           <Link
-            href="/internships"
+            href="/programs"
             className="inline-flex items-center justify-center w-full md:w-auto h-10 px-6 bg-transparent text-red-500 font-bold text-xs uppercase tracking-wider border border-red-600 hover:bg-red-600 hover:text-white transition-colors gap-2 group/btn"
           >
             CLAIM FREE ACCESS

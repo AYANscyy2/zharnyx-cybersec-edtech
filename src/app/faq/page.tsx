@@ -39,7 +39,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "Is this online or offline?",
-        a: "The program is primarily online with structured weekly lab sessions, live mentor calls, and async module access. Physical workshops in Coimbatore and Chennai are conducted quarterly.",
+        a: "The program is primarily online with structured weekly lab sessions, live mentor calls, and async module access. Physical workshops across TN (Tamil Nadu) are conducted quarterly.",
       },
       {
         q: "What are the 4 specialization tracks?",
@@ -104,7 +104,7 @@ const FAQ_CATEGORIES = [
       },
       {
         q: "Do you help with placement?",
-        a: "We partner with companies in Chennai and Coimbatore actively hiring for cybersecurity roles. Top performers get direct referrals, resume review sessions, and mock interview prep.",
+        a: "We partner with companies in TN (Tamil Nadu) actively hiring for cybersecurity roles. Top performers get direct referrals, resume review sessions, and mock interview prep.",
       },
       {
         q: "How experienced are the mentors?",

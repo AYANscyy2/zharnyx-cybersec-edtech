@@ -2,7 +2,7 @@ import Link from "next/link";
 import { HeroSection } from "@/components/home/hero-section";
 import { ProblemStatementSection } from "@/components/home/problem-statement-section";
 import { TrackSpecialisationsSection } from "@/components/home/track-specialisations-section";
-import { ProgramDetailsSection } from "@/components/internships/program-details-section";
+import { CertificationsShowcaseSection } from "@/components/home/certifications-showcase-section";
 import { WhyZharnyxSection } from "@/components/home/why-zharnyx-section";
 import { MasterPlanSection } from "@/components/home/master-plan-section";
 import { WhoIsThisForSection } from "@/components/home/who-is-this-for-section";
@@ -11,7 +11,8 @@ import { FaqSection } from "@/components/home/faq-section";
 import { AboutCTASection } from "@/components/home/about-cta-section";
 import { ToolsStrip } from "@/components/home/tools-strip";
 import { PartnersStrip } from "@/components/home/partners-strip";
-import { CollegesStrip } from "@/components/home/colleges-strip";
+import { CollaboratedCompaniesSection } from "@/components/home/collaborated-companies-section";
+import { CollaboratedCollegesSection } from "@/components/home/collaborated-colleges-section";
 
 export const dynamic = "force-dynamic";
 
@@ -53,8 +54,8 @@ export default async function Home() {
       {/* 3. Track Specialisations */}
       <TrackSpecialisationsSection />
 
-      {/* Internship Integration */}
-      <ProgramDetailsSection />
+      {/* Certifications Showcase */}
+      <CertificationsShowcaseSection />
 
       {/* 4. Why Zharnyx */}
       <WhyZharnyxSection />
@@ -71,16 +72,9 @@ export default async function Home() {
       {/* 8. FAQ */}
       <FaqSection />
 
-      {/* Colleges Strip — Tamil Nadu colleges ticker */}
-      <div className="flex flex-col items-center bg-black">
-        <CollegesStrip />
-        <Link
-          href="/colleges"
-          className="pb-12 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-gray-700 hover:text-red-500 transition-all flex items-center gap-1.5 group"
-        >
-          [ See All Supported Campuses <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span> ]
-        </Link>
-      </div>
+      {/* 9. Collaborated Companies & Colleges */}
+      <CollaboratedCompaniesSection />
+      <CollaboratedCollegesSection />
 
       {/* 9. Final CTA */}
       <AboutCTASection />

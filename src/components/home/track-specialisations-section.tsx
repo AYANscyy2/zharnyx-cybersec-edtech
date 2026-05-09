@@ -17,7 +17,7 @@ const TRACKS = [
       "Threat Hunting",
       "Incident Response",
     ],
-    hires: "TCS, Infosys, Chennai GCCs",
+    hires: "TCS, Infosys, TN (Tamil Nadu) GCCs",
   },
   {
     icon: Crosshair,

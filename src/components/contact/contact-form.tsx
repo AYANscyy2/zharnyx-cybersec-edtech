@@ -103,7 +103,7 @@ export function ContactForm() {
               <div className="flex gap-3 items-start">
                 <MapPin size={16} className="text-gray-600 shrink-0 mt-0.5" />
                 <p className="text-gray-300 text-sm leading-relaxed font-sans">
-                  Zharnyx HQ, Cyber City,<br />Coimbatore, TN 641001
+                  Karpagam college of engineering, <br />Coimbatore - 641 032
                 </p>
               </div>
             </div>
@@ -146,17 +146,6 @@ export function ContactForm() {
                     <Icon size={16} />
                   </a>
                 ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Response time note */}
-          <div className="contact-info-item border-t border-white/10 pt-8">
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 shrink-0 animate-pulse" />
-              <div>
-                <p className="text-white text-xs font-bold uppercase tracking-widest mb-1">Operators Online</p>
-                <p className="text-gray-600 text-xs font-sans leading-relaxed">We typically respond within 24 hours on business days.</p>
               </div>
             </div>
           </div>

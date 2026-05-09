@@ -98,7 +98,7 @@ export default function TermsPage() {
               <span className="text-red-500 text-3xl">8.</span> Governing Law
             </h2>
             <p className="pl-8 border-l-2 border-white/10">
-              These terms are governed by the laws of Tamil Nadu, India. Any disputes shall be subject to the jurisdiction of courts in Coimbatore, Tamil Nadu.
+              These terms are governed by the laws of Tamil Nadu, India. Any disputes shall be subject to the jurisdiction of courts in TN (Tamil Nadu).
             </p>
           </div>
 

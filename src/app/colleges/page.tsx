@@ -11,7 +11,7 @@ gsap.registerPlugin(SplitText);
 
 const HUBS = [
   {
-    region: "Chennai Hub",
+    region: "TN (Tamil Nadu) Hub",
     color: "red",
     colleges: [
       "Anna University",
@@ -22,12 +22,6 @@ const HUBS = [
       "SRM Institute of Science & Technology",
       "Velammal Engineering College",
       "Sri Sairam Engineering College",
-    ],
-  },
-  {
-    region: "Coimbatore Hub",
-    color: "red",
-    colleges: [
       "PSG College of Technology",
       "Coimbatore Institute of Technology (CIT)",
       "Sri Krishna College of Engineering",

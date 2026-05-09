@@ -63,7 +63,7 @@ export default async function DashboardPage() {
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md:mb-8 pb-2 md:pb-4 border-b-2 border-white/20">
           <div className="flex flex-col">
             <h1 className="text-2xl md:text-4xl font-black font-mono text-white uppercase tracking-tighter leading-none">
-              Command Center
+              Dashboard
             </h1>
             <div className="flex items-center gap-2 mt-2">
               <span className="bg-green-600 text-black text-[10px] font-bold uppercase tracking-widest px-2 py-0.5">
@@ -218,7 +218,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* User Details Sidebar */}
-          <div className="w-full lg:w-80 shrink-0">
+          {/* <div className="w-full lg:w-80 shrink-0">
             <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none">
               <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
                 <div className="flex items-center gap-2 mb-1">
@@ -267,7 +267,7 @@ export default async function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

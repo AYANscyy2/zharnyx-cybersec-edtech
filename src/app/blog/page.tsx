@@ -21,7 +21,7 @@ gsap.registerPlugin(SplitText);
 const blogPosts = [
   {
     title: "SOC Analyst Roadmap 2026 — Tamil Nadu Edition",
-    excerpt: "Everything you need to know about becoming a SOC Analyst in Chennai & Coimbatore. Career path, skills, salary, and hiring companies.",
+    excerpt: "Everything you need to know about becoming a SOC Analyst in TN (Tamil Nadu). Career path, skills, salary, and hiring companies.",
     category: "Career Guide",
     date: "Mar 12, 2026",
     slug: "#"
@@ -56,7 +56,7 @@ const blogPosts = [
   },
   {
     title: "Tamil Nadu Cybersecurity Job Market 2026",
-    excerpt: "An analysis of cybersecurity hiring trends in Coimbatore, Chennai, and across Tamil Nadu. Salary data, top employers, and in-demand skills.",
+    excerpt: "An analysis of cybersecurity hiring trends across TN (Tamil Nadu). Salary data, top employers, and in-demand skills.",
     category: "Industry Insights",
     date: "Jan 18, 2026",
     slug: "#"

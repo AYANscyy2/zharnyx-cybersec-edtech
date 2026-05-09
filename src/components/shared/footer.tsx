@@ -112,6 +112,7 @@ export function Footer() {
           <div className="flex gap-8 text-xs font-bold uppercase tracking-widest">
             <Link href="/privacy" className="text-gray-500 hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="text-gray-500 hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/copyright" className="text-gray-500 hover:text-white transition-colors">Copyright Notices</Link>
           </div>
         </div>
 
