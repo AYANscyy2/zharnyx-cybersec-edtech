@@ -3,12 +3,15 @@
 import { useRouter } from "next/navigation";
 
 const TOOLS = [
-  "Splunk", "Metasploit", "Burp Suite", "Wireshark", "Nmap", "Nessus",
-  "Kali Linux", "MITRE ATT&CK", "Cobalt Strike", "Volatility", "Autopsy",
-  "OpenVAS", "Snort", "Suricata", "YARA", "Sigma", "TheHive", "Velociraptor",
-  "Elastic SIEM", "Microsoft Sentinel", "AWS Security Hub", "Shodan",
-  "Hashcat", "John the Ripper", "Ghidra", "Radare2", "IDA Pro", "x64dbg",
-  "Maltego", "Recon-ng", "Nikto", "SQLMap", "Hydra", "Aircrack-ng",
+  "Wireshark", "Burp Suite", "DVWA", "VirusTotal", "AbuseIPDB", "Shodan",
+  "Autopsy", "Nmap", "CloudTrail", "Docker", "Kubernetes", "Splunk",
+  "Microsoft Sentinel", "IBM QRadar", "MISP", "OpenCTI", "AlienVault OTX",
+  "Censys", "TheHive", "Cortex", "Volatility", "Sigma", "Jira", "Slack",
+  "BlueTeamLabs", "CyberDefenders", "Hashcat", "John the Ripper", "BloodHound",
+  "PowerView", "ADRecon", "SQLMap", "Hydra", "Metasploit", "Meterpreter",
+  "Mimikatz", "ScoutSuite", "Prowler", "Pacu", "ROADtools", "JADX", "ADB",
+  "MobSF", "Frida", "Objection", "GoPhish", "Evilginx", "Zeek", "Suricata",
+  "CrowdStrike Falcon", "SentinelOne",
 ];
 
 // Triple the items so the loop is truly seamless at any viewport
