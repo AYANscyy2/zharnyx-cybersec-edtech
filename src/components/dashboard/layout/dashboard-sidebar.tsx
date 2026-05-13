@@ -12,9 +12,17 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   BookOpen,
   Briefcase,
@@ -24,6 +32,7 @@ import {
   LayoutDashboard,
   GraduationCap,
   Users,
+  User,
   Shield,
   PanelLeft,
   ChevronLeft,
@@ -34,6 +43,8 @@ import {
   Trophy,
   Ticket,
   Handshake,
+  ChevronRight,
+  ChevronsRight,
 } from "lucide-react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -44,28 +55,31 @@ import { Button } from "@/components/ui/button";
 // Menu items configuration
 const STUDENT_ITEMS = [
   {
-    title: "My Learning",
-    id: "learning",
-    icon: GraduationCap,
-  },
-  {
-    title: "Submissions",
-    id: "submissions",
-    icon: FileText,
+    title: "Home",
+    id: "dashboard",
+    icon: Home,
+    href: "/dashboard",
   },
   {
     title: "Profile",
     id: "profile",
-    icon: Settings,
+    icon: User,
+    href: "/dashboard/profile",
   },
   {
-    title: "Doubt Sessions",
-    id: "doubts",
-    icon: HelpCircle,
+    title: "Settings",
+    id: "settings",
+    icon: Settings,
+    href: "/dashboard/settings",
   },
 ];
 
 const ADMIN_ITEMS = [
+  {
+    title: "Dashboard",
+    id: "dashboard",
+    icon: LayoutDashboard,
+  },
   {
     title: "User Management",
     id: "user-management",
@@ -110,6 +124,11 @@ const ADMIN_ITEMS = [
 
 const MENTOR_ITEMS = [
   {
+    title: "Dashboard",
+    id: "dashboard",
+    icon: LayoutDashboard,
+  },
+  {
     title: "Student Progress",
     id: "student-progress",
     icon: GraduationCap,
@@ -132,6 +151,11 @@ const MENTOR_ITEMS = [
 ];
 
 const PARTNER_ITEMS = [
+  {
+    title: "Dashboard",
+    id: "dashboard",
+    icon: LayoutDashboard,
+  },
   {
     title: "Overview",
     id: "overview", // Matches default
@@ -161,16 +185,19 @@ export function DashboardSidebar({
   const searchParams = useSearchParams();
   const { toggleSidebar, state } = useSidebar();
 
-  const effectiveRole =
-    pathname?.startsWith("/dashboard/student")
+  const isBaseRoute = pathname === "/dashboard" || pathname === "/dashboard/profile" || pathname === "/dashboard/settings";
+
+  const effectiveRole = isBaseRoute
+    ? "base"
+    : pathname?.startsWith("/dashboard/student")
       ? "student"
-      : userRole === "admin"
-        ? pathname?.startsWith("/dashboard/mentor")
+      : pathname?.startsWith("/dashboard/admin")
+        ? "admin"
+        : pathname?.startsWith("/dashboard/mentor")
           ? "mentor"
           : pathname?.startsWith("/dashboard/partner")
             ? "partner_agency"
-            : "admin"
-        : userRole;
+            : userRole;
 
   const currentSection =
     searchParams.get("section") ||
@@ -186,19 +213,39 @@ export function DashboardSidebar({
   };
 
   const handleAdminClick = (id: string) => {
+    if (id === "dashboard") {
+      router.push("/dashboard");
+      return;
+    }
     // Navigate with search param for admin sections
     router.push(`/dashboard/admin?section=${id}`);
   };
 
   const handleMentorClick = (id: string) => {
+    if (id === "dashboard") {
+      router.push("/dashboard");
+      return;
+    }
     router.push(`/dashboard/mentor?section=${id}`);
   };
 
-  const handleStudentClick = (id: string) => {
+  const handleStudentClick = (id: string, href?: string) => {
+    if (href) {
+      router.push(href);
+      return;
+    }
+    if (id === "dashboard") {
+      router.push("/dashboard");
+      return;
+    }
     router.push(`/dashboard/student?section=${id}`);
   };
 
   const handlePartnerClick = (id: string) => {
+    if (id === "dashboard") {
+      router.push("/dashboard");
+      return;
+    }
     router.push(`/dashboard/partner?section=${id}`);
   };
 
@@ -242,7 +289,7 @@ export function DashboardSidebar({
                 "text-[10px] font-mono uppercase tracking-widest leading-none mt-1",
                 effectiveRole === "mentor"
                   ? "text-purple-500"
-                  : effectiveRole === "student"
+                  : effectiveRole === "student" || effectiveRole === "base"
                     ? "text-blue-500"
                     : effectiveRole === "partner_agency"
                       ? "text-green-500"
@@ -250,11 +297,11 @@ export function DashboardSidebar({
               )}
             >
               {effectiveRole === "mentor"
-                ? "Mentor Zone"
-                : effectiveRole === "student"
-                  ? "Student Portal"
+                ? "Mentor"
+                : effectiveRole === "student" || effectiveRole === "base"
+                  ? "Student "
                   : effectiveRole === "partner_agency"
-                    ? "Agency Portal"
+                    ? "Agency "
                     : "Admin Console"}
             </span>
           </div>
@@ -272,8 +319,10 @@ export function DashboardSidebar({
               <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
                 {ADMIN_ITEMS.map((item) => {
                   const isActive =
-                    pathname === "/dashboard/admin" &&
-                    currentSection === item.id;
+                    item.id === "dashboard"
+                      ? pathname === "/dashboard"
+                      : pathname === "/dashboard/admin" &&
+                      currentSection === item.id;
 
                   return (
                     <SidebarMenuItem key={item.title}>
@@ -324,8 +373,10 @@ export function DashboardSidebar({
               <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
                 {MENTOR_ITEMS.map((item) => {
                   const isActive =
-                    pathname === "/dashboard/mentor" &&
-                    currentSection === item.id;
+                    item.id === "dashboard"
+                      ? pathname === "/dashboard"
+                      : pathname === "/dashboard/mentor" &&
+                      currentSection === item.id;
 
                   return (
                     <SidebarMenuItem key={item.title}>
@@ -376,8 +427,10 @@ export function DashboardSidebar({
               <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
                 {items.map((item) => {
                   const isActive =
-                    pathname === "/dashboard/partner" &&
-                    (currentSection === item.id || (item.id === "overview" && !currentSection));
+                    item.id === "dashboard"
+                      ? pathname === "/dashboard"
+                      : pathname === "/dashboard/partner" &&
+                      (currentSection === item.id || (item.id === "overview" && !currentSection));
 
                   return (
                     <SidebarMenuItem key={item.title}>
@@ -428,15 +481,19 @@ export function DashboardSidebar({
               <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
                 {items.map((item) => {
                   const isActive =
-                    pathname === "/dashboard/student" &&
-                    currentSection === item.id;
+                    item.id === "dashboard"
+                      ? pathname === "/dashboard"
+                      : (item as any).href
+                        ? pathname === (item as any).href
+                        : pathname === "/dashboard/student" &&
+                        currentSection === item.id;
 
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
                         isActive={isActive}
-                        onClick={() => handleStudentClick(item.id)}
+                        onClick={() => handleStudentClick(item.id, (item as any).href)}
                         className={cn(
                           "font-mono font-bold text-sm border-2 transition-all duration-200 p-3 h-auto rounded-none mb-1",
                           // Default
@@ -467,6 +524,62 @@ export function DashboardSidebar({
                 })}
               </SidebarMenu>
             </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {/* Consoles Dropdown for Elevated Roles */}
+        {userRole !== "student" && (
+          <SidebarGroup>
+            {/* <SidebarGroupLabel className="text-gray-500 font-mono font-bold uppercase tracking-widest text-xs mb-4 pl-4 group-data-[collapsible=icon]:hidden">
+              Access Points
+            </SidebarGroupLabel> */}
+            <SidebarMenu className="gap-2 px-2 group-data-[collapsible=icon]:px-0">
+              <Collapsible asChild className="group/collapsible">
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton className="font-mono font-bold text-sm border-2 transition-all duration-200 p-3 h-auto rounded-none mb-1 bg-transparent border-transparent text-gray-400 hover:bg-white/10 hover:text-white w-full justify-between group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2">
+                      <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
+                        <Terminal className="h-5 w-5 stroke-[1.5px] shrink-0" />
+                        <span className="uppercase tracking-wide text-xs group-data-[collapsible=icon]:hidden">
+                          Consoles
+                        </span>
+                      </div>
+                      <ChevronsRight className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 group-data-[collapsible=icon]:hidden" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub className="pr-0 mr-0 mt-1 border-l-2 border-white/10 ml-4 group-data-[collapsible=icon]:ml-0 group-data-[collapsible=icon]:border-none">
+                      {userRole === "admin" && (
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild className="rounded-none hover:bg-red-900/20 text-gray-400 hover:text-red-500 font-mono text-xs uppercase mb-1 h-auto py-2">
+                            <Link href="/dashboard/admin">Admin </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      )}
+                      {(userRole === "admin" || userRole === "mentor") && (
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild className="rounded-none hover:bg-purple-900/20 text-gray-400 hover:text-purple-500 font-mono text-xs uppercase mb-1 h-auto py-2">
+                            <Link href="/dashboard/mentor">Mentor</Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      )}
+                      {(userRole === "admin" || userRole === "partner_agency") && (
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild className="rounded-none hover:bg-green-900/20 text-gray-400 hover:text-green-500 font-mono text-xs uppercase mb-1 h-auto py-2">
+                            <Link href="/dashboard/partner">Agency </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      )}
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild className="rounded-none hover:bg-blue-900/20 text-gray-400 hover:text-blue-500 font-mono text-xs uppercase mb-1 h-auto py-2">
+                          <Link href="/dashboard">Student </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+            </SidebarMenu>
           </SidebarGroup>
         )}
       </SidebarContent>

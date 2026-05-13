@@ -1,26 +1,24 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentSession } from "@/lib/auth/role-guard";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
+import { getEnrolledCourses } from "@/actions/student/dashboard";
 import {
   Shield,
   GraduationCap,
   Users,
   Briefcase,
   Terminal,
-  User,
-  Mail,
-  Fingerprint,
-  AlertTriangle,
+  Activity,
+  Trophy,
+  Target,
   ArrowRight,
+  Play,
+  Award,
+  MapPin,
+  ChevronRight,
 } from "lucide-react";
 import { HubUserControls } from "@/components/dashboard/hub/user-controls";
+import { ComingSoonWrapper } from "@/components/ui/coming-soon-wrapper";
 
 export default async function DashboardPage() {
   const session = await getCurrentSession();
@@ -31,244 +29,176 @@ export default async function DashboardPage() {
 
   const userRole = session.user.role;
   const userName = session.user.name;
-  const userEmail = session.user.email;
-  const userId = session.user.id;
 
-  // Check if profile is incomplete (common for Google sign-in users)
-  const profileIncomplete = !session.user.phone || !session.user.preferredTrack || !session.user.city;
+  // Fetch dynamic courses
+  const coursesResult = await getEnrolledCourses(session.user.id);
+  const enrolledCourses = coursesResult.success && coursesResult.data ? coursesResult.data : [];
+  
+  const activeCourse = enrolledCourses.length > 0 ? enrolledCourses[0] : null;
+  const otherCourses = enrolledCourses.length > 1 ? enrolledCourses.slice(1, 4) : [];
 
   return (
-    <div className="flex min-h-screen w-full bg-black font-sans">
-      <div className="relative flex flex-col flex-1 z-10 w-full px-3 pb-3 pt-2 md:pl-6 md:pr-6 md:pb-6 md:pt-4">
-        {/* Incomplete Profile Banner */}
-        {profileIncomplete && (
-          <div className="mb-4 border-2 border-yellow-500/60 bg-yellow-500/10 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="text-yellow-400 shrink-0 mt-0.5" size={18} />
-              <div>
-                <p className="text-yellow-300 font-mono font-bold text-sm uppercase tracking-wider">Profile Incomplete</p>
-                <p className="text-yellow-500/80 font-mono text-xs mt-0.5">Complete your profile to unlock full platform features and enroll in internships.</p>
+    <div className="w-full h-full text-white space-y-8 max-w-[1400px] mx-auto pb-12">
+      {/* Top Welcome Section (Like HTB Account) */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-8">
+        <div className="flex items-center gap-6">
+          <div className="w-20 h-20 border-2 border-green-500 shrink-0 bg-black flex items-center justify-center relative shadow-[4px_4px_0px_0px_#22c55e]">
+            {session.user.image ? (
+              <img src={session.user.image} alt={userName} className="w-full h-full object-cover grayscale" />
+            ) : (
+              <div className="w-10 h-10 border-2 border-green-500 bg-transparent rotate-45 flex items-center justify-center">
+                 <div className="w-4 h-4 border border-green-500"></div>
               </div>
-            </div>
-            <Link
-              href="/auth?mode=complete-profile"
-              className="shrink-0 flex items-center gap-2 px-4 py-2 bg-yellow-500 text-black font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition-colors border-2 border-yellow-500 hover:border-yellow-400"
-            >
-              Complete Profile <ArrowRight size={14} />
-            </Link>
+            )}
           </div>
-        )}
-
-        {/* Header - Hub Style */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 md:mb-8 pb-2 md:pb-4 border-b-2 border-white/20">
-          <div className="flex flex-col">
-            <h1 className="text-2xl md:text-4xl font-black font-mono text-white uppercase tracking-tighter leading-none">
-              Dashboard
-            </h1>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="bg-green-600 text-black text-[10px] font-bold uppercase tracking-widest px-2 py-0.5">
-                {userRole} Mode
-              </span>
-              <span className="text-gray-500 font-mono text-xs uppercase tracking-widest">
-                {"// Welcome, "}
+          
+          <div className="space-y-1">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl md:text-3xl font-black font-mono uppercase tracking-tighter text-white">
                 {userName}
-              </span>
+              </h1>
+              <span className="text-gray-500 font-mono text-xs lowercase">@{userName.replace(/\s+/g, '')}</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-400 font-mono text-sm uppercase tracking-widest">
+              <MapPin className="w-3.5 h-3.5 text-gray-500" /> {session.user.city || "Unknown Location"}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 shrink-0 overflow-x-auto pb-2 md:pb-0">
+          {userRole === "admin" && (
+            <Link
+              href="/dashboard/admin"
+              className="flex items-center gap-2 px-6 py-2 bg-black text-red-500 font-bold text-xs uppercase tracking-widest hover:bg-red-500/10 transition-all border-2 border-red-500 rounded-none flex-nowrap whitespace-nowrap shadow-[4px_4px_0px_0px_#dc2626] active:translate-x-1 active:translate-y-1 active:shadow-none"
+            >
+              Admin Console
+            </Link>
+          )}
+          {userRole === "mentor" && (
+            <Link
+              href="/dashboard/mentor"
+              className="flex items-center gap-2 px-6 py-2 bg-black text-purple-500 font-bold text-xs uppercase tracking-widest hover:bg-purple-500/10 transition-all border-2 border-purple-500 rounded-none flex-nowrap whitespace-nowrap shadow-[4px_4px_0px_0px_#9333ea] active:translate-x-1 active:translate-y-1 active:shadow-none"
+            >
+              Mentor Zone
+            </Link>
+          )}
+          {userRole === "partner_agency" && (
+            <Link
+              href="/dashboard/partner"
+              className="flex items-center gap-2 px-6 py-2 bg-black text-green-500 font-bold text-xs uppercase tracking-widest hover:bg-green-500/10 transition-all border-2 border-green-500 rounded-none flex-nowrap whitespace-nowrap shadow-[4px_4px_0px_0px_#22c55e] active:translate-x-1 active:translate-y-1 active:shadow-none"
+            >
+              Agency Portal
+            </Link>
+          )}
+          <Link
+            href="/dashboard/profile"
+            className="flex items-center gap-2 px-6 py-2 bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-gray-200 transition-all border-2 border-white rounded-none flex-nowrap whitespace-nowrap shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] active:translate-x-1 active:translate-y-1 active:shadow-none"
+          >
+            View Profile
+          </Link>
+        </div>
+      </div>
+
+      {/* Main Course Layout - 2 Columns like HTB */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        {/* Left Card: Academy / Active Course */}
+        <div className="relative border-2 border-white/20 bg-black p-8 flex flex-col justify-between overflow-hidden group hover:border-green-500 transition-colors min-h-[300px]">
+          <div className="absolute top-0 right-0 p-4 opacity-20 pointer-events-none group-hover:scale-110 group-hover:opacity-100 transition-all duration-500">
+            {/* Abstract Graphic */}
+            <svg width="150" height="150" viewBox="0 0 100 100" className="fill-green-500 stroke-green-500">
+              <path d="M50 0 L100 25 L100 75 L50 100 L0 75 L0 25 Z" opacity="0.2" />
+              <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" fill="none" strokeWidth="2" />
+            </svg>
+          </div>
+          
+          <div className="relative z-10 space-y-4">
+            <h3 className="font-mono text-sm text-gray-500 font-bold uppercase tracking-widest">
+              ZHARNYX <span className="text-white">Academy</span>
+            </h3>
+            <div>
+              <h2 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
+                Learn and get<br/>certified
+              </h2>
+              <p className="text-gray-400 font-mono text-sm mt-4 max-w-sm leading-relaxed">
+                Begin or advance your journey in cybersecurity with our online learning paths and earn industry certifications to prove your expertise.
+              </p>
             </div>
           </div>
 
-          <HubUserControls />
-        </header>
-
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Navigation Grid */}
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 content-start">
-            {/* Admin Link - Only for Admin */}
-            {userRole === "admin" && (
-              <Link href="/dashboard/admin" className="block group">
-                <Card className="h-full bg-zinc-950 border-2 border-white/20 text-white rounded-none transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[4px_4px_0px_0px_#ef4444]">
-                  <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Shield className="w-5 h-5 text-red-500" />
-                      <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
-                        Admin Console
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                      Complete system control.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-3 md:p-6">
-                    <p className="text-sm text-gray-400 font-mono">
-                      Manage users, courses, mentors, and platform settings.
-                    </p>
-                    <div className="mt-4 flex items-center text-red-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
+          <div className="relative z-10 mt-8">
+            {activeCourse ? (
+              <Link
+                href={`/dashboard/student?section=learning`}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-black font-bold text-sm uppercase tracking-widest hover:bg-green-400 transition-all shadow-[4px_4px_0px_0px_#166534] active:translate-x-1 active:translate-y-1 active:shadow-none border-2 border-green-500"
+              >
+                Start learning
               </Link>
-            )}
-
-            {/* Mentor Link - For Admin and Mentor */}
-            {(userRole === "admin" || userRole === "mentor") && (
-              <Link href="/dashboard/mentor" className="block group">
-                <Card className="h-full bg-zinc-950 border-2 border-white/20 text-white rounded-none transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[4px_4px_0px_0px_#a855f7]">
-                  <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Users className="w-5 h-5 text-purple-500" />
-                      <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
-                        Mentor Portal
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                      Student management & grading.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-3 md:p-6">
-                    <p className="text-sm text-gray-400 font-mono">
-                      Track student progress, grade assignments, and clear
-                      doubts.
-                    </p>
-                    <div className="mt-4 flex items-center text-purple-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            )}
-
-            {/* Student Link - For Everyone */}
-            <Link href="/dashboard/student" className="block group">
-              <Card className="h-full bg-zinc-950 border-2 border-white/20 text-white rounded-none transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[4px_4px_0px_0px_#3b82f6]">
-                <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <GraduationCap className="w-5 h-5 text-blue-500" />
-                    <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
-                      Student Portal
-                    </CardTitle>
-                  </div>
-                  <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                    Learning & submissions.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-3 md:p-6">
-                  <p className="text-sm text-gray-400 font-mono">
-                    Access course materials, submit work, and view progress.
-                  </p>
-                  <div className="mt-4 flex items-center text-blue-500 font-bold text-xs uppercase tracking-widest">
-                    <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-
-            {/* Recruiter Link - For Admin and Recruiter */}
-            {(userRole === "admin" || userRole === "recruiter") && (
-              <Link href="/dashboard/recruiter" className="block group">
-                <Card className="h-full bg-zinc-950 border-2 border-white/20 text-white rounded-none transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[4px_4px_0px_0px_#eab308]">
-                  <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Briefcase className="w-5 h-5 text-yellow-500" />
-                      <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
-                        Recruiter Portal
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                      Talent acquisition.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-3 md:p-6">
-                    <p className="text-sm text-gray-400 font-mono">
-                      Search for candidates and manage job postings.
-                    </p>
-                    <div className="mt-4 flex items-center text-yellow-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            )}
-
-            {/* Partner Agency Link - For Admin and Partner Agency */}
-            {(userRole === "admin" || userRole === "partner_agency") && (
-              <Link href="/dashboard/partner" className="block group">
-                <Card className="h-full bg-zinc-950 border-2 border-white/20 text-white rounded-none transition-all duration-300 group-hover:translate-x-[-4px] group-hover:translate-y-[-4px] group-hover:shadow-[4px_4px_0px_0px_#22c55e]">
-                  <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Briefcase className="w-5 h-5 text-green-500" />
-                      <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
-                        Partner Portal
-                      </CardTitle>
-                    </div>
-                    <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                      Agency Stats & Revenue.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-3 md:p-6">
-                    <p className="text-sm text-gray-400 font-mono">
-                      Track coupon usage and revenue share.
-                    </p>
-                    <div className="mt-4 flex items-center text-green-500 font-bold text-xs uppercase tracking-widest">
-                      <Terminal className="w-3 h-3 mr-2" /> Access Granted
-                    </div>
-                  </CardContent>
-                </Card>
+            ) : (
+              <Link
+                href={`/courses`}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-black font-bold text-sm uppercase tracking-widest hover:bg-green-400 transition-all shadow-[4px_4px_0px_0px_#166534] active:translate-x-1 active:translate-y-1 active:shadow-none border-2 border-green-500"
+              >
+                Browse Paths
               </Link>
             )}
           </div>
-
-          {/* User Details Sidebar */}
-          {/* <div className="w-full lg:w-80 shrink-0">
-            <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none">
-              <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
-                <div className="flex items-center gap-2 mb-1">
-                  <User className="w-5 h-5 text-gray-400" />
-                  <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
-                    Identity
-                  </CardTitle>
-                </div>
-                <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
-                  Current Session Details
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-3 md:p-6 space-y-4 md:space-y-6">
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase tracking-widest block">
-                    Full Name
-                  </label>
-                  <div className="font-mono text-sm break-all">{userName}</div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase tracking-widest flex items-center gap-1">
-                    <Mail className="w-3 h-3" /> Email Address
-                  </label>
-                  <div className="font-mono text-sm break-all text-gray-300">
-                    {userEmail}
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-500 font-mono uppercase tracking-widest flex items-center gap-1">
-                    <Fingerprint className="w-3 h-3" /> User ID
-                  </label>
-                  <div className="font-mono text-xs break-all py-2 px-3 bg-white/5 border border-white/10 rounded-sm text-gray-400">
-                    {userId}
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-white/10">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-xs font-mono text-green-500 uppercase tracking-widest">
-                      Session Active
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div> */}
         </div>
+
+        {/* Right Card: Labs / Other Activities */}
+        <div className="relative border-2 border-white/20 bg-black p-8 flex flex-col justify-between overflow-hidden group hover:border-[#be185d] transition-colors min-h-[300px]">
+          <div className="absolute top-0 right-0 p-4 opacity-20 pointer-events-none group-hover:scale-110 group-hover:opacity-100 transition-all duration-500">
+             {/* Abstract Graphic */}
+             <svg width="150" height="150" viewBox="0 0 100 100" className="fill-[#be185d] stroke-[#be185d]">
+              <path d="M20 20 h60 v60 h-60 Z" opacity="0.2" />
+              <path d="M30 30 h40 v40 h-40 Z" fill="none" strokeWidth="2" />
+              <path d="M40 40 h20 v20 h-20 Z" />
+            </svg>
+          </div>
+          
+          <div className="relative z-10 space-y-4">
+            <h3 className="font-mono text-sm text-gray-500 font-bold uppercase tracking-widest">
+              ZHARNYX <span className="text-white">Labs</span>
+            </h3>
+            <div>
+              <h2 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
+                Practice with hands-<br/>on Labs
+              </h2>
+              <p className="text-gray-400 font-mono text-sm mt-4 max-w-sm leading-relaxed">
+                Access cybersecurity labs simulating real-world vulnerabilities, misconfigurations, and incidents. With releases every week!
+              </p>
+            </div>
+          </div>
+
+          <div className="relative z-10 mt-8">
+            <ComingSoonWrapper
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#be185d] text-white font-bold text-sm uppercase tracking-widest hover:bg-[#db2777] transition-all shadow-[4px_4px_0px_0px_#831843] active:translate-x-1 active:translate-y-1 active:shadow-none border-2 border-[#be185d] cursor-pointer"
+            >
+              Start playing
+            </ComingSoonWrapper>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Sub-Items List */}
+      <div className="flex flex-col gap-2 pt-4">
+        {[
+          { title: "ZHARNYX LetsDefend", desc: "Level up your defensive skills" },
+          { title: "ZHARNYX CTF", desc: "Play or host a hacking competition" }
+        ].map((item, i) => (
+          <ComingSoonWrapper key={i} className="flex items-center justify-between p-6 border-2 border-white/10 bg-black hover:border-white/40 transition-colors group cursor-pointer">
+            <div className="space-y-1">
+              <h3 className="text-gray-400 font-mono text-sm font-bold uppercase tracking-widest group-hover:text-white transition-colors">
+                {item.title.split(' ')[0]} <span className="text-white">{item.title.split(' ').slice(1).join(' ')}</span>
+              </h3>
+              <p className="text-gray-500 font-mono text-xs uppercase tracking-widest">{item.desc}</p>
+            </div>
+            <div className="w-8 h-8 border-2 border-white/20 bg-transparent flex items-center justify-center group-hover:bg-white group-hover:border-white transition-colors">
+              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-black transition-colors" />
+            </div>
+          </ComingSoonWrapper>
+        ))}
       </div>
     </div>
   );
