@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ArrowRight, Terminal } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SectionBadge } from "@/components/ui/section-badge";
 
 import { ProgramDetailsSection } from "@/components/internships/program-details-section";
@@ -17,6 +18,7 @@ export default function InternshipsPage() {
   const badgeRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     gsap.set(containerRef.current, { autoAlpha: 1 });
@@ -119,6 +121,44 @@ export default function InternshipsPage() {
 
           {/* Block 4: Course Reminder Footer */}
           <CourseReminderSection />
+
+          {/* College Selection Dropdown */}
+          <div className="w-full max-w-3xl mx-auto mt-24 mb-12 p-8 border-2 border-white/10 bg-black relative overflow-hidden group">
+            <div className="absolute inset-0 bg-red-600/5 group-hover:bg-red-600/10 transition-colors pointer-events-none"></div>
+            
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <Terminal size={24} className="text-red-500 mb-4" />
+              <h3 className="text-2xl font-black uppercase tracking-widest text-white mb-2">Partner College Portal</h3>
+              <p className="text-gray-400 text-sm mb-8 max-w-lg font-mono">
+                Are you a student at one of our partner institutions? Select your college below to access your customized 4-week internship program track.
+              </p>
+              
+              <div className="w-full max-w-md relative">
+                <select
+                  className="w-full bg-black text-white border-2 border-white/20 p-4 font-mono text-sm focus:border-red-600 focus:outline-none transition-colors appearance-none cursor-pointer text-center"
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      router.push(`/internships/${e.target.value}`);
+                    }
+                  }}
+                  defaultValue=""
+                >
+                  <option value="" disabled>-- SELECT YOUR COLLEGE --</option>
+                  <option value="sri-krishna-college">Sri Krishna College of Engineering</option>
+                  <option value="psg-tech">PSG College of Technology</option>
+                  <option value="kumaraguru">Kumaraguru College of Technology</option>
+                  <option value="cit">Coimbatore Institute of Technology</option>
+                  <option value="srec">Sri Ramakrishna Engineering College</option>
+                  <option value="karunya">Karunya Institute of Technology</option>
+                  <option value="amrita">Amrita Vishwa Vidyapeetham</option>
+                  <option value="other">Other / Not Listed</option>
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-red-500 font-bold">
+                  ↓
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
