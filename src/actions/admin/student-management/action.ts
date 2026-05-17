@@ -1,9 +1,9 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { user, assessmentResponse, projectSubmission } from "@/lib/db/schema";
+import { user, assessmentResponse, projectSubmission, internshipEnrollment } from "@/lib/db/schema";
 import { requireAdmin } from "@/lib/auth/role-guard";
-import { eq, like, or, sql } from "drizzle-orm";
+import { eq, like, or, sql, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 
@@ -121,5 +121,145 @@ export async function getUserProgress(userId: string) {
     } catch (error) {
         console.error("Error fetching user progress:", error);
         return { success: false, error: "Failed to fetch user progress" };
+    }
+}
+
+// Get New User Applications (Recently signed up)
+export async function getNewUserApplications({
+    page = 1,
+    limit = 10,
+    query = "",
+}: {
+    page?: number;
+    limit?: number;
+    query?: string;
+}) {
+    try {
+        await requireAdmin();
+
+        const offset = (page - 1) * limit;
+
+        const searchCondition = query
+            ? or(like(user.name, `%${query}%`), like(user.email, `%${query}%`))
+            : undefined;
+
+        const [users, totalCountResult] = await Promise.all([
+            db
+                .select({
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    city: user.city,
+                    studentStatus: user.studentStatus,
+                    preferredTrack: user.preferredTrack,
+                    collegeName: user.collegeName,
+                    message: user.message,
+                    imageUrl: user.imageUrl,
+                    createdAt: user.createdAt,
+                    paymentStatus: internshipEnrollment.paymentStatus,
+                })
+                .from(user)
+                .leftJoin(internshipEnrollment, eq(user.id, internshipEnrollment.studentId))
+                .where(searchCondition)
+                .limit(limit)
+                .offset(offset)
+                .orderBy(desc(user.createdAt)),
+            db
+                .select({ count: sql<number>`count(*)` })
+                .from(user)
+                .where(searchCondition),
+        ]);
+
+        const totalCount = Number(totalCountResult[0]?.count || 0);
+        const totalPages = Math.ceil(totalCount / limit);
+
+        return {
+            success: true,
+            data: users,
+            meta: {
+                totalCount,
+                totalPages,
+                currentPage: page,
+                limit,
+            },
+        };
+    } catch (error) {
+        console.error("Error fetching new users:", error);
+        return { success: false, error: "Failed to fetch new users" };
+    }
+}
+
+// Approve User Access (Grant Payment Processed)
+export async function approveUserAccess(userId: string) {
+    try {
+        await requireAdmin();
+
+        const [targetUser] = await db.select().from(user).where(eq(user.id, userId));
+        if (!targetUser) return { success: false, error: "User not found" };
+
+        const [existingEnrollment] = await db
+            .select()
+            .from(internshipEnrollment)
+            .where(eq(internshipEnrollment.studentId, userId));
+
+        if (existingEnrollment) {
+            await db
+                .update(internshipEnrollment)
+                .set({ paymentStatus: "paid" })
+                .where(eq(internshipEnrollment.id, existingEnrollment.id));
+        } else {
+            const { createId } = await import("@paralleldrive/cuid2");
+            await db.insert(internshipEnrollment).values({
+                id: createId(),
+                studentId: userId,
+                track: targetUser.preferredTrack || "Undecided",
+                tier: "Standard",
+                paymentStatus: "paid",
+                amount: 0,
+            });
+        }
+
+        revalidatePath("/dashboard/admin");
+        return { success: true, message: "Access granted successfully" };
+    } catch (error) {
+        console.error("Error approving access:", error);
+        return { success: false, error: "Failed to approve access" };
+    }
+}
+
+// Reject User Access
+export async function rejectUserAccess(userId: string) {
+    try {
+        await requireAdmin();
+
+        const [existingEnrollment] = await db
+            .select()
+            .from(internshipEnrollment)
+            .where(eq(internshipEnrollment.studentId, userId));
+
+        if (existingEnrollment) {
+            await db
+                .update(internshipEnrollment)
+                .set({ paymentStatus: "cancelled" })
+                .where(eq(internshipEnrollment.id, existingEnrollment.id));
+        } else {
+            const { createId } = await import("@paralleldrive/cuid2");
+            const [targetUser] = await db.select().from(user).where(eq(user.id, userId));
+            await db.insert(internshipEnrollment).values({
+                id: createId(),
+                studentId: userId,
+                track: targetUser?.preferredTrack || "Undecided",
+                tier: "Standard",
+                paymentStatus: "cancelled",
+                amount: 0,
+            });
+        }
+
+        revalidatePath("/dashboard/admin");
+        return { success: true, message: "Access rejected" };
+    } catch (error) {
+        console.error("Error rejecting access:", error);
+        return { success: false, error: "Failed to reject access" };
     }
 }

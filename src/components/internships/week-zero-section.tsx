@@ -39,13 +39,13 @@ export function WeekZeroSection() {
 
             <div className="pt-6">
               <Link
-                href="/week0"
+                href="/programs/week-0"
                 className="group relative inline-flex flex-col sm:flex-row items-center justify-center h-14 px-8 bg-red-600 text-black font-black text-sm uppercase tracking-widest border-2 border-red-600 hover:translate-x-[3px] hover:translate-y-[3px] transition-transform w-full sm:w-auto"
               >
                 <span className="absolute inset-0 bg-white translate-x-[5px] translate-y-[5px] -z-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform border-2 border-white" />
                 <span className="flex items-center gap-2">
                   <PlayCircle size={18} />
-                  Start Week 0 for Free
+                  Explore week 0 content
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform ml-2" />
                 </span>
               </Link>

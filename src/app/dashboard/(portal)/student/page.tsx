@@ -3,6 +3,10 @@ import { ArrowLeft } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { requireStudent } from "@/lib/auth/role-guard";
 import { StudentDashboardShell } from "@/components/dashboard/student/student-dashboard-shell";
+import { db } from "@/lib/db";
+import { internshipEnrollment, enrollment } from "@/lib/db/schema";
+import { eq, and } from "drizzle-orm";
+import { redirect } from "next/navigation";
 
 
 interface PageProps {
@@ -16,6 +20,25 @@ export default async function StudentPage(props: PageProps) {
     typeof searchParams.section === "string" ? searchParams.section : undefined;
   const courseId =
     typeof searchParams.courseId === "string" ? searchParams.courseId : undefined;
+
+  // Enforce payment gate for any course
+  const paidInternships = await db.query.internshipEnrollment.findMany({
+    where: and(
+      eq(internshipEnrollment.studentId, session.user.id),
+      eq(internshipEnrollment.paymentStatus, "paid")
+    ),
+  });
+  
+  const paidStandard = await db.query.enrollment.findMany({
+    where: and(
+      eq(enrollment.studentId, session.user.id),
+      eq(enrollment.paymentStatus, "paid")
+    )
+  });
+
+  if (paidInternships.length === 0 && paidStandard.length === 0) {
+    redirect("/waitlist");
+  }
 
   return (
     <div className="flex min-h-screen w-full bg-black font-sans">

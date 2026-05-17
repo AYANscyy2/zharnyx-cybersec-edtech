@@ -1,6 +1,6 @@
 import { requireStudent } from "@/lib/auth/role-guard";
 import { db } from "@/lib/db";
-import { course, enrollment } from "@/lib/db/schema";
+import { course, enrollment, internshipEnrollment } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
@@ -23,15 +23,35 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   if (!session?.user) return null;
 
-  // Verify enrollment
-  const enrollmentRecord = await db.query.enrollment.findFirst({
-    where: and(
-      eq(enrollment.studentId, session.user.id),
-      eq(enrollment.courseId, courseId)
-    ),
-  });
+  // Verify enrollment (standard or internship)
+  let isEnrolled = false;
+  
+  if (courseId.startsWith("internship-")) {
+      const internshipId = courseId.replace("internship-", "");
+      const internshipRecord = await db.query.internshipEnrollment.findFirst({
+        where: and(
+            eq(internshipEnrollment.id, internshipId),
+            eq(internshipEnrollment.studentId, session.user.id),
+            eq(internshipEnrollment.paymentStatus, "paid")
+        )
+      });
+      if (internshipRecord) {
+          isEnrolled = true;
+      }
+  } else {
+      const enrollmentRecord = await db.query.enrollment.findFirst({
+        where: and(
+          eq(enrollment.studentId, session.user.id),
+          eq(enrollment.courseId, courseId),
+          eq(enrollment.paymentStatus, "paid")
+        ),
+      });
+      if (enrollmentRecord) {
+          isEnrolled = true;
+      }
+  }
 
-  if (!enrollmentRecord) {
+  if (!isEnrolled) {
     redirect("/dashboard/student");
   }
 

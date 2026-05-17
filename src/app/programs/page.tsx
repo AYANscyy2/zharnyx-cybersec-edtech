@@ -90,7 +90,7 @@ export default function ProgramsPage() {
             <PhaseCard
               step="01"
               title="Foundation"
-              href="/foundation"
+              href="/programs/foundation"
               desc="All students start here. Master systems, networking, security fundamentals, and Python scripting. Build your first lab environment."
             />
             <PhaseCard

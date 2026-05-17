@@ -10,6 +10,7 @@ import { RankingTable } from "@/components/admin/ranking/ranking-table";
 import { CouponManager } from "@/components/admin/coupon-management/coupon-manager";
 import { PartnerApplicationTable } from "@/components/admin/partner-management/partner-application-table";
 import { PartnerTable } from "@/components/admin/partner-management/partner-table";
+import { NewUserApplicationTable } from "@/components/admin/user-management/new-user-application-table";
 import {
   Card,
   CardContent,
@@ -105,6 +106,28 @@ export default function AdminPage() {
                   </CardHeader>
                   <CardContent className="p-3 md:p-6">
                     <MentorApplicationTable />
+                  </CardContent>
+                </Card>
+
+                {/* New User Applications */}
+                <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none shadow-[4px_4px_0px_0px_white/10] pt-0 col-span-1 xl:col-span-2">
+                  <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <Terminal className="w-4 h-4 text-orange-500" />
+                          <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
+                            New User Applications
+                          </CardTitle>
+                        </div>
+                        <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
+                          Review newly registered users and their details.
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-3 md:p-6">
+                    <NewUserApplicationTable />
                   </CardContent>
                 </Card>
 

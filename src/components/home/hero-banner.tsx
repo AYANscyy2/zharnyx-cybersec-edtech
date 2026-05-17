@@ -40,10 +40,10 @@ export function HeroBanner() {
         {/* Action */}
         <div className="w-full md:w-auto shrink-0 mt-2 md:mt-0">
           <Link
-            href="/programs"
+            href="/programs/week-0"
             className="inline-flex items-center justify-center w-full md:w-auto h-10 px-6 bg-transparent text-red-500 font-bold text-xs uppercase tracking-wider border border-red-600 hover:bg-red-600 hover:text-white transition-colors gap-2 group/btn"
           >
-            CLAIM FREE ACCESS
+            Explore
             <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
           </Link>
         </div>

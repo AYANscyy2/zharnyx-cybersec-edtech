@@ -26,15 +26,19 @@ import { cn } from "@/lib/utils";
 
 interface CoursePreviewProps {
     course: any;
-    isLoggedIn: boolean;
+    userRole?: string;
 }
 
-export function CoursePreview({ course, isLoggedIn }: CoursePreviewProps) {
+export function CoursePreview({ course, userRole }: CoursePreviewProps) {
     const [openItem, setOpenItem] = useState<string | undefined>("module-0");
     const router = useRouter();
 
-    const handleLoginRedirect = () => {
-        router.push("/auth?callbackUrl=" + encodeURIComponent(window.location.pathname));
+    const isLoggedIn = !!userRole;
+
+    const handleJoinRedirect = () => {
+        if (!isLoggedIn) {
+            router.push("/auth?callbackUrl=" + encodeURIComponent(window.location.pathname));
+        }
     };
 
     const duration = "6 Months";
@@ -120,7 +124,7 @@ export function CoursePreview({ course, isLoggedIn }: CoursePreviewProps) {
                                     </CourseEnrollmentDialog>
                                 ) : (
                                     <Button
-                                        onClick={handleLoginRedirect}
+                                        onClick={handleJoinRedirect}
                                         className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-6 text-lg rounded-lg shadow-lg shadow-red-500/20 mb-4 transition-all hover:scale-[1.02]"
                                     >
                                         Start Residency
@@ -201,7 +205,7 @@ export function CoursePreview({ course, isLoggedIn }: CoursePreviewProps) {
                             </CourseEnrollmentDialog>
                         ) : (
                             <Button
-                                onClick={handleLoginRedirect}
+                                onClick={handleJoinRedirect}
                                 className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-6 text-lg rounded-lg shadow-lg shadow-red-500/20 mb-4 transition-all hover:scale-[1.02]"
                             >
                                 Start Residency

@@ -167,7 +167,7 @@ export default function PricingPage() {
                   </div>
                   <button
                     onClick={() => toast.info("courses will be live soon")}
-                    className="w-full block text-center py-4 bg-[#f83146] hover:bg-[#ff4055] text-white font-bold rounded-xl transition-colors cursor-pointer"
+                    className="w-full block text-center py-4 bg-red-600 hover:bg-red-800 text-white font-bold rounded-xl transition-colors cursor-pointer"
                   >
                     Enroll as Student
                   </button>

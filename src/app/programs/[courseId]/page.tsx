@@ -39,7 +39,7 @@ export default async function CoursePreviewPage(props: PageProps) {
 
     return (
         <main>
-            <CoursePreview course={courseData} isLoggedIn={!!session} />
+            <CoursePreview course={courseData} userRole={session?.user?.role} />
         </main>
     );
 }

@@ -69,7 +69,10 @@ export async function getStudentStats(studentId: string) {
 export async function getEnrolledCourses(studentId: string) {
   try {
     const enrollments = await db.query.enrollment.findMany({
-      where: eq(enrollment.studentId, studentId),
+      where: and(
+        eq(enrollment.studentId, studentId),
+        eq(enrollment.paymentStatus, "paid")
+      ),
       with: {
         course: true,
       },
@@ -78,7 +81,10 @@ export async function getEnrolledCourses(studentId: string) {
     const internshipEnrollments = await db
       .select()
       .from(internshipEnrollment)
-      .where(eq(internshipEnrollment.studentId, studentId));
+      .where(and(
+        eq(internshipEnrollment.studentId, studentId),
+        eq(internshipEnrollment.paymentStatus, "paid")
+      ));
 
     const standardCourses = enrollments.map((e) => e.course);
     

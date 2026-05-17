@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import { signIn, signUp, useSession, signOut } from "@/lib/auth/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "@/components/shared/toast";
-import { motion, AnimatePresence } from "motion/react";
+import gsap from "gsap";
 import {
   Terminal,
   User,
@@ -65,6 +65,18 @@ function AuthContent() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      gsap.fromTo(
+        containerRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+      );
+    }
+  }, []);
+
   const { data: session } = useSession();
 
   // Redirect if they ALREADY have all info and mode is complete-profile
@@ -91,15 +103,15 @@ function AuthContent() {
     const file = e.target.files?.[0];
     if (file) {
       setFileName(file.name);
-      
+
       const formData = new FormData();
       formData.append("file", file);
-      
+
       try {
         const { uploadToImageKit } = await import("@/actions/upload");
         const toastId = toast.loading("Uploading ID Proof...");
         const result = await uploadToImageKit(formData);
-        
+
         if (result.success && result.url) {
           setImageUrl(result.url);
           toast.success("ID Proof uploaded successfully!", { id: toastId });
@@ -152,7 +164,7 @@ function AuthContent() {
     try {
       if (mode === "signin") {
         const { error: signInError } = await signIn.email({ email, password });
-        
+
         if (signInError) {
           setError(signInError.message || "Invalid credentials");
           toast.error("Sign in failed", { description: signInError.message || "Invalid credentials" });
@@ -177,7 +189,7 @@ function AuthContent() {
         toast.success("Profile completed successfully!", {
           description: "Redirecting...",
         });
-        
+
         router.push(callbackUrl);
         router.refresh();
       } else {
@@ -226,11 +238,9 @@ function AuthContent() {
       {/* Background Grid Accent */}
       <div className="inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none fixed"></div>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`w-full relative z-10 transition-all duration-500 ease-in-out ${mode === "signup" ? "max-w-2xl" : "max-w-md"}`}
+      <div
+        ref={containerRef}
+        className={`w-full relative z-10 transition-all duration-500 ease-in-out opacity-0 ${mode === "signup" ? "max-w-2xl" : "max-w-md"}`}
       >
         <div className="bg-black border-2 border-white/20 p-8 md:p-10 shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] backdrop-blur-sm">
 
@@ -321,11 +331,11 @@ function AuthContent() {
               <div className="space-y-6">
 
                 {mode === "complete-profile" && (
-                   <div className="bg-red-950/20 border border-red-500/30 p-4 mb-4">
-                     <p className="text-red-400 font-mono text-xs uppercase font-bold text-center">
-                       MANDATORY SECURE ENROLLMENT DATA REQUIRED BEFORE PROCEEDING
-                     </p>
-                   </div>
+                  <div className="bg-red-950/20 border border-red-500/30 p-4 mb-4">
+                    <p className="text-red-400 font-mono text-xs uppercase font-bold text-center">
+                      MANDATORY SECURE ENROLLMENT DATA REQUIRED BEFORE PROCEEDING
+                    </p>
+                  </div>
                 )}
 
                 {mode === "signup" && (
@@ -384,17 +394,13 @@ function AuthContent() {
                   </div>
                 </div>
 
-                <AnimatePresence>
-                  {studentStatus === "College Student" && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="space-y-1 overflow-hidden">
-                      <Label htmlFor="college" className="text-white text-xs font-bold uppercase tracking-wider">College Name</Label>
-                      <div className="relative group">
-                        <Target className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
-                        <Input id="college" type="text" placeholder="Your college name" required value={collegeName} onChange={(e) => setCollegeName(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div className={`space-y-1 overflow-hidden transition-all duration-300 ${studentStatus === "College Student" ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}>
+                  <Label htmlFor="college" className="text-white text-xs font-bold uppercase tracking-wider">College Name</Label>
+                  <div className="relative group">
+                    <Target className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors" size={16} />
+                    <Input id="college" type="text" placeholder="Your college name" required={studentStatus === "College Student"} value={collegeName} onChange={(e) => setCollegeName(e.target.value)} className="pl-10 bg-white/5 border-2 border-white/20 text-white placeholder:text-gray-500 focus:border-red-600 focus:ring-0 rounded-none h-12 font-mono text-sm transition-colors" />
+                  </div>
+                </div>
 
                 <div className="space-y-1">
                   <Label htmlFor="track" className="text-white text-xs font-bold uppercase tracking-wider">Preferred Track</Label>
@@ -500,7 +506,7 @@ function AuthContent() {
             )}
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

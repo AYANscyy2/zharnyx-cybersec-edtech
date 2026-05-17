@@ -82,6 +82,36 @@ export function Navbar({ className }: NavbarProps) {
     return null;
   }
 
+  if (pathname?.startsWith("/auth") || pathname?.startsWith("/checkout") || pathname?.startsWith("/apply") || pathname?.startsWith("/join")) {
+    return (
+      <div
+        ref={navRef}
+        className={cn(
+          "fixed  top-0 inset-x-0 w-full z-[10000] font-mono",
+          className
+        )}
+      >
+        <nav className="relative flex items-center justify-between px-6 md:px-12 py-5 bg-transparent ">
+          <Link href="/" className="flex items-center gap-0">
+            <div className="flex items-center justify-center shrink-0 -mr-2">
+              <img
+                src="https://ik.imagekit.io/bkt3emitco/zharnyxincress.png"
+                alt="Zharnyx Logo"
+                className="h-12 w-auto object-contain "
+              />
+            </div>
+            <span className="relative z-10 text-2xl font-black text-white tracking-tighter uppercase">
+              ZHARNY<span className="text-red-600">X</span>
+            </span>
+          </Link>
+          {/* <Link href="/" className="px-6 py-2.5 text-white font-bold text-sm uppercase tracking-wider hover:text-red-500 transition-colors">
+            Go to Home
+          </Link> */}
+        </nav>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={navRef}
