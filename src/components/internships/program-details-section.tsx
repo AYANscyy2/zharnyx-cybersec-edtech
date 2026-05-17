@@ -3,7 +3,7 @@
 import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
 import { Shield, Zap, Target, ArrowRight } from "lucide-react";
 import { SectionBadge } from "@/components/ui/section-badge";
-import Link from "next/link";
+import { toast } from "sonner";
 
 const TIERS = [
   {
@@ -121,15 +121,15 @@ export function ProgramDetailsSection() {
                   ))}
                 </div>
 
-                <Link
-                  href={`/checkout/internship?tier=${index + 1}`}
-                  className="mt-auto group relative flex items-center justify-center h-14 w-full bg-white/5 border-2 border-white/20 hover:border-white text-white font-bold text-sm uppercase tracking-wider transition-all hover:-translate-y-1"
+                <button
+                  onClick={() => toast.info("courses will be live soon")}
+                  className="mt-auto group relative flex items-center justify-center h-14 w-full bg-white/5 border-2 border-white/20 hover:border-white text-white font-bold text-sm uppercase tracking-wider transition-all hover:-translate-y-1 cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
                     Apply Now
                     <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                   </span>
-                </Link>
+                </button>
               </div>
             );
           })}

@@ -1,9 +1,9 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { user, assessmentResponse, projectSubmission, internshipEnrollment } from "@/lib/db/schema";
-import { requireAdmin } from "@/lib/auth/role-guard";
 import { eq, like, or, sql, desc } from "drizzle-orm";
+import { user, assessmentResponse, projectSubmission, internshipEnrollment, enrollment, course } from "@/lib/db/schema";
+import { requireAdmin } from "@/lib/auth/role-guard";
 import { revalidatePath } from "next/cache";
 
 
@@ -263,3 +263,79 @@ export async function rejectUserAccess(userId: string) {
         return { success: false, error: "Failed to reject access" };
     }
 }
+
+// Get all enrollments (standard + internship) for a user
+export async function getUserEnrollments(userId: string) {
+    try {
+        await requireAdmin();
+
+        const standardCourses = await db
+            .select({
+                id: enrollment.id,
+                courseId: enrollment.courseId,
+                courseTitle: course.title,
+                paymentStatus: enrollment.paymentStatus,
+                enrolledAt: enrollment.enrolledAt,
+                type: sql<string>`'standard'`,
+            })
+            .from(enrollment)
+            .leftJoin(course, eq(enrollment.courseId, course.id))
+            .where(eq(enrollment.studentId, userId));
+
+        const internships = await db
+            .select({
+                id: internshipEnrollment.id,
+                courseId: internshipEnrollment.track,
+                courseTitle: internshipEnrollment.track,
+                paymentStatus: internshipEnrollment.paymentStatus,
+                enrolledAt: internshipEnrollment.enrolledAt,
+                type: sql<string>`'internship'`,
+            })
+            .from(internshipEnrollment)
+            .where(eq(internshipEnrollment.studentId, userId));
+
+        const combined = [...standardCourses, ...internships].sort(
+            (a, b) => new Date(b.enrolledAt).getTime() - new Date(a.enrolledAt).getTime()
+        );
+
+        return { success: true, data: combined };
+    } catch (error) {
+        console.error("Error fetching user enrollments:", error);
+        return { success: false, error: "Failed to fetch user enrollments" };
+    }
+}
+
+// Update Standard Enrollment Status
+export async function updateEnrollmentStatus(enrollmentId: string, status: "paid" | "pending" | "cancelled") {
+    try {
+        await requireAdmin();
+        await db
+            .update(enrollment)
+            .set({ paymentStatus: status })
+            .where(eq(enrollment.id, enrollmentId));
+
+        revalidatePath("/dashboard/admin");
+        return { success: true, message: `Access ${status === 'paid' ? 'approved' : 'removed'} successfully` };
+    } catch (error) {
+        console.error("Error updating enrollment status:", error);
+        return { success: false, error: "Failed to update enrollment status" };
+    }
+}
+
+// Update Internship Enrollment Status
+export async function updateInternshipEnrollmentStatus(enrollmentId: string, status: "paid" | "pending" | "cancelled") {
+    try {
+        await requireAdmin();
+        await db
+            .update(internshipEnrollment)
+            .set({ paymentStatus: status })
+            .where(eq(internshipEnrollment.id, enrollmentId));
+
+        revalidatePath("/dashboard/admin");
+        return { success: true, message: `Access ${status === 'paid' ? 'approved' : 'removed'} successfully` };
+    } catch (error) {
+        console.error("Error updating internship enrollment status:", error);
+        return { success: false, error: "Failed to update internship enrollment status" };
+    }
+}
+

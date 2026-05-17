@@ -1,9 +1,9 @@
 "use client";
 
 import { Shield, Target, Building2, ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
 import { SectionBadge } from "@/components/ui/section-badge";
+import { toast } from "sonner";
 
 export function AboutCTASection() {
   const labelRef = useGsapScrollAnimation<HTMLDivElement>({
@@ -126,12 +126,12 @@ export function AboutCTASection() {
           </p>
 
           <div ref={ctaBtnRef}>
-            <Link
-              href="/apply"
-              className="inline-flex items-center gap-2 px-10 py-5 bg-red-600 text-black font-black text-xl uppercase tracking-widest border-2 border-red-600 shadow-[8px_8px_0px_0px_white] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_white] transition-all"
+            <button
+              onClick={() => toast.info("courses will be live soon")}
+              className="inline-flex items-center gap-2 px-10 py-5 bg-red-600 text-black font-black text-xl uppercase tracking-widest border-2 border-red-600 shadow-[8px_8px_0px_0px_white] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_white] transition-all cursor-pointer"
             >
               Apply Now <ArrowRight size={24} strokeWidth={3} />
-            </Link>
+            </button>
           </div>
 
           <div

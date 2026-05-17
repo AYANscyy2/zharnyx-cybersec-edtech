@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useState, useTransition } from "react";
 import { format } from "date-fns";
 import { Eye, CheckCircle, XCircle } from "lucide-react";
-import { approveUserAccess, rejectUserAccess } from "@/actions/admin/student-management/action";
+import { getUserEnrollments, updateEnrollmentStatus, updateInternshipEnrollmentStatus } from "@/actions/admin/student-management/action";
 import { toast } from "@/components/shared/toast";
 import {
   Dialog,
@@ -33,16 +33,34 @@ export type NewUser = {
 const ViewDetailsCell = ({ user }: { user: NewUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [loadingEnrollments, setLoadingEnrollments] = useState(false);
 
-  const handleAction = (action: "approve" | "reject") => {
+  const fetchEnrollments = async () => {
+    setLoadingEnrollments(true);
+    const result = await getUserEnrollments(user.id);
+    if (result.success && result.data) {
+      setEnrollments(result.data);
+    }
+    setLoadingEnrollments(false);
+  };
+
+  const handleOpen = () => {
+    setIsOpen(true);
+    fetchEnrollments();
+  };
+
+  const handleEnrollmentAction = (enrollmentId: string, type: string, action: "approve" | "remove") => {
     startTransition(async () => {
-      const result = action === "approve"
-        ? await approveUserAccess(user.id)
-        : await rejectUserAccess(user.id);
+      const status = action === "approve" ? "paid" : "cancelled";
+      const result = type === "standard" 
+        ? await updateEnrollmentStatus(enrollmentId, status)
+        : await updateInternshipEnrollmentStatus(enrollmentId, status);
 
       if (result.success) {
-        toast.success(result.message || `User access ${action}d successfully`);
-        setIsOpen(false);
+        toast.success(`Access ${action === 'approve' ? 'approved' : 'removed'} successfully`);
+        // Refresh enrollments locally to avoid closing modal or waiting for full page reload
+        await fetchEnrollments();
       } else {
         toast.error("Action failed", { description: result.error });
       }
@@ -54,7 +72,7 @@ const ViewDetailsCell = ({ user }: { user: NewUser }) => {
       <Button
         variant="outline"
         size="sm"
-        onClick={() => setIsOpen(true)}
+        onClick={handleOpen}
         className="font-mono text-xs uppercase tracking-wider rounded-none border-white/20 bg-black text-white hover:bg-white/10 hover:text-white h-8"
       >
         <Eye className="w-3 h-3 mr-2" />
@@ -136,25 +154,60 @@ const ViewDetailsCell = ({ user }: { user: NewUser }) => {
               </div>
             )}
           </div>
-          <div className="flex items-center gap-4 mt-6 pt-4 border-t-2 border-white/20">
-            <Button
-              variant="outline"
-              disabled={isPending}
-              onClick={() => handleAction("approve")}
-              className="flex-1 rounded-none cursor-pointer  border-green-500/50 bg-green-500/10 text-green-500 font-bold uppercase tracking-wider transition-colors"
-            >
-              <CheckCircle className="w-4 h-4 mr-2" />
-              Approve Access
-            </Button>
-            <Button
-              variant="outline"
-              disabled={isPending}
-              onClick={() => handleAction("reject")}
-              className="flex-1 rounded-none cursor-pointer  border-red-500/50 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 font-bold uppercase tracking-wider transition-colors"
-            >
-              <XCircle className="w-4 h-4 mr-2" />
-              Reject Access
-            </Button>
+
+          <div className="mt-6 pt-4 border-t-2 border-white/20 space-y-4">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-2">Enrolled Courses & Access Control</h3>
+            {loadingEnrollments ? (
+               <p className="text-xs text-gray-400 font-mono">Loading enrollments...</p>
+            ) : enrollments.length === 0 ? (
+               <p className="text-xs text-gray-400 font-mono">No courses found for this user.</p>
+            ) : (
+               <div className="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                  {enrollments.map((enrollment) => (
+                    <div key={enrollment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border border-white/10 bg-white/5 gap-3">
+                       <div className="flex flex-col">
+                          <span className="text-sm font-bold truncate max-w-[250px]">{enrollment.courseTitle || enrollment.courseId}</span>
+                          <div className="flex items-center gap-2 mt-1">
+                             <span className="text-[10px] uppercase tracking-widest bg-white/10 px-1.5 py-0.5 rounded-sm text-gray-400">
+                                {enrollment.type}
+                             </span>
+                             <span className={`text-[10px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-sm ${
+                                enrollment.paymentStatus === 'paid' ? 'bg-green-500/10 text-green-500' :
+                                enrollment.paymentStatus === 'cancelled' ? 'bg-red-500/10 text-red-500' :
+                                'bg-yellow-500/10 text-yellow-500'
+                             }`}>
+                                {enrollment.paymentStatus}
+                             </span>
+                          </div>
+                       </div>
+                       
+                       <div className="flex gap-2 shrink-0">
+                          {enrollment.paymentStatus !== 'paid' ? (
+                             <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={isPending}
+                                onClick={() => handleEnrollmentAction(enrollment.id, enrollment.type, "approve")}
+                                className="rounded-none h-7 px-3 border-green-500/50 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-black font-bold uppercase text-[10px] tracking-wider transition-colors"
+                             >
+                                Approve Access
+                             </Button>
+                          ) : (
+                             <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={isPending}
+                                onClick={() => handleEnrollmentAction(enrollment.id, enrollment.type, "remove")}
+                                className="rounded-none h-7 px-3 border-red-500/50 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white font-bold uppercase text-[10px] tracking-wider transition-colors"
+                             >
+                                Remove Access
+                             </Button>
+                          )}
+                       </div>
+                    </div>
+                  ))}
+               </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>

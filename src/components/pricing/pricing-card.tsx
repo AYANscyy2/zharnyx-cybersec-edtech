@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CourseEnrollmentDialog } from "@/components/programs/course-enrollment-dialog";
+import { toast } from "sonner";
 
 interface Course {
   id: string;
@@ -119,16 +119,13 @@ export function PricingCard({ course }: PricingCardProps) {
               {course.description}
             </p>
 
-            <CourseEnrollmentDialog
-              courseId={course.id}
-              courseTitle={course.title}
-              price={course.price || 0}
+            <Button
+              onClick={() => toast.info("courses will be live soon")}
+              className="w-full bg-red-600 hover:bg-red-700 text-black hover:text-white font-black uppercase tracking-wider h-16 text-lg border-2 border-red-600 hover:border-red-500 transition-all group"
             >
-              <Button className="w-full bg-red-600 hover:bg-red-700 text-black hover:text-white font-black uppercase tracking-wider h-16 text-lg border-2 border-red-600 hover:border-red-500 transition-all group">
-                Apply Now
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </CourseEnrollmentDialog>
+              Apply Now
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
 
             <div className="flex items-center gap-2 text-[10px] text-zinc-600 uppercase tracking-widest font-mono">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
