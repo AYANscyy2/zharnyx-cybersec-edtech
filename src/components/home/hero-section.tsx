@@ -21,7 +21,7 @@ export function HeroSection({ course }: HeroSectionProps) {
   const ringRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
-  
+
   const headingRef = useRef<HTMLHeadingElement>(null);
   const subtextRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -48,7 +48,7 @@ export function HeroSection({ course }: HeroSectionProps) {
       if (featuresRef.current) {
         gsap.set(featuresRef.current.children, { opacity: 0, y: 20 });
       }
-      
+
       document.body.style.overflow = "hidden";
 
       // Progress Counter Animation (0% to 100% over 3.5s)
@@ -73,41 +73,43 @@ export function HeroSection({ course }: HeroSectionProps) {
       tl.to(ringRef.current, { rotation: 540, duration: 2, ease: "power1.inOut" }, 1.5);
       tl.to(introOverlayRef.current, { scale: 1.05, duration: 2, ease: "power1.inOut" }, 1.5);
 
-      tl.to(introOverlayRef.current, { y: "-100vh", opacity: 0, duration: 1.2, ease: "power4.inOut", onComplete: () => {
-        document.body.style.overflow = "auto";
-      } }, 3.5);
+      tl.to(introOverlayRef.current, {
+        y: "-100vh", opacity: 0, duration: 1.2, ease: "power4.inOut", onComplete: () => {
+          document.body.style.overflow = "auto";
+        }
+      }, 3.5);
 
       // --- PART 2: HERO REVEAL ---
-      tl.to(splitHeading.words, { 
-        yPercent: 0, 
-        opacity: 1, 
-        duration: 0.8, 
-        stagger: 0.05, 
-        ease: "power3.out" 
+      tl.to(splitHeading.words, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.05,
+        ease: "power3.out"
       }, 4.2);
 
-      tl.to(splitSubtext.lines, { 
-        yPercent: 0, 
-        opacity: 1, 
-        duration: 0.8, 
-        stagger: 0.1, 
-        ease: "power3.out" 
+      tl.to(splitSubtext.lines, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out"
       }, 4.5);
 
-      tl.to(ctaRef.current, { 
-        opacity: 1, 
-        y: 0, 
-        duration: 0.8, 
-        ease: "power3.out" 
+      tl.to(ctaRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out"
       }, 4.8);
-      
+
       if (featuresRef.current) {
-        tl.to(featuresRef.current.children, { 
-          opacity: 1, 
-          y: 0, 
-          duration: 0.8, 
-          stagger: 0.1, 
-          ease: "power3.out" 
+        tl.to(featuresRef.current.children, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out"
         }, 5.0);
       }
 
@@ -125,19 +127,19 @@ export function HeroSection({ course }: HeroSectionProps) {
 
   return (
     <div className="relative min-h-screen bg-[#000000] overflow-hidden flex flex-col justify-center pt-24 pb-12 sm:pt-32 sm:pb-24">
-      
+
       {/* BACKGROUND: ULTRA CLEAN PURE BLACK */}
       <div className="absolute inset-0 pointer-events-none z-0 bg-[#000000]">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vh] bg-red-900/5 rounded-full blur-[100px] pointer-events-none"></div>
       </div>
 
       {/* --- INTRO OVERLAY (ABSOLUTE) --- */}
-      <div 
+      <div
         ref={introOverlayRef}
         className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#000000] origin-center"
       >
         <div className="relative flex items-center justify-center w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96">
-          <div 
+          <div
             ref={ringRef}
             className="absolute inset-0 rounded-full border border-red-600/30 scale-75 opacity-0"
           >
@@ -146,8 +148,8 @@ export function HeroSection({ course }: HeroSectionProps) {
             <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-[2px] h-4 bg-red-500"></div>
             <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-[2px] h-4 bg-red-500"></div>
           </div>
-          
-          <div 
+
+          <div
             ref={textRef}
             className="text-white font-black text-xl sm:text-2xl md:text-4xl tracking-[0.5em] ml-[0.5em] opacity-0 scale-95 blur-md"
           >
@@ -156,7 +158,7 @@ export function HeroSection({ course }: HeroSectionProps) {
         </div>
 
         {/* Loading Progress */}
-        <div 
+        <div
           ref={progressRef}
           className="absolute bottom-8 right-8 md:bottom-12 md:right-12 text-white font-mono text-sm md:text-base tracking-widest font-bold opacity-80"
         >
@@ -166,9 +168,9 @@ export function HeroSection({ course }: HeroSectionProps) {
 
       {/* --- MAIN HERO CONTENT --- */}
       <main className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col items-center justify-center text-center mt-12 md:mt-0">
-        
+
         {/* Heading */}
-        <h1 
+        <h1
           ref={headingRef}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold tracking-tight text-white leading-[1.15] md:leading-[1.1] max-w-4xl lg:max-w-6xl text-balance"
         >
@@ -177,23 +179,23 @@ export function HeroSection({ course }: HeroSectionProps) {
 
         {/* Subtext */}
         <div className="mt-8 md:mt-10 max-w-2xl lg:max-w-3xl">
-          <p 
+          <p
             ref={subtextRef}
             className="text-sm sm:text-base md:text-lg text-gray-400 font-medium tracking-wide leading-relaxed text-balance"
           >
-            Zharnyx is India's first integrated 4-track cybersecurity institute — built to train, certify, and place the next generation of security professionals. 
+            Zharnyx is India's first integrated 4-track cybersecurity institute — built to train, certify, and place the next generation of security professionals.
             <br className="hidden sm:block" />
             <span className="text-white font-bold mt-4 block text-xs sm:text-sm uppercase tracking-widest opacity-80">SOC Analysis · VAPT · DFIR · Cloud Security</span>
           </p>
         </div>
 
         {/* CTA Buttons */}
-        <div 
+        <div
           ref={ctaRef}
           className="mt-12 md:mt-14 flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center justify-center"
         >
           <Link
-            href="/#master-plan"
+            href="/programs"
             className="group relative flex items-center justify-center h-12 sm:h-14 px-8 sm:px-10 bg-[#E60000] text-white font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-red-700 transition-colors w-full sm:w-auto rounded-none"
           >
             <span className="flex items-center gap-2">
@@ -203,7 +205,7 @@ export function HeroSection({ course }: HeroSectionProps) {
           </Link>
 
           <Link
-            href="/auth?mode=signup"
+            href="/pricing"
             className="group flex items-center justify-center h-12 sm:h-14 px-8 sm:px-10 border border-white/20 bg-transparent text-white font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full sm:w-auto rounded-none"
           >
             Get Started
@@ -211,7 +213,7 @@ export function HeroSection({ course }: HeroSectionProps) {
         </div>
 
         {/* 3-Column Features */}
-        <div 
+        <div
           ref={featuresRef}
           className="mt-20 md:mt-28 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 lg:gap-16 w-full text-left"
         >
