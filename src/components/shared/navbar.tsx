@@ -31,18 +31,17 @@ export function Navbar({ className }: NavbarProps) {
     // Initial state: hidden above viewport
     gsap.set(el, { yPercent: -100, opacity: 0 });
 
-    // Entrance after 1.5s with smooth cubic bezier
-
+    // Slide in gracefully just as the hero section finishes its intro sequence
     gsap.to(el, {
       yPercent: 0,
       opacity: 1,
       duration: 1,
-      ease: "cubic-bezier(0.16, 1, 0.3, 1)",
-      delay: 1.5,
+      ease: "power3.out",
+      delay: 4.0,
       onComplete: () => {
         hasEntered.current = true;
       },
-    })
+    });
 
     const handleScroll = () => {
       if (!hasEntered.current) return;

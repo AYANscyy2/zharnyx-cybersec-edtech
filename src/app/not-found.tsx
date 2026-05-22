@@ -1,101 +1,117 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function NotFound() {
-  const [glitchText, setGlitchText] = useState("404_FATAL_ERROR");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-    const original = "404_PAGE_NOT_FOUND";
-    let iterations = 0;
-
-    const interval = setInterval(() => {
-      setGlitchText(
-        original
-          .split("")
-          .map((char, index) => {
-            if (index < Math.floor(iterations)) {
-              return original[index];
-            }
-            return chars[Math.floor(Math.random() * chars.length)];
-          })
-          .join("")
-      );
-
-      if (iterations >= original.length) {
-        clearInterval(interval);
-      }
-
-      iterations += 1 / 3;
-    }, 50);
-
-    return () => clearInterval(interval);
+    setMounted(true);
   }, []);
 
+  if (!mounted) return null;
+
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-6 font-mono overflow-hidden relative">
-      {/* Background Matrix/Noise vibe */}
+    <div className="min-h-screen bg-black flex items-center justify-center p-6 font-mono overflow-hidden relative">
+      {/* Background Matrix/Noise vibe for Athletic Corporate */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-overlay"></div>
 
-      <div className="w-full max-w-2xl relative z-10 flex flex-col items-center">
-        
-        {/* Main Terminal Card */}
-        <div className="w-full bg-black border-2 border-red-600 shadow-[8px_8px_0px_0px_rgba(220,38,38,1)] overflow-hidden">
-          
-          {/* Header */}
-          <div className="bg-red-600/10 border-b-2 border-red-600 p-6 flex flex-col items-center justify-center text-center space-y-2">
-            <h1 className="text-red-500 font-black text-2xl uppercase tracking-widest flex items-center gap-3">
-              <AlertTriangle className="animate-pulse" size={28} />
-              SYSTEM_FAULT
+      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 items-center relative z-10">
+
+        {/* Left Column - Content */}
+        <div className="space-y-6 flex flex-col items-start px-4 md:px-8">
+
+          {/* Stark Line above 404 - Athletic Corporate style */}
+          <div className="w-32 h-2 bg-red-600 mb-4 rounded-none"></div>
+
+          {/* 404 Text */}
+          <div className="relative">
+            <h1 className="text-8xl md:text-[150px] font-black tracking-tighter text-white leading-none uppercase drop-shadow-[4px_4px_0px_rgba(220,38,38,1)]">
+              404
             </h1>
-            <p className="text-gray-400 text-xs tracking-wider uppercase">Critical Navigation Failure Detected</p>
           </div>
 
-          <div className="p-8 space-y-8 text-left">
-            
-            {/* Error Readout */}
-            <div className="space-y-4">
-              <h2 className="text-red-500 font-black tracking-widest text-3xl md:text-4xl uppercase break-all inline-block">
-                {glitchText}
-              </h2>
-              
-              <div className="bg-white/5 border-l-4 border-red-600 p-4 space-y-2">
-                <p className="text-gray-400 text-sm md:text-base tracking-wider flex items-start gap-2">
-                  <span className="text-red-500 font-bold shrink-0">&gt;</span> 
-                  <span>The requested sector does not exist on this server.</span>
-                </p>
-                <p className="text-gray-400 text-sm md:text-base tracking-wider flex items-start gap-2">
-                  <span className="text-red-500 font-bold shrink-0">&gt;</span> 
-                  <span>Unauthorized access attempts have been logged.</span>
-                </p>
-                <p className="text-gray-400 text-sm md:text-base tracking-wider flex items-start gap-2">
-                  <span className="text-red-500 font-bold shrink-0">&gt;</span> 
-                  <span>Rerouting to secure perimeter...</span>
-                </p>
+          {/* Error Text */}
+          <div className="space-y-4 mt-8 bg-white/5 border-l-4 border-red-600 p-6 rounded-none">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-widest uppercase">
+              System Disconnected
+            </h2>
+            <p className="text-gray-400 max-w-sm text-sm md:text-base leading-relaxed tracking-wider uppercase">
+              <span className="text-red-500 font-bold mr-2">&gt;</span>
+              The Page you are looking for doesn't exist or has been rerouted.
+            </p>
+          </div>
+
+          {/* CTA Button */}
+          <Link href="/" className="mt-8 block w-full md:w-auto">
+            <button className="w-full md:w-auto group relative px-8 py-4 bg-red-600 text-black hover:bg-red-500 rounded-none font-black text-sm md:text-base tracking-widest uppercase transition-all duration-300 flex items-center justify-center md:justify-start gap-4">
+              BACK TO HOMEPAGE
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </Link>
+        </div>
+
+        {/* Right Column - Athletic Corporate Graphic (Brutalist Robot/Plug) */}
+        <div className="hidden md:flex justify-center items-center relative h-[400px] md:h-[600px]">
+
+          <div className="relative z-10 flex flex-col items-center justify-center">
+            {/* Brutalist Robot Head */}
+            <div className="relative group hover:-translate-y-2 transition-transform duration-500">
+              <div className="relative bg-black border-4 border-white p-12 rounded-none shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] flex flex-col items-center justify-center gap-6">
+                {/* Eyes */}
+                <div className="relative flex gap-8">
+                  <div className="w-8 h-8 bg-red-600 rounded-none animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.5)]"></div>
+                  <div className="w-8 h-8 bg-red-600 rounded-none animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.5)]" style={{ animationDelay: '0.5s' }}></div>
+                </div>
+                {/* Mouth/Grill */}
+                <div className="flex gap-2">
+                  <div className="w-2 h-6 bg-white"></div>
+                  <div className="w-2 h-6 bg-white"></div>
+                  <div className="w-2 h-6 bg-white"></div>
+                  <div className="w-2 h-6 bg-white"></div>
+                </div>
+              </div>
+
+              {/* Robot Antenna/Ears */}
+              <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-6 h-12 bg-white rounded-none"></div>
+              <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-6 h-12 bg-white rounded-none"></div>
+              {/* Top Antenna */}
+              <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-2 h-12 bg-white rounded-none"></div>
+              <div className="absolute -top-14 left-1/2 -translate-x-1/2 w-6 h-4 bg-red-600 rounded-none shadow-[0_0_10px_rgba(220,38,38,0.8)]"></div>
+            </div>
+
+            {/* Plugs representing disconnection - Brutalist Style */}
+            <div className="flex gap-8 mt-24 items-center justify-center relative">
+              {/* Left Plug (Live) */}
+              <div className="relative flex items-center -rotate-12 hover:rotate-0 transition-transform duration-300">
+                <div className="w-24 h-4 bg-white rounded-none"></div>
+                <div className="bg-black border-4 border-white p-4 rounded-none flex items-center gap-2 shadow-[6px_6px_0px_0px_rgba(220,38,38,1)]">
+                  <div className="w-4 h-8 bg-red-600 rounded-none"></div>
+                  <div className="w-4 h-8 bg-red-600 rounded-none"></div>
+                </div>
+              </div>
+
+              {/* Disconnected Gap/Spark */}
+              <div className="text-red-600 font-black text-4xl animate-bounce">
+                X
+              </div>
+
+              {/* Right Plug (Dead) */}
+              <div className="relative flex items-center rotate-12 hover:rotate-0 transition-transform duration-300">
+                <div className="bg-black border-4 border-gray-600 p-4 rounded-none flex flex-col gap-2 shadow-[6px_6px_0px_0px_rgba(75,85,99,1)]">
+                  <div className="w-8 h-4 bg-gray-600 rounded-none"></div>
+                  <div className="w-8 h-4 bg-gray-600 rounded-none"></div>
+                </div>
+                <div className="w-24 h-4 bg-gray-600 rounded-none"></div>
               </div>
             </div>
 
-            {/* CTA */}
-            <Link href="/" className="block">
-              <button className="w-full group relative px-8 py-5 bg-red-600 text-black font-black text-lg uppercase tracking-wider transition-all hover:-translate-y-1">
-                <span className="flex items-center justify-center gap-3">
-                  INITIATE SYSTEM REBOOT
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                </span>
-              </button>
-            </Link>
-
           </div>
         </div>
-        
-        {/* Pulsing cursor at the bottom for flair */}
-        <div className="mt-12 flex justify-center">
-            <div className="h-6 w-3 bg-red-600 animate-pulse shadow-[0_0_8px_rgba(220,38,38,0.8)]"></div>
-        </div>
       </div>
+
     </div>
   );
 }
