@@ -35,21 +35,21 @@ export function WhoIsThisForSection() {
     duration: 0.7,
     delay: 0.1,
     stagger: 0.13,
-    childSelector: ".persona-card",
+    childSelector: ".persona-anim-wrapper",
   });
 
   return (
-    <section className="w-full py-24 px-6 font-mono bg-black border-t-2 border-white/10">
-      <div className="max-w-6xl mx-auto flex flex-col items-center gap-12">
+    <section className="w-full py-24 px-6 bg-black overflow-hidden">
+      <div className="max-w-7xl mx-auto flex flex-col items-center gap-12">
         <div ref={headerRef} className="text-center space-y-4 flex flex-col items-center">
           <SectionBadge text="Target Audience" icon={GraduationCap} />
-          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white">
-            Who Is This{" "}
-            <span className="text-red-500">
-              For?
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+            Who is this{" "}
+            <span className="text-[#E60000]">
+              for?
             </span>
           </h2>
-          <p className="text-gray-400 max-w-xl mx-auto">
+          <p className="text-gray-400 max-w-xl mx-auto font-medium">
             If you can commit to the process, the program is built for you.
           </p>
         </div>
@@ -58,28 +58,34 @@ export function WhoIsThisForSection() {
           {PERSONAS.map((p) => {
             const Icon = p.icon;
             return (
-              <div
-                key={p.title}
-                className="persona-card flex flex-col gap-6 p-8 border-2 border-white/10 bg-[#050505] hover:border-red-600 transition-colors group"
-              >
-                <div className="p-3 border-2 border-red-600 bg-red-600/10 text-red-500 w-fit">
-                  <Icon size={24} />
-                </div>
-                <h3 className="text-2xl font-black uppercase text-white">
-                  {p.title}
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed flex-1">
-                  {p.desc}
-                </p>
-                <div className="flex flex-wrap gap-2 pt-4 border-t-2 border-white/10">
-                  {p.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 bg-white/5 border border-white/10 text-xs text-gray-400 font-bold uppercase tracking-wider"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              <div key={p.title} className="persona-anim-wrapper h-full">
+                <div
+                  className="persona-card h-full flex flex-col gap-6 p-8 rounded-3xl bg-zinc-900/40 border border-white/5 relative overflow-hidden hover:border-[#E60000] hover:-translate-x-2 hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_#E60000] transition-all duration-300 group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#E60000]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  
+                  <div className="relative w-16 h-16 rounded-2xl flex items-center justify-center mb-2 overflow-hidden group-hover:scale-110 transition-transform duration-500 shrink-0">
+                    <div className="absolute inset-0 bg-[#E60000] opacity-20 group-hover:opacity-40 transition-opacity duration-500 blur-xl"></div>
+                    <div className="absolute inset-0 bg-[#E60000]/10 border border-[#E60000]/20 rounded-2xl"></div>
+                    <Icon size={32} strokeWidth={1.5} className="relative z-10 text-[#E60000]" />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-white relative z-10">
+                    {p.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed flex-1 font-medium">
+                    {p.desc}
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-6 border-t border-white/5">
+                    {p.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1.5 rounded-full bg-black/40 border border-white/10 text-xs text-gray-400 font-medium tracking-wide"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             );

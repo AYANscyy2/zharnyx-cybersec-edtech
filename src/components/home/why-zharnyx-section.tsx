@@ -1,218 +1,160 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { X, Check, AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
 import gsap from "gsap";
-import { SectionBadge } from "@/components/ui/section-badge";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Activity, Briefcase, ShieldAlert, Users, Target, X, Check } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function WhyZharnyxSection() {
-  const headerRef = useRef<HTMLDivElement>(null);
-  const quoteRef = useRef<HTMLDivElement>(null);
-  const leftColRef = useRef<HTMLDivElement>(null);
-  const rightColRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Header animation
   useEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
+    const ctx = gsap.context(() => {
+      // Header Animation
+      gsap.to(".why-header", {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+        },
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+      });
 
-    gsap.set(el, { opacity: 0, y: 40 });
+      // Staggered grid items
+      gsap.to(".why-item-wrapper", {
+        scrollTrigger: {
+          trigger: ".why-grid",
+          start: "top 85%",
+        },
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power3.out",
+      });
+      
+      // CTA Animation
+      gsap.to(".why-cta", {
+        scrollTrigger: {
+          trigger: ".why-cta",
+          start: "top 90%",
+        },
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        ease: "power3.out",
+      });
+    }, sectionRef);
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          gsap.to(el, { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" });
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  // Quote animation
-  useEffect(() => {
-    const el = quoteRef.current;
-    if (!el) return;
-
-    gsap.set(el, { opacity: 0, y: 40 });
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          gsap.to(el, { opacity: 1, y: 0, duration: 0.65, delay: 0.15, ease: "power3.out" });
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  // Left column stagger
-  useEffect(() => {
-    const col = leftColRef.current;
-    if (!col) return;
-
-    const header = col.querySelector(".col-header") as HTMLElement;
-    const items = col.querySelectorAll<HTMLElement>(".compare-item");
-
-    gsap.set([header, ...Array.from(items)], { opacity: 0, x: -40 });
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          gsap.to(header, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" });
-          gsap.to(items, {
-            opacity: 1,
-            x: 0,
-            duration: 0.5,
-            ease: "power3.out",
-            stagger: 0.1,
-            delay: 0.15,
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    observer.observe(col);
-    return () => observer.disconnect();
-  }, []);
-
-  // Right column stagger
-  useEffect(() => {
-    const col = rightColRef.current;
-    if (!col) return;
-
-    const header = col.querySelector(".col-header") as HTMLElement;
-    const items = col.querySelectorAll<HTMLElement>(".compare-item");
-
-    gsap.set([header, ...Array.from(items)], { opacity: 0, x: 40 });
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          gsap.to(header, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" });
-          gsap.to(items, {
-            opacity: 1,
-            x: 0,
-            duration: 0.5,
-            ease: "power3.out",
-            stagger: 0.1,
-            delay: 0.15,
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    observer.observe(col);
-    return () => observer.disconnect();
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section className="py-24 relative bg-black border-t-2 border-white/20">
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Header */}
-        <div ref={headerRef} className="text-center mb-20 flex flex-col items-center">
-          <SectionBadge text="Problem Statement" icon={AlertTriangle} />
-
-          <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
-            <div className="text-gray-500 line-through decoration-red-600 decoration-4">
-              Why Courses Fail.
-            </div>
-            <div className="text-red-500 mt-2">Why Zharnyx Exists.</div>
+    <section ref={sectionRef} className="py-32 relative bg-black overflow-hidden">
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none mix-blend-overlay"></div>
+      
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        {/* Header matched to inspiration */}
+        <div className="why-header text-center mb-24 flex flex-col items-center opacity-0 translate-y-10">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.2] max-w-4xl">
+            A platform for total immersion in <span className="text-[#E60000]">cyber operations</span>
           </h2>
-        </div>
-
-        {/* Comparison Table */}
-        <div className="grid md:grid-cols-2 gap-10">
-          {/* Traditional Column */}
-          <div ref={leftColRef}>
-            <div className="col-header text-center mb-8 p-4 border-2 border-white/20 bg-white/5">
-              <h3 className="text-xl font-bold font-mono text-gray-400 uppercase tracking-widest">
-                Traditional Courses
-              </h3>
-            </div>
-            <div className="space-y-4">
-              <CompareItem isPositive={false} text="Theory-based learning" />
-              <CompareItem isPositive={false} text="Certificates as proof" />
-              <CompareItem isPositive={false} text="Hope for placement" />
-              <CompareItem isPositive={false} text="Self-paced isolation" />
-              <CompareItem isPositive={false} text="Generic curriculum" />
-            </div>
-          </div>
-
-          {/* Zharnyx Column */}
-          <div ref={rightColRef} className="relative">
-            <div className="col-header text-center mb-8 p-4 bg-red-600 border-2 border-red-600 shadow-[4px_4px_0px_0px_white] relative z-10">
-              <h3 className="text-xl font-black font-mono text-black uppercase tracking-widest">
-                Zharnyx Residency
-              </h3>
-            </div>
-            <div className="space-y-4 relative z-10">
-              <CompareItem isPositive={true} text="Simulation-based operations" />
-              <CompareItem isPositive={true} text="Portfolio & verified work" />
-              <CompareItem isPositive={true} text="Gatekeeping & deployment tiers" />
-              <CompareItem isPositive={true} text="Pressure-tested cohorts" />
-              <CompareItem isPositive={true} text="War room missions" />
-            </div>
-          </div>
-        </div>
-
-        {/* Brutalist Quote */}
-        <div
-          ref={quoteRef}
-          className="mt-24 p-8 border-2 border-white text-center max-w-4xl mx-auto shadow-[8px_8px_0px_0px_#ef4444] bg-black hover:-translate-y-1 hover:-translate-x-1 transition-transform group cursor-default"
-        >
-          <p className="text-xl md:text-3xl text-white font-bold uppercase tracking-tight">
-            &ldquo;We don&apos;t teach cybersecurity. <br className="hidden md:block" />
-            <span className="text-red-500 bg-white/10 px-2">
-              We operationalize it.
-            </span>
-            &rdquo;
+          <p className="text-gray-400 mt-6 text-lg font-medium">
+            Operatives rate our residency 9 out of 10. Here is why:
           </p>
+        </div>
+
+        {/* Structured staggered layout */}
+        <div className="why-grid grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-7xl mx-auto">
+          
+          {/* Column 1 */}
+          <div className="flex flex-col gap-8 lg:gap-12">
+            <WhyItem 
+              icon={<Activity size={32} className="text-[#E60000]" />}
+              title="Learning Method"
+              bad="Theory-based learning"
+              good="Simulation-based operations"
+              desc="Step out of theory. Engage in high-stress, real-world simulations designed to mirror actual enterprise environments."
+            />
+            <WhyItem 
+              icon={<Briefcase size={32} className="text-[#E60000]" />}
+              title="Validation & Proof"
+              bad="Certificates as proof"
+              good="Portfolio & verified work"
+              desc="Don't just collect certificates. Build a provable track record of completed missions, incident reports, and successful pentests."
+            />
+            <WhyItem 
+              icon={<ShieldAlert size={32} className="text-[#E60000]" />}
+              title="Career Advancement"
+              bad="Hope for placement"
+              good="Gatekeeping & tiers"
+              desc="Progress is earned, not given. Advance through rigorous tiers that validate your operational readiness before you reach the field."
+            />
+          </div>
+
+          {/* Column 2 (Offset top for masonry feel) */}
+          <div className="flex flex-col gap-8 lg:gap-12 lg:mt-32">
+            <WhyItem 
+              icon={<Users size={32} className="text-[#E60000]" />}
+              title="Training Environment"
+              bad="Self-paced isolation"
+              good="Pressure-tested cohorts"
+              desc="Train alongside a curated squad of top-tier talent. Our intensive environment ensures you are pushed to your absolute limits."
+            />
+            <WhyItem 
+              icon={<Target size={32} className="text-[#E60000]" />}
+              title="Curriculum Focus"
+              bad="Generic curriculum"
+              good="War room missions"
+              desc="Face live-fire scenarios where every second counts. Defend, attack, and strategize under the same pressure as a real SOC or Red Team."
+            />
+          </div>
+        </div>
+
+        <div className="why-cta mt-32 flex justify-center opacity-0 translate-y-5">
+          <button className="group relative inline-flex items-center justify-center px-10 py-5 bg-[#E60000] text-white font-bold text-sm uppercase tracking-widest transition-all rounded-full hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(230,0,0,0.4)]">
+            Explore Residency
+          </button>
         </div>
       </div>
     </section>
   );
 }
 
-function CompareItem({
-  isPositive,
-  text,
-}: {
-  isPositive: boolean;
-  text: string;
-}) {
+function WhyItem({ icon, title, bad, good, desc }: { icon: React.ReactNode, title: string, bad: string, good: string, desc: string }) {
   return (
-    <div
-      className={cn(
-        "compare-item flex items-center gap-4 p-4 border-2 text-base font-bold uppercase tracking-wide transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)]",
-        isPositive
-          ? "border-red-600 bg-black text-white shadow-[4px_4px_0px_0px_#ef4444] hover:shadow-[6px_6px_0px_0px_#ef4444]"
-          : "border-white/20 bg-transparent text-gray-500 hover:border-white/40 hover:text-gray-300"
-      )}
-    >
-      <div
-        className={cn(
-          "shrink-0 p-1 border-2",
-          isPositive
-            ? "border-red-500 text-red-500 bg-white"
-            : "border-gray-600 text-gray-600"
-        )}
-      >
-        {isPositive ? (
-          <Check size={16} strokeWidth={4} />
-        ) : (
-          <X size={16} strokeWidth={4} />
-        )}
+    <div className="why-item-wrapper opacity-0 translate-y-16">
+      <div className="group flex flex-col items-start text-left bg-zinc-900/40 border border-white/5 p-8 md:p-10 rounded-3xl hover:border-[#E60000] transition-all duration-300 hover:shadow-[8px_8px_0px_0px_#E60000] hover:-translate-x-2 hover:-translate-y-2 relative overflow-hidden h-full">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#E60000]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        
+        <div className="mb-6 relative w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-500 shrink-0 z-10">
+          <div className="absolute inset-0 bg-[#E60000] opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl"></div>
+          <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-2xl group-hover:border-[#E60000]/30 transition-colors duration-500"></div>
+          <div className="relative z-10 group-hover:drop-shadow-[0_0_15px_rgba(230,0,0,0.8)] transition-all duration-500">{icon}</div>
+        </div>
+        <h3 className="text-white text-2xl font-bold tracking-tight mb-4 group-hover:text-[#E60000] transition-colors duration-500 relative z-10">{title}</h3>
+        
+        <div className="flex flex-col gap-3 mb-6 w-full relative z-10">
+          <div className="flex items-center gap-3 text-gray-500">
+            <div className="w-6 h-6 rounded-full bg-gray-900/80 border border-gray-800 flex items-center justify-center shrink-0">
+              <X size={12} className="text-gray-500" strokeWidth={3} />
+            </div>
+            <span className="text-sm font-medium line-through decoration-gray-600/50">{bad}</span>
+          </div>
+          <div className="flex items-center gap-3 text-white">
+            <div className="w-6 h-6 rounded-full bg-[#E60000]/10 border border-[#E60000]/30 flex items-center justify-center shrink-0 group-hover:bg-[#E60000] transition-colors duration-300">
+              <Check size={12} className="text-[#E60000] group-hover:text-white transition-colors duration-300" strokeWidth={4} />
+            </div>
+            <span className="text-sm md:text-base font-bold tracking-wide group-hover:text-[#E60000] transition-colors duration-300">{good}</span>
+          </div>
+        </div>
+
+        <p className="text-gray-400 text-base leading-relaxed font-medium pt-5 border-t border-white/10 relative z-10">{desc}</p>
       </div>
-      <span>{text}</span>
     </div>
   );
 }

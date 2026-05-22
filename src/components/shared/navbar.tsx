@@ -118,6 +118,7 @@ export function Navbar({ className }: NavbarProps) {
         "fixed top-0 inset-x-0 w-full z-[10000] font-mono",
         className
       )}
+      style={{ opacity: 0 }}
     >
       <nav
         className={cn(
@@ -140,7 +141,7 @@ export function Navbar({ className }: NavbarProps) {
         </Link>
 
         {/* Middle: Nav Links - Desktop */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden lg:flex items-center gap-1">
           <NavLink href="/" label="Home" isActive={pathname === "/"} />
           <NavLink href="/internships" label="Internships" isActive={pathname?.startsWith("/internships")} />
 
@@ -175,7 +176,7 @@ export function Navbar({ className }: NavbarProps) {
         </div>
 
         {/* Right: CTA - Desktop */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4">
           {session ? (
             <>
               <Link
@@ -201,7 +202,7 @@ export function Navbar({ className }: NavbarProps) {
               </Link>
               <Link
                 href="/auth?mode=signup"
-                className="relative px-6 py-2.5 bg-red-600 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600 shadow-[4px_4px_0px_0px_white] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                className="relative px-6 py-2.5 bg-red-700 text-white font-bold text-sm uppercase tracking-wider border-2 border-red-600 shadow-[4px_4px_0px_0px_white] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
               >
                 Enroll Now
               </Link>
@@ -210,14 +211,14 @@ export function Navbar({ className }: NavbarProps) {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <button className="p-2 text-white border-2 border-white/20 hover:bg-white/10">
                 <Menu size={24} />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-black border-l-2 border-white/20 p-0 w-[300px]">
+            <SheetContent side="right" className="bg-black border-l-2 border-white/20 p-0 w-[85vw] sm:w-[300px]">
               <div className="flex flex-col h-full">
                 <div className="p-6 border-b border-white/10">
                   <Link href="/" className="flex items-center gap-1.5">

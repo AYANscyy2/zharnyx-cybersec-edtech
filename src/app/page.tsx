@@ -13,6 +13,7 @@ import { ToolsStrip } from "@/components/home/tools-strip";
 import { PartnersStrip } from "@/components/home/partners-strip";
 import { CollaboratedCompaniesSection } from "@/components/home/collaborated-companies-section";
 import { CollaboratedCollegesSection } from "@/components/home/collaborated-colleges-section";
+import { FinalCta } from "@/components/home/final-cta";
 
 export const dynamic = "force-dynamic";
 
@@ -61,11 +62,11 @@ export default async function Home() {
       <WhyZharnyxSection />
 
       {/* 5. 7-Month Plan */}
-      {/* <MasterPlanSection /> */}
+      <MasterPlanSection />
 
       {/* 6. Who Is This For */}
       <WhoIsThisForSection />
-
+     <AboutCTASection />
       {/* 7. Founders */}
       <FoundersSection />
 
@@ -75,9 +76,10 @@ export default async function Home() {
       {/* 9. Collaborated Companies & Colleges */}
       <CollaboratedCompaniesSection />
       <CollaboratedCollegesSection />
+      <FinalCta />
 
       {/* 9. Final CTA */}
-      <AboutCTASection />
+ 
     </>
   );
 }

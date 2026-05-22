@@ -4,7 +4,8 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Play, ArrowUpRight, User } from "lucide-react";
+import LightRays from "@/components/LightRays";
 
 gsap.registerPlugin(SplitText);
 
@@ -23,33 +24,31 @@ export function HeroSection({ course }: HeroSectionProps) {
   const progressRef = useRef<HTMLDivElement>(null);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const subtextRef = useRef<HTMLParagraphElement>(null);
+  const avatarsRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const featuresRef = useRef<HTMLDivElement>(null);
+  const tagsRef = useRef<HTMLDivElement>(null);
+  const rightColumnRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // SplitText setup
+      // SplitText setup for heading
       const splitHeading = new SplitText(headingRef.current, {
-        type: "words,lines",
-        linesClass: "overflow-hidden pb-2",
-      });
-      const splitSubtext = new SplitText(subtextRef.current, {
-        type: "lines",
-        linesClass: "overflow-hidden",
+        type: "words",
+        wordsClass: "inline-block pb-2",
       });
 
       const tl = gsap.timeline();
 
       // Initial state
       gsap.set(splitHeading.words, { yPercent: 100, opacity: 0 });
-      gsap.set(splitSubtext.lines, { yPercent: 100, opacity: 0 });
+      gsap.set(avatarsRef.current, { opacity: 0, x: -20 });
       gsap.set(ctaRef.current, { opacity: 0, y: 20 });
-      if (featuresRef.current) {
-        gsap.set(featuresRef.current.children, { opacity: 0, y: 20 });
+      gsap.set(tagsRef.current, { opacity: 0, y: 20 });
+      gsap.set(rightColumnRef.current, { opacity: 0, scale: 0.95 });
+      if (cardsRef.current) {
+        gsap.set(cardsRef.current.children, { opacity: 0, y: 40 });
       }
-
-      document.body.style.overflow = "hidden";
 
       // Progress Counter Animation (0% to 100% over 3.5s)
       const progressProxy = { val: 0 };
@@ -59,7 +58,6 @@ export function HeroSection({ course }: HeroSectionProps) {
         ease: "power2.inOut",
         onUpdate: () => {
           if (progressRef.current) {
-            // padStart ensures it looks like 00%, 05%, 100% for a cleaner tech vibe
             progressRef.current.innerText = Math.round(progressProxy.val).toString().padStart(2, '0') + "%";
           }
         }
@@ -69,71 +67,100 @@ export function HeroSection({ course }: HeroSectionProps) {
       tl.to(ringRef.current, { scale: 1, opacity: 1, duration: 1.5, ease: "expo.out" }, 0);
       tl.to(textRef.current, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 1.5, ease: "expo.out" }, 0);
 
-      // Spin more (540 degrees = 1.5 turns)
+      // Spin more
       tl.to(ringRef.current, { rotation: 540, duration: 2, ease: "power1.inOut" }, 1.5);
       tl.to(introOverlayRef.current, { scale: 1.05, duration: 2, ease: "power1.inOut" }, 1.5);
 
       tl.to(introOverlayRef.current, {
-        y: "-100vh", opacity: 0, duration: 1.2, ease: "power4.inOut", onComplete: () => {
-          document.body.style.overflow = "auto";
-        }
+        y: "-100vh", opacity: 0, duration: 1.2, ease: "power4.inOut"
       }, 3.5);
 
-      // --- PART 2: HERO REVEAL ---
+      // --- HERO REVEAL ---
       tl.to(splitHeading.words, {
         yPercent: 0,
         opacity: 1,
-        duration: 0.8,
-        stagger: 0.05,
-        ease: "power3.out"
-      }, 4.2);
+        duration: 1.2,
+        stagger: 0.04,
+        ease: "power4.out"
+      }, 4.0);
 
-      tl.to(splitSubtext.lines, {
-        yPercent: 0,
+      tl.to(avatarsRef.current, {
         opacity: 1,
+        x: 0,
         duration: 0.8,
-        stagger: 0.1,
         ease: "power3.out"
-      }, 4.5);
+      }, 4.4);
 
       tl.to(ctaRef.current, {
         opacity: 1,
         y: 0,
         duration: 0.8,
         ease: "power3.out"
+      }, 4.6);
+
+      tl.to(tagsRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out"
       }, 4.8);
 
-      if (featuresRef.current) {
-        tl.to(featuresRef.current.children, {
+      tl.to(rightColumnRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        ease: "power3.out"
+      }, 4.4);
+
+      if (cardsRef.current) {
+        gsap.set(cardsRef.current, { opacity: 1 });
+        tl.to(cardsRef.current.children, {
           opacity: 1,
           y: 0,
           duration: 0.8,
           stagger: 0.1,
-          ease: "power3.out"
-        }, 5.0);
+          ease: "linear"
+        }, 4.6);
       }
 
       return () => {
         splitHeading.revert();
-        splitSubtext.revert();
       };
     });
 
     return () => {
       ctx.revert();
-      document.body.style.overflow = "auto";
     }
   }, []);
 
   return (
     <div className="relative min-h-screen bg-[#000000] overflow-hidden flex flex-col justify-center pt-24 pb-12 sm:pt-32 sm:pb-24">
 
-      {/* BACKGROUND: ULTRA CLEAN PURE BLACK */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 pointer-events-none z-0 bg-[#000000]">
+        <div className="absolute inset-0 opacity-60">
+          <LightRays
+            raysOrigin="top-center"
+            raysColor="#EF0000"
+            raysSpeed={1}
+            lightSpread={0.5}
+            rayLength={3}
+            followMouse={true}
+            mouseInfluence={0.1}
+            noiseAmount={0}
+            distortion={0}
+            className="w-full h-full"
+            pulsating={false}
+            fadeDistance={1}
+            saturation={1}
+          />
+        </div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vh] bg-red-900/5 rounded-full blur-[100px] pointer-events-none"></div>
       </div>
 
-      {/* --- INTRO OVERLAY (ABSOLUTE) --- */}
+
+
+      {/* --- INTRO OVERLAY --- */}
       <div
         ref={introOverlayRef}
         className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#000000] origin-center"
@@ -148,7 +175,6 @@ export function HeroSection({ course }: HeroSectionProps) {
             <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-[2px] h-4 bg-red-500"></div>
             <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-[2px] h-4 bg-red-500"></div>
           </div>
-
           <div
             ref={textRef}
             className="text-white font-black text-xl sm:text-2xl md:text-4xl tracking-[0.5em] ml-[0.5em] opacity-0 scale-95 blur-md"
@@ -156,8 +182,6 @@ export function HeroSection({ course }: HeroSectionProps) {
             ZHARNYX
           </div>
         </div>
-
-        {/* Loading Progress */}
         <div
           ref={progressRef}
           className="absolute bottom-8 right-8 md:bottom-12 md:right-12 text-white font-mono text-sm md:text-base tracking-widest font-bold opacity-80"
@@ -167,84 +191,141 @@ export function HeroSection({ course }: HeroSectionProps) {
       </div>
 
       {/* --- MAIN HERO CONTENT --- */}
-      <main className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col items-center justify-center text-center mt-12 md:mt-0">
+      <main className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 mt-12 md:mt-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 justify-center items-center">
+          
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col items-start gap-8 md:gap-10">
+            <h1
+              ref={headingRef}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-bold tracking-tighter text-white leading-[1.05] uppercase"
+            >
+              WHERE SERIOUS<br />
+              <span className="text-[#E60000]">CYBERSECURITY</span><br />
+              CAREERS BEGIN
+            </h1>
 
-        {/* Heading */}
-        <h1
-          ref={headingRef}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[6.5rem] font-bold tracking-tight text-white leading-[1.15] md:leading-[1.1] max-w-4xl lg:max-w-6xl text-balance"
-        >
-          Where Serious <span className="text-[#E60000]">Cybersecurity</span> Careers Begin.
-        </h1>
+            <div ref={avatarsRef} className="flex items-center gap-4">
+              <div className="flex -space-x-3">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800 border-2 border-black z-30 flex items-center justify-center overflow-hidden">
+                  <User className="text-gray-400 w-6 h-6" />
+                </div>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-700 border-2 border-black z-20 flex items-center justify-center overflow-hidden">
+                  <User className="text-gray-400 w-6 h-6" />
+                </div>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-600 border-2 border-black z-10 flex items-center justify-center overflow-hidden">
+                  <User className="text-gray-300 w-6 h-6" />
+                </div>
+              </div>
+              <span className="text-white text-lg sm:text-2xl font-bold tracking-widest uppercase">PROFESSIONALS</span>
+            </div>
 
-        {/* Subtext */}
-        <div className="mt-8 md:mt-10 max-w-2xl lg:max-w-3xl">
-          <p
-            ref={subtextRef}
-            className="text-sm sm:text-base md:text-lg text-gray-400 font-medium tracking-wide leading-relaxed text-balance"
-          >
-            Zharnyx is India's first integrated 4-track cybersecurity institute — built to train, certify, and place the next generation of security professionals.
-            <br className="hidden sm:block" />
-            <span className="text-white font-bold mt-4 block text-xs sm:text-sm uppercase tracking-widest opacity-80">SOC Analysis · VAPT · DFIR · Cloud Security</span>
-          </p>
-        </div>
+            <div ref={ctaRef} className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-6 mt-2">
+              <Link 
+                href="/programs" 
+                className="group flex items-center justify-between w-full sm:w-auto sm:min-w-[220px] h-14 sm:h-16 rounded-full border border-white/20 bg-transparent pl-6 sm:pl-8 pr-2 hover:bg-white/5 transition-colors"
+              >
+                <span className="text-white font-medium text-sm sm:text-base tracking-wide mr-4">View Blueprint</span>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center text-black group-hover:bg-[#E60000] group-hover:text-white transition-colors shrink-0">
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
 
-        {/* CTA Buttons */}
-        <div
-          ref={ctaRef}
-          className="mt-12 md:mt-14 flex flex-col sm:flex-row gap-4 w-full sm:w-auto items-center justify-center"
-        >
-          <Link
-            href="/programs"
-            className="group relative flex items-center justify-center h-12 sm:h-14 px-8 sm:px-10 bg-[#E60000] text-white font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-red-700 transition-colors w-full sm:w-auto rounded-none"
-          >
-            <span className="flex items-center gap-2">
-              View Blueprint
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </span>
-          </Link>
+              <Link 
+                href="/pricing" 
+                className="group flex items-center justify-center w-full sm:w-auto h-14 sm:h-16 px-8 rounded-full bg-[#E60000] hover:bg-red-700 text-white transition-colors"
+              >
+                <span className="font-medium text-sm sm:text-base tracking-wide">Get Started</span>
+              </Link>
 
-          <Link
-            href="/pricing"
-            className="group flex items-center justify-center h-12 sm:h-14 px-8 sm:px-10 border border-white/20 bg-transparent text-white font-bold text-xs sm:text-sm uppercase tracking-widest hover:bg-white hover:text-black transition-colors w-full sm:w-auto rounded-none"
-          >
-            Get Started
-          </Link>
-        </div>
+              {/* <button className="flex items-center gap-4 group mt-2 sm:mt-0">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white flex items-center justify-center text-black group-hover:bg-[#E60000] group-hover:text-white transition-colors shrink-0">
+                  <Play size={20} fill="currentColor" className="ml-1" />
+                </div>
+                <span className="text-white text-xs sm:text-sm font-medium text-left leading-snug whitespace-nowrap">
+                  Watch<br/>Introduction
+                </span>
+              </button> */}
+            </div>
 
-        {/* 3-Column Features */}
-        <div
-          ref={featuresRef}
-          className="mt-20 md:mt-28 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 lg:gap-16 w-full text-left"
-        >
-          {/* Feature 1 */}
-          <div className="flex flex-col gap-3 border-t border-white/10 pt-6">
-            <span className="text-red-500 font-mono text-[10px] sm:text-xs tracking-widest uppercase">[ 01 ]</span>
-            <h3 className="text-white text-base sm:text-lg font-bold tracking-wide">A Curriculum Built Around Real Roles</h3>
-            <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">
-              Every module maps to what employers are actively hiring — SOC Analyst, Penetration Tester, Incident Responder, Cloud Security Engineer. No filler. Pure skill-building.
-            </p>
+            <div ref={tagsRef} className="flex flex-wrap gap-3 mt-2">
+              {['SOC Analysis', 'VAPT', 'DFIR', 'Cloud Security'].map(tag => (
+                <span key={tag} className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-[10px] sm:text-xs text-gray-300 font-medium uppercase tracking-wider hover:border-white/30 transition-colors cursor-default">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
 
-          {/* Feature 2 */}
-          <div className="flex flex-col gap-3 border-t border-white/10 pt-6">
-            <span className="text-red-500 font-mono text-[10px] sm:text-xs tracking-widest uppercase">[ 02 ]</span>
-            <h3 className="text-white text-base sm:text-lg font-bold tracking-wide">Specialize Deep. Stand Out Completely.</h3>
-            <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">
-              Pick one track and master it — SOC, VAPT, DFIR, or Cloud Security. That depth is exactly what makes a Zharnyx Certified graduate different from the rest.
-            </p>
+          {/* RIGHT COLUMN */}
+          <div ref={rightColumnRef} className="relative w-full flex items-center justify-center lg:justify-center mt-8 lg:mt-0 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px]">
+            {/* Hero Illustration */}
+            <img
+              src="https://ik.imagekit.io/modelia123aistudio/zharnyx_cybersecurity_hero.svg?updatedAt=1779483085596"
+              alt="Zharnyx Cybersecurity Hero"
+              className="relative z-10 w-full max-w-[500px] lg:max-w-[600px] xl:max-w-[700px] h-auto object-contain pointer-events-none drop-shadow-2xl"
+              style={{ clipPath: 'polygon(0 40px, 40px 0, 100% 0, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0 100%)' }}
+            />
           </div>
 
-          {/* Feature 3 */}
-          <div className="flex flex-col gap-3 border-t border-white/10 pt-6">
-            <span className="text-red-500 font-mono text-[10px] sm:text-xs tracking-widest uppercase">[ 03 ]</span>
-            <h3 className="text-white text-base sm:text-lg font-bold tracking-wide">We Stay With You Until You're Hired.</h3>
-            <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">
-              Resume prep, mock interviews, referrals to top security firms — Zharnyx Certified professionals get placed across India's fastest-growing cybersecurity sector.
-            </p>
-          </div>
         </div>
 
+        {/* BOTTOM CARDS ROW */}
+        <div ref={cardsRef} className="grid grid-cols-1 opacity-0 md:grid-cols-3 gap-6 mt-16 lg:mt-20 relative z-20">
+          
+          {/* Card 1 - Red */}
+          <div 
+            className="bg-[#E60000] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between group hover:-translate-y-2 transition-transform duration-300 cursor-pointer" 
+            style={{ clipPath: 'polygon(0 0, 65% 0, 75% 24px, 100% 24px, 100% 100%, 0 100%)', borderRadius: '16px' }}
+          >
+            <div>
+              <span className="text-white/50 font-mono text-[10px] sm:text-xs tracking-widest uppercase block mb-4">[ 01 ] PROGRAM</span>
+              <h3 className="text-white text-lg sm:text-xl font-bold tracking-wide leading-snug pr-4">
+                A Curriculum Built Around Real Roles
+              </h3>
+            </div>
+            <div className="mt-8">
+              <span className="text-white/90 text-xs sm:text-sm font-medium uppercase tracking-wider block">
+                EMPLOYMENT ASSISTANCE
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2 - Light Grey */}
+          <div 
+            className="bg-[#E5E5E5] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between relative group hover:-translate-y-2 transition-transform duration-300 cursor-pointer" 
+            style={{ clipPath: 'polygon(0 0, 60% 0, 70% 24px, 100% 24px, 100% 100%, 0 100%)', borderRadius: '16px' }}
+          >
+            <ArrowUpRight size={24} className="absolute top-8 right-6 text-black opacity-40 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+            <div>
+              <span className="text-black/60 font-mono text-[10px] sm:text-xs tracking-widest uppercase block mb-4">[ 02 ] DEEP DIVE</span>
+              <h3 className="text-black text-lg sm:text-xl font-bold tracking-wide leading-snug pr-12">
+                Specialize Deep.<br/>Stand Out Completely.
+              </h3>
+            </div>
+            <div className="text-black text-4xl sm:text-6xl font-black mt-6 opacity-30 group-hover:opacity-100 transition-opacity">
+              *
+            </div>
+          </div>
+
+          {/* Card 3 - Red Variant */}
+          <div 
+            className="bg-[#E60000] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between relative group hover:-translate-y-2 transition-transform duration-300 cursor-pointer" 
+            style={{ clipPath: 'polygon(0 0, 60% 0, 70% 24px, 100% 24px, 100% 100%, 0 100%)', borderRadius: '16px' }}
+          >
+            <ArrowUpRight size={24} className="absolute top-8 right-6 text-white opacity-40 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+            <div>
+              <span className="text-white/50 font-mono text-[10px] sm:text-xs tracking-widest uppercase block mb-4">[ 03 ] OUTCOME</span>
+              <h3 className="text-white text-lg sm:text-xl font-bold tracking-wide leading-snug pr-12">
+                We Stay With You Until You're Hired.
+              </h3>
+            </div>
+            <div className="text-white text-4xl sm:text-6xl font-black mt-6">
+              100%
+            </div>
+          </div>
+
+        </div>
       </main>
 
     </div>

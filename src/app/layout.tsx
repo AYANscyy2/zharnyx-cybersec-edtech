@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { FloatingChatbot } from "@/components/shared/floating-chatbot";
+import { LenisProvider } from "@/components/shared/lenis-provider";
 
 export const metadata: Metadata = {
   title: "Zharnyx Academy | Tamil Nadu's Elite Cybersecurity Residency",
@@ -39,20 +40,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" className="dark bg-black text-white" suppressHydrationWarning>
       <body
-        className={`antialiased bg-background text-foreground font-mono`}
+        className={`antialiased bg-black text-white font-mono min-h-screen`}
       >
-        <LoaderProvider>
-          <Suspense fallback={null}>
-            <GlobalLoader />
-          </Suspense>
-          <Navbar />
-          {children}
-          <Footer />
-          <FloatingChatbot />
-          <Toaster position="bottom-right" expand={false} />
-        </LoaderProvider>
+        <LenisProvider>
+          <LoaderProvider>
+            <Suspense fallback={null}>
+              <GlobalLoader />
+            </Suspense>
+            <Navbar />
+            {children}
+            <Footer />
+            <FloatingChatbot />
+            <Toaster position="bottom-right" expand={false} />
+          </LoaderProvider>
+        </LenisProvider>
       </body>
     </html>
   );

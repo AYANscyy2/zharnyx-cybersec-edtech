@@ -5,7 +5,7 @@ import { GraduationCap, Briefcase, Zap, Lock, ShieldCheck, Target, ArrowRight as
 
 export function ArchitectureSection() {
     return (
-        <section id="why-us" className="py-24 relative bg-black border-t-2 border-white/20">
+        <section id="why-us" className="py-24 relative bg-black border-t-2 border-white/20 overflow-hidden">
             {/* Section Header */}
             <div className="container mx-auto px-4 mb-20 text-center z-10 relative">
                 <motion.div
@@ -40,7 +40,7 @@ export function ArchitectureSection() {
                 </motion.p>
             </div>
 
-            <div className="container mx-auto px-4 flex flex-col lg:flex-row gap-8 items-stretch justify-center max-w-6xl relative z-10">
+            <div className="container mx-auto px-4 flex flex-col lg:flex-row gap-8 items-stretch justify-center max-w-7xl relative z-10">
 
                 {/* Card 1: Academy - Neo Brutalist (Red) */}
                 <motion.div
@@ -48,7 +48,7 @@ export function ArchitectureSection() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
-                    className="flex-1 bg-black border-2 border-white p-8 relative group hover:-translate-y-1 hover:-translate-x-1 transition-transform shadow-[8px_8px_0px_0px_#ef4444]"
+                    className="flex-1 bg-black border-2 border-white p-8 relative group hover:-translate-y-2 hover:-translate-x-2 transition-all duration-300 shadow-[8px_8px_0px_0px_#ef4444]"
                 >
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                         <GraduationCap size={140} strokeWidth={1} />
@@ -88,7 +88,7 @@ export function ArchitectureSection() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 }}
-                    className="flex-1 bg-black border-2 border-white p-8 relative group hover:-translate-y-1 hover:-translate-x-1 transition-transform shadow-[8px_8px_0px_0px_#9333ea]"
+                    className="flex-1 bg-black border-2 border-white p-8 relative group hover:-translate-y-2 hover:-translate-x-2 transition-all duration-300 shadow-[8px_8px_0px_0px_#9333ea]"
                 >
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Briefcase size={140} strokeWidth={1} />

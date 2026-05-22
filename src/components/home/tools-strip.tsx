@@ -20,12 +20,12 @@ const ITEMS = [...TOOLS, ...TOOLS, ...TOOLS];
 export function ToolsStrip() {
   const router = useRouter()
   return (
-    <div className="w-full bg-black border-y border-white/6 relative flex items-stretch overflow-hidden">
+    <div className="w-full bg-black relative flex items-stretch overflow-hidden">
       {/* Neo label */}
-      <div className="shrink-0 z-20 flex items-center justify-center border-r border-white/10 bg-black px-5 py-3.5">
-        <div className="border border-red-500 px-3 py-1.5 flex items-center gap-2">
+      <div className="shrink-0 z-20 flex items-center justify-center bg-black px-5 py-3.5">
+        <div className="border border-red-500/50 bg-red-500/5 rounded-full px-4 py-1.5 flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[9px] font-black text-red-500 uppercase tracking-[0.25em] whitespace-nowrap">
+          <span className="text-[9px] font-bold text-red-500 uppercase tracking-widest whitespace-nowrap">
             Cyber Tools
           </span>
         </div>

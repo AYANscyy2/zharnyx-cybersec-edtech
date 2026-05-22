@@ -13,8 +13,8 @@ import { cn } from "@/lib/utils";
 
 export function WarRoomSection() {
   return (
-    <section id="war-room" className="py-24 relative bg-black border-t-2 border-white/20">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <section id="war-room" className="py-24 relative bg-black border-t-2 border-white/20 overflow-hidden">
+      <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-20">
           <motion.div

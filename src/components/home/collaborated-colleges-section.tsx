@@ -19,11 +19,11 @@ const EXTENDED_COLLEGES = [...COLLEGES, ...COLLEGES, ...COLLEGES];
 
 export function CollaboratedCollegesSection() {
   return (
-    <section className="w-full bg-black py-16 flex flex-col items-center border-b border-white/10 overflow-hidden relative">
+    <section className="w-full bg-black py-16 flex flex-col items-center overflow-hidden relative">
       <div className="w-full flex justify-center mb-10">
-        <div className="border border-white/20 px-4 py-2 flex items-center gap-3">
+        <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">
+          <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
             Collaborated Colleges
           </span>
         </div>
@@ -35,10 +35,10 @@ export function CollaboratedCollegesSection() {
 
         <div className="flex w-max" style={{ animation: "scroll-slow 40s linear infinite" }}>
           {EXTENDED_COLLEGES.map((college, idx) => (
-            <div key={idx} className="flex items-center gap-4 mx-4 group border-2 border-white/10 bg-zinc-950 px-6 py-4 hover:border-red-600 transition-colors min-w-[280px]">
+            <div key={idx} className="flex items-center gap-4 mx-4 group rounded-2xl border border-white/5 bg-zinc-900/40 px-6 py-4 hover:border-[#E60000]/30 transition-all duration-300 min-w-[280px]">
               {/* Logo Placeholder */}
-              <div className="w-12 h-12 bg-white/5 border border-white/20 flex items-center justify-center shrink-0 group-hover:bg-red-600/20 transition-colors">
-                <span className="font-black text-gray-500 group-hover:text-red-500 text-sm tracking-tighter">
+              <div className="w-12 h-12 bg-black/40 rounded-full border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-red-500/10 transition-colors">
+                <span className="font-bold text-gray-500 group-hover:text-red-500 text-sm tracking-tight">
                   {college.abbr}
                 </span>
               </div>
@@ -47,7 +47,7 @@ export function CollaboratedCollegesSection() {
                 <span className="font-bold text-sm text-white uppercase tracking-wider group-hover:text-red-500 transition-colors">
                   {college.name}
                 </span>
-                <span className="text-[10px] text-gray-500 uppercase tracking-widest font-mono mt-0.5">
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest mt-0.5 font-medium">
                   Campus Partner
                 </span>
               </div>
@@ -58,9 +58,9 @@ export function CollaboratedCollegesSection() {
 
       <Link
         href="/colleges"
-        className="pb-4 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-gray-600 hover:text-red-500 transition-all flex items-center gap-1.5 group"
+        className="pb-4 text-xs font-medium uppercase tracking-widest text-gray-500 hover:text-white transition-all flex items-center gap-1.5 group"
       >
-        [ See All Supported Campuses <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span> ]
+        See All Supported Campuses <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
       </Link>
 
       <style>{`

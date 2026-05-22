@@ -32,13 +32,13 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-2 border-white/10 bg-black overflow-hidden hover:border-white/20 transition-colors">
+    <div className="rounded-2xl border border-white/5 bg-zinc-900/40 overflow-hidden hover:border-[#E60000]/30 transition-all duration-300">
       <button
         onClick={() => setOpen(!open)}
         className="w-full p-6 text-left flex justify-between items-center focus:outline-none"
       >
         <h4 className="text-base md:text-lg font-bold text-white pr-8">{q}</h4>
-        <div className="shrink-0 text-red-500">
+        <div className="shrink-0 text-[#E60000]">
           {open ? <Minus size={20} /> : <Plus size={20} />}
         </div>
       </button>
@@ -47,7 +47,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
           open ? "max-h-64 pb-6 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <p className="text-gray-400 text-sm border-t-2 border-white/10 pt-4 leading-relaxed">
+        <p className="text-gray-400 text-sm border-t border-white/5 pt-4 leading-relaxed font-medium">
           {a}
         </p>
       </div>
@@ -71,20 +71,20 @@ export function FaqSection() {
   return (
     <section
       id="faq"
-      className="w-full py-24 px-6 font-mono bg-black border-t-2 border-white/10"
+      className="w-full py-24 px-6 bg-black overflow-hidden"
     >
-      <div className="max-w-3xl mx-auto flex flex-col items-center gap-10">
+      <div className="max-w-7xl mx-auto flex flex-col items-center gap-10">
         <div ref={headerRef} className="text-center space-y-4 flex flex-col items-center">
           <SectionBadge text="FAQ" icon={HelpCircle} />
-          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white">
-            Frequently Asked{" "}
-            <span className="text-red-500">
-              Questions
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+            Frequently asked{" "}
+            <span className="text-[#E60000]">
+              questions
             </span>
           </h2>
         </div>
 
-        <div ref={listRef} className="flex flex-col gap-4 w-full">
+        <div ref={listRef} className="w-full max-w-3xl flex flex-col gap-4">
           {FAQS.map((faq) => (
             <div key={faq.q} className="faq-item">
               <FaqItem q={faq.q} a={faq.a} />

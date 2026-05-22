@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 
 export function DeploymentTiersSection() {
   return (
-    <section id="deployment-tiers" className="py-24 relative bg-black border-t-2 border-white/20">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <section id="deployment-tiers" className="py-24 relative bg-black border-t-2 border-white/20 overflow-hidden">
+      <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-20">
           <motion.div
@@ -123,7 +123,7 @@ function DeploymentCard({ tier, title, icon, description, color, delay, isTopTie
       viewport={{ once: true }}
       transition={{ delay }}
       className={cn(
-        "group relative bg-black border-2 p-8 flex flex-col items-center text-center transition-all duration-300",
+        "group relative bg-black border-2 p-8 flex flex-col items-center text-center transition-all duration-300 hover:-translate-x-2 hover:-translate-y-2",
         isTopTier ? "border-red-600" : "border-white/20 hover:border-white",
         theme.shadow
       )}

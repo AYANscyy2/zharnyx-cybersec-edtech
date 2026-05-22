@@ -17,21 +17,21 @@ export function ProblemStatementSection() {
     duration: 0.6,
     delay: 0.2,
     stagger: 0.1,
-    childSelector: "div",
+    childSelector: ".stat-anim-wrapper",
   });
 
   return (
-    <section className="w-full bg-black border-y-2 border-white/10 py-24 px-6">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-12 items-start">
+    <section className="w-full bg-black py-24 px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 items-center">
         {/* Left: Heading */}
         <div ref={headingRef} className="md:w-1/2 shrink-0">
-          <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-white uppercase leading-tight">
-            Colleges Teach the{" "}
-            <span className="text-red-500">Syllabus.</span>
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1]">
+            Colleges teach the <br />
+            <span className="text-gray-500">syllabus.</span>
             <br />
-            We Teach the{" "}
-            <span className="text-red-500">
-              Skill.
+            We teach the <br />
+            <span className="text-[#E60000]">
+              skill.
             </span>
           </h2>
         </div>
@@ -53,15 +53,16 @@ export function ProblemStatementSection() {
               { label: "Weeks", value: "28" },
               { label: "Tracks", value: "4" },
             ].map((stat) => (
-              <div
-                key={stat.label}
-                className="border-2 border-white/10 p-4 text-center hover:border-red-600 transition-colors"
-              >
-                <div className="text-3xl font-black text-white">
-                  {stat.value}
-                </div>
-                <div className="text-xs text-gray-500 uppercase tracking-widest font-bold mt-1">
-                  {stat.label}
+              <div key={stat.label} className="stat-anim-wrapper">
+                <div
+                  className="bg-white/5 border border-white/5 rounded-2xl p-6 text-center hover:bg-white/10 hover:-translate-y-1 transition-all duration-300"
+                >
+                  <div className="text-3xl md:text-4xl font-bold text-white mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-gray-400 font-medium">
+                    {stat.label}
+                  </div>
                 </div>
               </div>
             ))}
