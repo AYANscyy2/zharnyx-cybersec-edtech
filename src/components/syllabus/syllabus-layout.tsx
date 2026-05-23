@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
-  BookOpen, Terminal, PlayCircle, Briefcase, ShieldAlert, Target,
-  Search, ChevronDown, ChevronRight, ArrowLeft, Award,
   User, Settings, Menu, X, PanelLeftClose, PanelLeftOpen,
+  BookOpen, Terminal, PlayCircle, Briefcase, ShieldAlert, Target,
+  Search, ChevronDown, ChevronRight, ArrowLeft, Award, FlaskConical, Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ApplyButton } from "./apply-button";
+import { useSession } from "@/lib/auth/auth-client";
 
 export interface Module {
   id: string;
@@ -95,6 +97,8 @@ function filterModules(modules: Module[], viewMode: ViewMode): Module[] {
 }
 
 export function SyllabusLayout({ meta, curriculum }: { meta: ProgramMeta; curriculum: Month[] }) {
+  const router                            = useRouter();
+  const { data: session }                 = useSession();
   const [collapsed,       setCollapsed]       = useState(false);
   const [mobileOpen,      setMobileOpen]      = useState(false);
   const [activeWeek,      setActiveWeek]      = useState<number | null>(null);
@@ -370,11 +374,25 @@ export function SyllabusLayout({ meta, curriculum }: { meta: ProgramMeta; curric
                   className="bg-white/5 border border-white/10 text-white placeholder-gray-700 text-[11px] pl-7 pr-3 py-1.5 w-36 focus:outline-none focus:border-red-600/40 transition-colors"
                 />
               </div>
-              <button className="p-1.5 text-gray-600 hover:text-white transition-colors" title="Settings — Coming Soon">
+              <button
+                onClick={() => router.push("/dashboard/settings")}
+                className="p-1.5 text-gray-600 hover:text-white transition-colors"
+                title="Settings"
+              >
                 <Settings size={15} />
               </button>
-              <button className="p-1.5 text-gray-600 hover:text-white transition-colors" title="Profile — Coming Soon">
-                <User size={15} />
+              <button
+                onClick={() => router.push(session?.user ? "/dashboard/profile" : "/auth")}
+                className="p-1.5 text-gray-500 hover:text-white transition-colors relative"
+                title={session?.user ? session.user.name ?? "Profile" : "Sign In"}
+              >
+                {session?.user?.name ? (
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-red-600/20 border border-red-600/40 text-red-400 text-[10px] font-black uppercase">
+                    {session.user.name.charAt(0)}
+                  </span>
+                ) : (
+                  <User size={15} />
+                )}
               </button>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentSession } from "@/lib/auth/role-guard";
 import { getEnrolledCourses, getAllSubmissions, getCourseContent } from "@/actions/student/dashboard";
 import { getFullUserRecord } from "@/actions/student/settings";
+import { getMyWaitlistEntries } from "@/actions/student/waitlist";
 import {
   Shield,
   Terminal,
@@ -18,6 +19,8 @@ import {
   Globe,
   Mail,
   ExternalLink,
+  Clock,
+  ChevronRight,
 } from "lucide-react";
 import { HubUserControls } from "@/components/dashboard/hub/user-controls";
 import { ProfileTrackers } from "@/components/dashboard/profile/profile-trackers";
@@ -147,6 +150,10 @@ export default async function ProfilePage() {
     modulesDone: `${overallProgress}%`,
     streak: calculatedStreak,
   };
+
+  // ── 4. Fetch Waitlist Entries ──────────────────────────────────────────────
+  const waitlistResult = await getMyWaitlistEntries(session.user.id);
+  const waitlistEntries = waitlistResult.success ? waitlistResult.data : [];
 
   return (
     <div className="w-full h-full text-white pb-10">
@@ -303,7 +310,70 @@ export default async function ProfilePage() {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="lg:col-span-9">
+        <div className="lg:col-span-9 space-y-6">
+
+          {/* My Waitlisted Courses — Dropdown Widget */}
+          {waitlistEntries.length > 0 && (
+            <details className="group border-2 border-white/20 bg-black transition-colors" open>
+              <summary className="flex items-center justify-between px-6 py-4 border-b-2 border-white/20 bg-transparent cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden hover:bg-white/[0.02] transition-colors">
+                <div className="flex items-center gap-3">
+                  <ChevronRight className="w-4 h-4 text-gray-500 group-open:rotate-90 transition-transform" />
+                  <Clock className="w-4 h-4 text-yellow-500" />
+                  <h2 className="font-mono font-black text-sm uppercase tracking-widest text-white">My Waitlisted Courses</h2>
+                </div>
+                <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">{waitlistEntries.length} course{waitlistEntries.length !== 1 && 's'}</span>
+              </summary>
+
+              <div className="divide-y divide-white/10 group-open:animate-in group-open:slide-in-from-top-2 group-open:fade-in duration-200">
+                {waitlistEntries.map((entry: any) => {
+                  const slugRouteMap: Record<string, string> = {
+                    'week-0':         '/programs/week-0',
+                    'foundation':     '/programs/foundation',
+                    'soc':            '/programs/soc',
+                    'vapt':           '/programs/vapt',
+                    'cloud-security': '/programs/cloud-security',
+                    'dfir':           '/programs/dfir',
+                    'intern-tier-1':  '/internships',
+                    'intern-tier-2':  '/internships',
+                    'intern-tier-3':  '/internships',
+                  };
+                  const statusStyle: Record<string, string> = {
+                    pending:   'text-yellow-400 border-yellow-500/50 hover:bg-yellow-500/10',
+                    contacted: 'text-blue-400 border-blue-500/50 hover:bg-blue-500/10',
+                    enrolled:  'text-green-400 border-green-500/50 hover:bg-green-500/10',
+                    rejected:  'text-red-400 border-red-500/50 hover:bg-red-500/10',
+                  };
+                  const href = slugRouteMap[entry.course] ?? '/programs';
+                  return (
+                    <Link
+                      key={entry.id}
+                      href={href}
+                      className="flex items-center justify-between px-6 py-5 hover:bg-white/[0.02] transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-1.5 h-1.5 rounded-full bg-yellow-500 shrink-0" />
+                        <div>
+                          <p className="font-mono font-bold text-xs uppercase tracking-widest text-white hover:text-yellow-400 transition-colors">
+                            {entry.courseLabel}
+                          </p>
+                          <p className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mt-1">
+                            Applied {new Date(entry.appliedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }).toUpperCase()}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 group/btn">
+                        <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 border transition-colors ${statusStyle[entry.status] ?? 'text-gray-500 border-white/20 hover:bg-white/5'}`}>
+                          {entry.status}
+                        </span>
+                        <ExternalLink size={14} className="text-gray-600 group-hover/btn:text-white transition-colors" />
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </details>
+          )}
+
           <ProfileTrackers
             courseProgressData={courseProgressData}
             allActivities={allActivities}

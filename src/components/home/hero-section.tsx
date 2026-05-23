@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import Link from "next/link";
-import { ArrowRight, Play, ArrowUpRight, User } from "lucide-react";
+import { ArrowRight, Play, ArrowUpRight, User, ChevronRight } from "lucide-react";
 import LightRays from "@/components/LightRays";
 
 gsap.registerPlugin(SplitText);
@@ -24,11 +24,13 @@ export function HeroSection({ course }: HeroSectionProps) {
   const progressRef = useRef<HTMLDivElement>(null);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const bannerRef  = useRef<HTMLDivElement>(null);
   const avatarsRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const tagsRef = useRef<HTMLDivElement>(null);
+  const ctaRef     = useRef<HTMLDivElement>(null);
+  const tagsRef    = useRef<HTMLDivElement>(null);
   const rightColumnRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+  const cardsRef       = useRef<HTMLDivElement>(null);
+  const tickerRef      = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -42,12 +44,23 @@ export function HeroSection({ course }: HeroSectionProps) {
 
       // Initial state
       gsap.set(splitHeading.words, { yPercent: 100, opacity: 0 });
+      gsap.set(bannerRef.current, { opacity: 0, y: -12 });
       gsap.set(avatarsRef.current, { opacity: 0, x: -20 });
       gsap.set(ctaRef.current, { opacity: 0, y: 20 });
       gsap.set(tagsRef.current, { opacity: 0, y: 20 });
       gsap.set(rightColumnRef.current, { opacity: 0, scale: 0.95 });
       if (cardsRef.current) {
         gsap.set(cardsRef.current.children, { opacity: 0, y: 40 });
+      }
+
+      // Infinite ticker scroll
+      if (tickerRef.current) {
+        gsap.to(tickerRef.current, {
+          xPercent: -50,
+          duration: 14,
+          ease: "none",
+          repeat: -1,
+        });
       }
 
       // Progress Counter Animation (0% to 100% over 3.5s)
@@ -82,6 +95,13 @@ export function HeroSection({ course }: HeroSectionProps) {
         duration: 1.2,
         stagger: 0.04,
         ease: "power4.out"
+      }, 4.0);
+
+      tl.to(bannerRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out"
       }, 4.0);
 
       tl.to(avatarsRef.current, {
@@ -196,6 +216,49 @@ export function HeroSection({ course }: HeroSectionProps) {
           
           {/* LEFT COLUMN */}
           <div className="flex flex-col items-start gap-8 md:gap-10">
+
+            {/* ── HERO BANNER — scrolling ticker ──────────────── */}
+            <Link
+              href="/programs/week-0"
+              ref={bannerRef as any}
+              className="w-full overflow-hidden border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-red-600/30 backdrop-blur-sm transition-all group cursor-pointer flex items-center"
+              style={{ opacity: 0 }}
+            >
+              {/* FREE badge — fixed left */}
+              <div className="shrink-0 flex items-center gap-2 px-4 py-2.5 bg-[#E60000] border-r border-red-800 z-10">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-60" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                </span>
+                <span className="text-white text-[10px] font-black uppercase tracking-widest whitespace-nowrap font-mono">FREE</span>
+              </div>
+
+              {/* Scrolling ticker */}
+              <div className="overflow-hidden flex-1">
+                <div ref={tickerRef} className="flex whitespace-nowrap py-2.5">
+                  {Array(2).fill(null).map((_, i) => (
+                    <span key={i} className="inline-flex items-center gap-10 px-8 text-[11px] font-mono font-bold uppercase tracking-widest text-gray-300">
+                      <span className="text-white">Week 0 — Free Gateway Course is Now Live</span>
+                      <span className="text-[#E60000]">◆</span>
+                      <span>Start Your Cybersecurity Journey at Zero Cost</span>
+                      <span className="text-[#E60000]">◆</span>
+                      <span>No Prerequisites · No Payment · Just Skills</span>
+                      <span className="text-[#E60000]">◆</span>
+                      <span>Explore the Curriculum Now</span>
+                      <span className="text-[#E60000]">◆</span>
+                      <span>Linux · Networking · Threat Basics · CTF Intro</span>
+                      <span className="text-[#E60000]">◆</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Arrow — fixed right */}
+              <div className="shrink-0 flex items-center gap-1 px-4 py-2.5 text-[#E60000] group-hover:text-white transition-colors border-l border-white/10">
+                <ChevronRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </Link>
+
             <h1
               ref={headingRef}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-bold tracking-tighter text-white leading-[1.05] uppercase"

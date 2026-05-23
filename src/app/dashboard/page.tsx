@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentSession } from "@/lib/auth/role-guard";
 import { getEnrolledCourses } from "@/actions/student/dashboard";
+import { getMyWaitlistEntries } from "@/actions/student/waitlist";
 import {
   Shield,
   GraduationCap,
@@ -16,6 +17,8 @@ import {
   Award,
   MapPin,
   ChevronRight,
+  Clock,
+  ExternalLink,
 } from "lucide-react";
 import { HubUserControls } from "@/components/dashboard/hub/user-controls";
 import { ComingSoonWrapper } from "@/components/ui/coming-soon-wrapper";
@@ -33,6 +36,9 @@ export default async function DashboardPage() {
   // Fetch dynamic courses
   const coursesResult = await getEnrolledCourses(session.user.id);
   const enrolledCourses = coursesResult.success && coursesResult.data ? coursesResult.data : [];
+
+  const waitlistResult = await getMyWaitlistEntries(session.user.id);
+  const waitlistEntries = waitlistResult.success ? waitlistResult.data : [];
   
   const activeCourse = enrolledCourses.length > 0 ? enrolledCourses[0] : null;
   const otherCourses = enrolledCourses.length > 1 ? enrolledCourses.slice(1, 4) : [];
@@ -128,19 +134,19 @@ export default async function DashboardPage() {
 
           <div className="relative z-10 mt-8">
             {activeCourse ? (
-              <Link
-                href={`/dashboard/student?section=learning`}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-black font-bold text-sm uppercase tracking-widest hover:bg-green-400 transition-all shadow-[4px_4px_0px_0px_#166534] active:translate-x-1 active:translate-y-1 active:shadow-none border-2 border-green-500"
+              <ComingSoonWrapper
+                message="You can access your course soon"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-black font-bold text-sm uppercase tracking-widest hover:bg-green-400 transition-all shadow-[4px_4px_0px_0px_#166534] active:translate-x-1 active:translate-y-1 active:shadow-none border-2 border-green-500 cursor-pointer"
               >
                 Start learning
-              </Link>
+              </ComingSoonWrapper>
             ) : (
-              <Link
-                href={`/courses`}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-black font-bold text-sm uppercase tracking-widest hover:bg-green-400 transition-all shadow-[4px_4px_0px_0px_#166534] active:translate-x-1 active:translate-y-1 active:shadow-none border-2 border-green-500"
+              <ComingSoonWrapper
+                message="You can access your course soon"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-black font-bold text-sm uppercase tracking-widest hover:bg-green-400 transition-all shadow-[4px_4px_0px_0px_#166534] active:translate-x-1 active:translate-y-1 active:shadow-none border-2 border-green-500 cursor-pointer"
               >
-                Browse Paths
-              </Link>
+                Start learning
+              </ComingSoonWrapper>
             )}
           </div>
         </div>
@@ -180,6 +186,68 @@ export default async function DashboardPage() {
         </div>
 
       </div>
+
+      {/* My Applications — Waitlist Widget */}
+      {waitlistEntries.length > 0 && (
+        <div className="border-2 border-white/20 bg-black">
+          <div className="flex items-center justify-between px-6 py-4 border-b-2 border-white/20 bg-white/[0.02]">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-yellow-500" />
+              <h2 className="font-mono font-black text-sm uppercase tracking-widest text-white">My Applications</h2>
+            </div>
+            <span className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">{waitlistEntries.length} course{waitlistEntries.length > 1 ? 's' : ''}</span>
+          </div>
+
+          <div className="divide-y divide-white/8">
+            {waitlistEntries.map((entry: any) => {
+              // Map slug → syllabus route
+              const slugRouteMap: Record<string, string> = {
+                'week-0':         '/programs/week-0',
+                'foundation':     '/programs/foundation',
+                'soc':            '/programs/soc',
+                'vapt':           '/programs/vapt',
+                'cloud-security': '/programs/cloud-security',
+                'dfir':           '/programs/dfir',
+                'intern-tier-1':  '/internships',
+                'intern-tier-2':  '/internships',
+                'intern-tier-3':  '/internships',
+              };
+              const statusStyle: Record<string, string> = {
+                pending:   'text-yellow-400 bg-yellow-400/8 border-yellow-400/25',
+                contacted: 'text-blue-400  bg-blue-400/8  border-blue-400/25',
+                enrolled:  'text-green-400 bg-green-400/8 border-green-400/25',
+                rejected:  'text-red-400   bg-red-400/8   border-red-400/25',
+              };
+              const href = slugRouteMap[entry.course] ?? '/programs';
+              return (
+                <Link
+                  key={entry.id}
+                  href={href}
+                  className="flex items-center justify-between px-6 py-4 hover:bg-white/[0.03] transition-colors group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-2 h-2 rounded-full bg-yellow-500 shrink-0" />
+                    <div>
+                      <p className="font-mono font-bold text-xs uppercase tracking-widest text-white group-hover:text-yellow-400 transition-colors">
+                        {entry.courseLabel}
+                      </p>
+                      <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest mt-0.5">
+                        Applied {new Date(entry.appliedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 border ${statusStyle[entry.status] ?? 'text-gray-500 bg-white/5 border-white/10'}`}>
+                      {entry.status}
+                    </span>
+                    <ExternalLink size={12} className="text-gray-700 group-hover:text-white transition-colors" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Sub-Items List */}
       <div className="flex flex-col gap-2 pt-4">
