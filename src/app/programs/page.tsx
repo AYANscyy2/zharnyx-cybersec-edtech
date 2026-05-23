@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { Crosshair, Shield, Terminal, ArrowRight, Zap, Cloud, Code } from "lucide-react";
+import { Crosshair, Shield, Terminal, ArrowRight, Cloud, Code } from "lucide-react";
 import Link from "next/link";
 import { SectionBadge } from "@/components/ui/section-badge";
 import { WeekZeroSection } from "@/components/internships/week-zero-section";

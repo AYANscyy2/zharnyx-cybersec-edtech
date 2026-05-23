@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { getCurrentSession } from "@/lib/auth/role-guard";
 import { getFullUserRecord } from "@/actions/student/settings";
 import { HubUserControls } from "@/components/dashboard/hub/user-controls";
@@ -47,26 +48,28 @@ export default async function SettingsPage() {
 
       {/* ── Content ─────────────────────────────────────────────────────────── */}
       <div className="max-w-[1400px] mx-auto px-6 md:px-8 mt-6">
-        <SettingsClient
-          user={{
-            name: u.name,
-            email: u.email,
-            role: u.role,
-            phone: u.phone,
-            city: u.city,
-            bio: u.bio,
-            collegeName: u.collegeName,
-            studentStatus: u.studentStatus,
-            preferredTrack: u.preferredTrack,
-            githubUrl: u.githubUrl,
-            linkedinUrl: u.linkedinUrl,
-            websiteUrl: u.websiteUrl,
-            twitterUrl: u.twitterUrl,
-            contactEmail: u.contactEmail,
-            createdAt: u.createdAt,
-            emailVerified: u.emailVerified,
-          }}
-        />
+        <Suspense fallback={null}>
+          <SettingsClient
+            user={{
+              name: u.name,
+              email: u.email,
+              role: u.role,
+              phone: u.phone,
+              city: u.city,
+              bio: u.bio,
+              collegeName: u.collegeName,
+              studentStatus: u.studentStatus,
+              preferredTrack: u.preferredTrack,
+              githubUrl: u.githubUrl,
+              linkedinUrl: u.linkedinUrl,
+              websiteUrl: u.websiteUrl,
+              twitterUrl: u.twitterUrl,
+              contactEmail: u.contactEmail,
+              createdAt: u.createdAt,
+              emailVerified: u.emailVerified,
+            }}
+          />
+        </Suspense>
       </div>
     </div>
   );

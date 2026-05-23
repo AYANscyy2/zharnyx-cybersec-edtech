@@ -7,6 +7,7 @@ import { Check, Shield, Terminal, Plus, Minus, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { SectionBadge } from "@/components/ui/section-badge";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(SplitText);
@@ -17,7 +18,7 @@ export default function PricingPage() {
   const badgeRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
+  const router=useRouter()
   useEffect(() => {
     gsap.set(containerRef.current, { autoAlpha: 1 });
     const ctx = gsap.context(() => {
@@ -228,10 +229,10 @@ export default function PricingPage() {
               Limited seats per cohort. Secure your spot today.
             </p>
             <button
-              onClick={() => toast.info("Enrollment will be live soon")}
+              onClick={() => router.push("/programs")}
               className="group relative px-12 py-5 bg-[#E60000] text-white font-black text-sm uppercase tracking-widest hover:-translate-y-1 transition-transform shadow-[0_10px_0_0_#ffffff] cursor-pointer rounded-none flex items-center gap-3"
             >
-              Enroll Now <ArrowRight size={20} strokeWidth={2.5} className="group-hover:translate-x-2 transition-transform" />
+              Explore Courses<ArrowRight size={20} strokeWidth={2.5} className="group-hover:translate-x-2 transition-transform" />
             </button>
           </section>
         </div>

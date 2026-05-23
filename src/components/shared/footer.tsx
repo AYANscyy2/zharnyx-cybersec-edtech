@@ -70,7 +70,7 @@ export function Footer() {
               <h4 className="text-white font-black text-sm uppercase tracking-widest border-b-2 border-red-600/30 pb-2 mb-6">Programs</h4>
               <ul className="space-y-4">
                 <li><Link href="/programs" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Overview</Link></li>
-                <li><Link href="/foundation" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Foundation</Link></li>
+                <li><Link href="/programs/foundation" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Foundation</Link></li>
                 <li><Link href="/programs/soc" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">SOC Analyst</Link></li>
                 <li><Link href="/programs/vapt" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">VAPT</Link></li>
                 <li><Link href="/programs/cloud-security" className="block text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white  transition-transform">Cloud Security</Link></li>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { updateProfileSettings, updateSocialLinks, deleteUserAccount } from "@/actions/student/settings";
 import { authClient } from "@/lib/auth/auth-client";
 import {
@@ -64,6 +64,8 @@ const NOTIF_DEFAULTS: Record<string, boolean> = {
 
 export function SettingsClient({ user }: { user: UserData }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
   const [tab, setTab] = useState<Tab>("profile");
   const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -85,6 +87,10 @@ export function SettingsClient({ user }: { user: UserData }) {
     startTransition(async () => {
       const res = await updateProfileSettings(fd);
       showToast(res.success ? res.message! : res.error!, res.success);
+      if (res.success && callbackUrl) {
+        // Small delay so the user sees the success toast before redirect
+        setTimeout(() => router.push(callbackUrl), 1200);
+      }
     });
   };
 

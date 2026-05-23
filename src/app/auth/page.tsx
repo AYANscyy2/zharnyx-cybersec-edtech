@@ -171,8 +171,8 @@ function AuthContent() {
           return;
         }
 
-        toast.success("Signed in successfully!", { description: "Redirecting to dashboard..." });
-        router.push("/dashboard");
+        toast.success("Signed in successfully!", { description: "Redirecting..." });
+        router.push(callbackUrl);
         router.refresh();
       } else if (mode === "complete-profile") {
         const { updateStudentProfile } = await import("@/actions/student/profile");
@@ -212,8 +212,8 @@ function AuthContent() {
           return;
         }
 
-        toast.success("Account created successfully!", {
-          description: "Please sign in to access your dashboard.",
+        toast.success("Account created!", {
+          description: "Now sign in to continue.",
         });
 
         // The user specifically requested: Signup -> Sign in manually -> Dashboard.
@@ -272,7 +272,7 @@ function AuthContent() {
                   onClick={async () => {
                     await signIn.social({
                       provider: "google",
-                      callbackURL: "/dashboard",
+                      callbackURL: callbackUrl,
                       fetchOptions: { onError: (ctx) => { toast.error("Sign in failed", { description: ctx.error.message }); } }
                     });
                   }}

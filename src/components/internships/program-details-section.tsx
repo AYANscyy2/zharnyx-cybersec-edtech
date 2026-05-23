@@ -1,12 +1,13 @@
 "use client";
 
 import { useGsapScrollAnimation } from "@/hooks/use-gsap-animation";
-import { Shield, Zap, Target, ArrowRight } from "lucide-react";
+import { Shield, Zap, Target } from "lucide-react";
 import { SectionBadge } from "@/components/ui/section-badge";
-import { toast } from "sonner";
+import { ApplyButton } from "@/components/syllabus/apply-button";
 
 const TIERS = [
   {
+    slug: "intern-tier-1",
     icon: Shield,
     title: "Tier 1: Starter",
     duration: "1 Month",
@@ -17,6 +18,7 @@ const TIERS = [
     color: "blue",
   },
   {
+    slug: "intern-tier-2",
     icon: Zap,
     title: "Tier 2: Core",
     duration: "2 Months",
@@ -27,6 +29,7 @@ const TIERS = [
     color: "purple",
   },
   {
+    slug: "intern-tier-3",
     icon: Target,
     title: "Tier 3: Deep Track",
     duration: "3 Months",
@@ -121,15 +124,10 @@ export function ProgramDetailsSection() {
                   ))}
                 </div>
 
-                <button
-                  onClick={() => toast.info("courses will be live soon")}
-                  className="mt-auto group relative flex items-center justify-center h-14 w-full bg-white/5 border-2 border-white/20 hover:border-white text-white font-bold text-sm uppercase tracking-wider transition-all hover:-translate-y-1 cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    Apply Now
-                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </button>
+                <ApplyButton
+                  courseSlug={tier.slug}
+                  className="mt-auto h-14 text-sm font-bold tracking-wider"
+                />
               </div>
             );
           })}

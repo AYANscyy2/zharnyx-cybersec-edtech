@@ -4,11 +4,13 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Activity, Briefcase, ShieldAlert, Users, Target, X, Check } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function WhyZharnyxSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -116,8 +118,8 @@ export function WhyZharnyxSection() {
         </div>
 
         <div className="why-cta mt-32 flex justify-center opacity-0 translate-y-5">
-          <button className="group relative inline-flex items-center justify-center px-10 py-5 bg-[#E60000] text-white font-bold text-sm uppercase tracking-widest transition-all rounded-full hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(230,0,0,0.4)]">
-            Explore Residency
+          <button onClick={() => router.push("/programs")} className="group relative inline-flex items-center justify-center px-10 py-5 bg-[#E60000] text-white font-bold text-sm uppercase tracking-widest transition-all rounded-full hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(230,0,0,0.4)]">
+            Explore Courses
           </button>
         </div>
       </div>

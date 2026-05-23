@@ -4,8 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { GlobalLoader } from "@/components/shared/global-loader";
 import { LoaderProvider } from "@/components/shared/loader-context";
 import { Suspense } from "react";
-import { Navbar } from "@/components/shared/navbar";
-import { Footer } from "@/components/shared/footer";
+import { NavbarWrapper } from "@/components/shared/navbar-wrapper";
 import { FloatingChatbot } from "@/components/shared/floating-chatbot";
 import { LenisProvider } from "@/components/shared/lenis-provider";
 
@@ -41,17 +40,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark bg-black text-white" suppressHydrationWarning>
-      <body
-        className={`antialiased bg-black text-white font-mono min-h-screen`}
-      >
+      <body className="antialiased bg-black text-white font-mono min-h-screen">
         <LenisProvider>
           <LoaderProvider>
             <Suspense fallback={null}>
               <GlobalLoader />
             </Suspense>
-            <Navbar />
-            {children}
-            <Footer />
+            <NavbarWrapper>
+              {children}
+            </NavbarWrapper>
             <FloatingChatbot />
             <Toaster position="bottom-right" expand={false} />
           </LoaderProvider>

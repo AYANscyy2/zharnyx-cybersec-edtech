@@ -11,6 +11,7 @@ import { CouponManager } from "@/components/admin/coupon-management/coupon-manag
 import { PartnerApplicationTable } from "@/components/admin/partner-management/partner-application-table";
 import { PartnerTable } from "@/components/admin/partner-management/partner-table";
 import { NewUserApplicationTable } from "@/components/admin/user-management/new-user-application-table";
+import { WaitlistTable } from "@/components/admin/waitlist/waitlist-table";
 import {
   Card,
   CardContent,
@@ -86,6 +87,25 @@ export default function AdminPage() {
 
           {activeSection === "applications" && (
             <div className="space-y-8">
+
+              {/* ── Waitlist Candidates ── */}
+              <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none shadow-[4px_4px_0px_0px_white/10] pt-0">
+                <CardHeader className="bg-white/5 border-b-2 border-white/20 pb-4 pt-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Terminal className="w-4 h-4 text-red-500" />
+                    <CardTitle className="font-mono text-xl text-white uppercase tracking-wide">
+                      Waitlist Candidates
+                    </CardTitle>
+                  </div>
+                  <CardDescription className="text-gray-400 font-mono text-xs uppercase tracking-wider">
+                    All students who applied via syllabus pages. Update status inline.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-3 md:p-6">
+                  <WaitlistTable />
+                </CardContent>
+              </Card>
+
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                 {/* Mentor Applications */}
                 <Card className="bg-zinc-950 border-2 border-white/20 text-white rounded-none shadow-[4px_4px_0px_0px_white/10] pt-0">

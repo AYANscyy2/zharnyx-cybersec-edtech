@@ -679,3 +679,39 @@ export const couponRelations = relations(coupon, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+// ===============WAITLIST ENTRY=================
+
+export const waitlistEntry = pgTable(
+  "waitlist_entry",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    phone: text("phone"),
+    course: text("course").notNull(), // slug: "foundation", "soc", "vapt", etc.
+    courseLabel: text("course_label").notNull(), // human-readable label
+    status: text("status", { enum: ["pending", "contacted", "enrolled", "rejected"] })
+      .default("pending")
+      .notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("waitlist_entry_userId_idx").on(table.userId),
+    index("waitlist_entry_course_idx").on(table.course),
+  ]
+);
+
+export const waitlistEntryRelations = relations(waitlistEntry, ({ one }) => ({
+  user: one(user, {
+    fields: [waitlistEntry.userId],
+    references: [user.id],
+  }),
+}));
