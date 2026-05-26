@@ -31,13 +31,13 @@ export function Navbar({ className }: NavbarProps) {
     // Initial state: hidden above viewport
     gsap.set(el, { yPercent: -100, opacity: 0 });
 
-    // Slide in gracefully just as the hero section finishes its intro sequence
+    // Slide in gracefully on load
     gsap.to(el, {
       yPercent: 0,
       opacity: 1,
       duration: 1,
       ease: "power3.out",
-      delay: 4.0,
+      delay: 0.4,
       onComplete: () => {
         hasEntered.current = true;
       },

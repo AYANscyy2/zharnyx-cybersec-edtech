@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth/auth";
 
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
@@ -16,17 +14,27 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Protected routes - require authentication
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  // Fetch session from better-auth API endpoint
+  let sessionData: any = null;
+  try {
+    const res = await fetch(`${request.nextUrl.origin}/api/auth/get-session`, {
+      headers: {
+        cookie: request.headers.get("cookie") || "",
+      },
+    });
+    if (res.ok) {
+      sessionData = await res.json();
+    }
+  } catch (err) {
+    console.error("Failed to fetch session in proxy:", err);
+  }
 
-  if (!session) {
+  if (!sessionData || !sessionData.session) {
     return NextResponse.redirect(new URL("/auth", request.url));
   }
 
   // Role-based route protection
-  const userRole = session.user.role;
+  const userRole = sessionData.user.role;
 
   // Admin-only routes
   if (pathname.startsWith("/dashboard/admin")) {

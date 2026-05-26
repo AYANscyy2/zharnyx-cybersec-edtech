@@ -18,27 +18,31 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ course }: HeroSectionProps) {
-  const introOverlayRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
-
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const bannerRef  = useRef<HTMLDivElement>(null);
+  const bannerRef = useRef<HTMLDivElement>(null);
   const avatarsRef = useRef<HTMLDivElement>(null);
-  const ctaRef     = useRef<HTMLDivElement>(null);
-  const tagsRef    = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const tagsRef = useRef<HTMLDivElement>(null);
   const rightColumnRef = useRef<HTMLDivElement>(null);
-  const cardsRef       = useRef<HTMLDivElement>(null);
-  const tickerRef      = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const tickerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+
+      gsap.to(heroRef.current, {
+        autoAlpha: 1
+      })
+
       // SplitText setup for heading
       const splitHeading = new SplitText(headingRef.current, {
-        type: "words",
-        wordsClass: "inline-block pb-2",
+        type: "words,lines",
+        linesClass: "line-mask",
       });
+
+      // Set overflow hidden on line-masks for the about-style clipping reveal
+      gsap.set(splitHeading.lines, { overflow: "hidden", display: "block" });
 
       const tl = gsap.timeline();
 
@@ -63,84 +67,51 @@ export function HeroSection({ course }: HeroSectionProps) {
         });
       }
 
-      // Progress Counter Animation (0% to 100% over 3.5s)
-      const progressProxy = { val: 0 };
-      tl.to(progressProxy, {
-        val: 100,
-        duration: 3.5,
-        ease: "power2.inOut",
-        onUpdate: () => {
-          if (progressRef.current) {
-            progressRef.current.innerText = Math.round(progressProxy.val).toString().padStart(2, '0') + "%";
-          }
-        }
-      }, 0);
-
-      // --- PART 1: INTRO SEQUENCE ---
-      tl.to(ringRef.current, { scale: 1, opacity: 1, duration: 1.5, ease: "expo.out" }, 0);
-      tl.to(textRef.current, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 1.5, ease: "expo.out" }, 0);
-
-      // Spin more
-      tl.to(ringRef.current, { rotation: 540, duration: 2, ease: "power1.inOut" }, 1.5);
-      tl.to(introOverlayRef.current, { scale: 1.05, duration: 2, ease: "power1.inOut" }, 1.5);
-
-      tl.to(introOverlayRef.current, {
-        y: "-100vh", opacity: 0, duration: 1.2, ease: "power4.inOut"
-      }, 3.5);
-
-      // --- HERO REVEAL ---
-      tl.to(splitHeading.words, {
-        yPercent: 0,
-        opacity: 1,
-        duration: 1.2,
-        stagger: 0.04,
-        ease: "power4.out"
-      }, 4.0);
-
+      // --- HERO REVEAL (Following /about page animation style, slightly faster) ---
       tl.to(bannerRef.current, {
         opacity: 1,
         y: 0,
-        duration: 0.7,
-        ease: "power3.out"
-      }, 4.0);
-
-      tl.to(avatarsRef.current, {
-        opacity: 1,
-        x: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      }, 4.4);
-
-      tl.to(ctaRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      }, 4.6);
-
-      tl.to(tagsRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      }, 4.8);
-
-      tl.to(rightColumnRef.current, {
-        opacity: 1,
-        scale: 1,
         duration: 1,
-        ease: "power3.out"
-      }, 4.4);
+        ease: "power2.out",
+        delay: 0.2
+      })
+        .to(splitHeading.words, {
+          yPercent: 0,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.1,
+          ease: "power2.out"
+        }, "-=0.6")
+        .add("contentReveal", "-=0.8")
+        .to(rightColumnRef.current, {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: "power2.out"
+        }, "contentReveal")
+        .to(avatarsRef.current, {
+          opacity: 1,
+          x: 0,
+          duration: 1,
+          ease: "power2.out"
+        }, "contentReveal")
+        .to([ctaRef.current, tagsRef.current], {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          stagger: 0.1,
+          ease: "power2.out"
+        }, "contentReveal");
 
       if (cardsRef.current) {
         gsap.set(cardsRef.current, { opacity: 1 });
         tl.to(cardsRef.current.children, {
           opacity: 1,
           y: 0,
-          duration: 0.8,
+          duration: 1,
           stagger: 0.1,
-          ease: "linear"
-        }, 4.6);
+          ease: "power2.out"
+        }, "contentReveal");
       }
 
       return () => {
@@ -154,7 +125,7 @@ export function HeroSection({ course }: HeroSectionProps) {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#000000] overflow-hidden flex flex-col justify-center pt-24 pb-12 sm:pt-32 sm:pb-24">
+    <div ref={heroRef} className="opacity-0 relative min-h-screen bg-[#000000] overflow-hidden flex flex-col justify-center pt-24 pb-12 sm:pt-32 sm:pb-24">
 
       {/* BACKGROUND */}
       <div className="absolute inset-0 pointer-events-none z-0 bg-[#000000]">
@@ -178,42 +149,10 @@ export function HeroSection({ course }: HeroSectionProps) {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vh] bg-red-900/5 rounded-full blur-[100px] pointer-events-none"></div>
       </div>
 
-
-
-      {/* --- INTRO OVERLAY --- */}
-      <div
-        ref={introOverlayRef}
-        className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#000000] origin-center"
-      >
-        <div className="relative flex items-center justify-center w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96">
-          <div
-            ref={ringRef}
-            className="absolute inset-0 rounded-full border border-red-600/30 scale-75 opacity-0"
-          >
-            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-red-500"></div>
-            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-red-500"></div>
-            <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-[2px] h-4 bg-red-500"></div>
-            <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-[2px] h-4 bg-red-500"></div>
-          </div>
-          <div
-            ref={textRef}
-            className="text-white font-black text-xl sm:text-2xl md:text-4xl tracking-[0.5em] ml-[0.5em] opacity-0 scale-95 blur-md"
-          >
-            ZHARNYX
-          </div>
-        </div>
-        <div
-          ref={progressRef}
-          className="absolute bottom-8 right-8 md:bottom-12 md:right-12 text-white font-mono text-sm md:text-base tracking-widest font-bold opacity-80"
-        >
-          00%
-        </div>
-      </div>
-
       {/* --- MAIN HERO CONTENT --- */}
       <main className="relative z-10 w-full max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 mt-12 md:mt-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 justify-center items-center">
-          
+
           {/* LEFT COLUMN */}
           <div className="flex flex-col items-start gap-8 md:gap-10">
 
@@ -284,8 +223,8 @@ export function HeroSection({ course }: HeroSectionProps) {
             </div>
 
             <div ref={ctaRef} className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 sm:gap-6 mt-2">
-              <Link 
-                href="/programs" 
+              <Link
+                href="/programs"
                 className="group flex items-center justify-between w-full sm:w-auto sm:min-w-[220px] h-14 sm:h-16 rounded-full border border-white/20 bg-transparent pl-6 sm:pl-8 pr-2 hover:bg-white/5 transition-colors"
               >
                 <span className="text-white font-medium text-sm sm:text-base tracking-wide mr-4">View Blueprint</span>
@@ -294,8 +233,8 @@ export function HeroSection({ course }: HeroSectionProps) {
                 </div>
               </Link>
 
-              <Link 
-                href="/pricing" 
+              <Link
+                href="/pricing"
                 className="group flex items-center justify-center w-full sm:w-auto h-14 sm:h-16 px-8 rounded-full bg-[#E60000] hover:bg-red-700 text-white transition-colors"
               >
                 <span className="font-medium text-sm sm:text-base tracking-wide">Get Started</span>
@@ -335,10 +274,10 @@ export function HeroSection({ course }: HeroSectionProps) {
 
         {/* BOTTOM CARDS ROW */}
         <div ref={cardsRef} className="grid grid-cols-1 opacity-0 md:grid-cols-3 gap-6 mt-16 lg:mt-20 relative z-20">
-          
+
           {/* Card 1 - Red */}
-          <div 
-            className="bg-[#E60000] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between group hover:-translate-y-2 transition-transform duration-300 cursor-pointer" 
+          <div
+            className="bg-[#E60000] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between group hover:-translate-y-2 transition-transform duration-300 cursor-pointer"
             style={{ clipPath: 'polygon(0 0, 65% 0, 75% 24px, 100% 24px, 100% 100%, 0 100%)', borderRadius: '16px' }}
           >
             <div>
@@ -355,15 +294,15 @@ export function HeroSection({ course }: HeroSectionProps) {
           </div>
 
           {/* Card 2 - Light Grey */}
-          <div 
-            className="bg-[#E5E5E5] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between relative group hover:-translate-y-2 transition-transform duration-300 cursor-pointer" 
+          <div
+            className="bg-[#E5E5E5] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between relative group hover:-translate-y-2 transition-transform duration-300 cursor-pointer"
             style={{ clipPath: 'polygon(0 0, 60% 0, 70% 24px, 100% 24px, 100% 100%, 0 100%)', borderRadius: '16px' }}
           >
             <ArrowUpRight size={24} className="absolute top-8 right-6 text-black opacity-40 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
             <div>
               <span className="text-black/60 font-mono text-[10px] sm:text-xs tracking-widest uppercase block mb-4">[ 02 ] DEEP DIVE</span>
               <h3 className="text-black text-lg sm:text-xl font-bold tracking-wide leading-snug pr-12">
-                Specialize Deep.<br/>Stand Out Completely.
+                Specialize Deep.<br />Stand Out Completely.
               </h3>
             </div>
             <div className="text-black text-4xl sm:text-6xl font-black mt-6 opacity-30 group-hover:opacity-100 transition-opacity">
@@ -372,8 +311,8 @@ export function HeroSection({ course }: HeroSectionProps) {
           </div>
 
           {/* Card 3 - Red Variant */}
-          <div 
-            className="bg-[#E60000] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between relative group hover:-translate-y-2 transition-transform duration-300 cursor-pointer" 
+          <div
+            className="bg-[#E60000] card p-6 sm:p-8 min-h-[200px] flex flex-col justify-between relative group hover:-translate-y-2 transition-transform duration-300 cursor-pointer"
             style={{ clipPath: 'polygon(0 0, 60% 0, 70% 24px, 100% 24px, 100% 100%, 0 100%)', borderRadius: '16px' }}
           >
             <ArrowUpRight size={24} className="absolute top-8 right-6 text-white opacity-40 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
